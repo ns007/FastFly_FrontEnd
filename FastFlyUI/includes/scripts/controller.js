@@ -25,6 +25,7 @@ app.controller("index", function ($scope, $http, $window, loginService) {
                    if (loginService.checkRoll(response)) {
                        console.log("admin");
                        scope.admenGetHistoryButton = true;
+                       scope.admenCreateUserButton = true;
                    }
 
                });
@@ -37,6 +38,8 @@ app.controller("index", function ($scope, $http, $window, loginService) {
         scope.newForm = false;
         scope.admenGetHistoryButton = false;
         scope.aside = false;
+        scope.isDatePickerOpen = false;
+        scope.admenCreateUserButton = false;
     }
     
     scope.openNewForm = function () {
@@ -54,7 +57,7 @@ app.controller("index", function ($scope, $http, $window, loginService) {
         scope.mailTextBox = user.EmailAddress;
         scope.type = ["קק\"מ אישי", "קק\"מ קבוצתי", "סגל עמית", "אחר"];
         this.myDate = new Date();
-        this.isOpen = true;
+        scope.isDatePickerOpen = true;
         scope.newForm = true;
     }
 
@@ -65,6 +68,10 @@ app.controller("index", function ($scope, $http, $window, loginService) {
 
     scope.getUserHistory = function () {
         console.log("get user history");
+    }
+
+    scope.admenCreateUser = function () {
+        console.log("create user");
     }
 
 });

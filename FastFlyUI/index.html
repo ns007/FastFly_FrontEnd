@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app="fastFly" ng-controller="index" data-ng-init="init()">
+<html ng-app="fastFly" ng-controller="index as index" data-ng-init="init()">
 <head>
     <title>Login</title>
     <meta charset="utf-8" />
@@ -40,6 +40,7 @@
                 <li><a href="#" id="openNewForm" ng-model="openNewForm" class="btn btn-primary" ng-click="openNewForm()">פתח טופס נסיעה חדש</a></li>
                 <li><a href="#" id="historyButton" ng-model="openNewForm" class="btn btn-primary" ng-click="getHistory()">היסטוריית טספים</a></li>
                 <li><a href="#" id="admenGetHistoryButton" ng-model="admenGetHistoryButton" class="btn btn-primary" ng-click="getUserHistory()" ng-show="admenGetHistoryButton">היסטוריית משתמשים</a></li>
+                <li><a href="#" id="admenCreateUserButton" ng-model="admenCreateUserButton" class="btn btn-primary" ng-click="admenCreateUser()" ng-show="admenCreateUserButton">יצירת משתמש</a></li>
             </ul>
         </section>
     </aside>
@@ -141,7 +142,12 @@
                     <div>
                         <select ng-model="selectedName" ng-options="x for x in type" class="selectpicker" data-style="btn-info"></select>
                     </div>
-                    
+                    <div>
+                        <!--<input id='dateToImport' type='date' uib-datepicker-popup='yyyy-MM-dd' class='form-control' ng-change='changeDateTime()' ng-model='selectedDate' is-open='index.isDatePickerOpen' />-->
+                        <input type="date" name="date" />
+                     </div>
+
+
                 </fieldset>
             </form>
         </div>

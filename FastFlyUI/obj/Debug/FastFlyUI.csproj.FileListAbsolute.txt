@@ -30,3 +30,35 @@
 \\mac\home\documents\visual studio 2015\Projects\FastFlyUI\FastFlyUI\obj\Debug\FastFlyUI.csprojResolveAssemblyReference.cache
 \\mac\home\documents\visual studio 2015\Projects\FastFlyUI\FastFlyUI\obj\Debug\FastFlyUI.dll
 \\mac\home\documents\visual studio 2015\Projects\FastFlyUI\FastFlyUI\obj\Debug\FastFlyUI.pdb
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\csc.exe
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\vbc.exe
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\VBCSCompiler.exe
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\FastFlyUI.dll.config
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\FastFlyUI.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\FastFlyUI.pdb
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.Web.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.ApplicationInsights.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.Web.xml
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.ApplicationInsights.xml
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\obj\Debug\FastFlyUI.csprojResolveAssemblyReference.cache
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\obj\Debug\FastFlyUI.dll
+C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\obj\Debug\FastFlyUI.pdb

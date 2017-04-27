@@ -100,8 +100,20 @@ aside{
 }
 .dropDown{
     position:relative;
-    top:30px;
-
+    top:20px;
+    left:75px;
+    width:205px;
+}
+#budgetTextBox{
+    position:relative;
+    top:70px;
+    left:285px;
+    width:205px;
+}
+.pagingClass{
+    position:relative;
+    top: 400px;
+    left:500px;
 }
 /*.formRequestTypeRadio input[type="radio"]{
     margin-right:20px;

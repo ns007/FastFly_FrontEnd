@@ -10,7 +10,7 @@
     }
 
     this.checkRoll = function (data) {
-        if (data.ApplicationRole1.Id == 1) {
+        if (data.ApplicationRole1.Id == 2) {
             return true;
         }
     }

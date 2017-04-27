@@ -1,0 +1,13 @@
+﻿
+<section id="formSection" ng-show="loginForm" data-ng-init="init()" ng-controller="login">
+    <form class="form" ng-submit="submit()">
+        <div class="col-xs-6">
+            <label for="id">תעודת זהות:</label>
+            <input type="text" class="form-control" id="id" ng-model="id">
+            <label for="pwd">סיסמה:</label>
+            <input type="password" class="form-control" id="pwd" ng-model="password">
+            <a href="#" id="submitButton" ng-model="submitButton" class="btn btn-primary" ng-click="submit()" ng-show="submitButton">התחבר</a>
+            <!--<button type="submit" class="btn btn-primary" id="submitSection">Submit</button>-->
+        </div>
+    </form>
+</section>

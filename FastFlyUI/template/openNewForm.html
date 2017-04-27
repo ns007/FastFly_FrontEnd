@@ -1,0 +1,108 @@
+﻿
+<section ng-show="newForm" id="newFornSection" ng-controller="newFormController" data-ng-init="init()">
+    <div class="col-xs-12">
+        <form class="form">
+            <fieldset>
+                <!-- Text input-->
+                <!--<div class="formRequestTypeRadio">
+                    <div>
+                        <input type="radio" name="radioOpt" ng-model="kakamAishi" id="kakamAishi"/>
+                        <label  for="kakamAishi">קק"מ אישי</label>
+                        <input type="radio" name="radioOpt" ng-model="kakamKvutzati" id="kakamKvutzati"/>
+                        <label for="kakamKvutzati">קק"מ קבוצתי</label>
+                    </div>
+                    <div style="padding-right:20px;">
+                        <input type="radio" name="radioOpt" ng-model="segelAmitRadio" id="segelAmitRadio" />
+                        <label for="segelAmitRadio">סגל עמית</label>
+                        <input type="radio" name="radioOpt" ng-model="other" id="other" />
+                        <label for="other">אחר</label>
+                    </div>
+                </div>-->
+
+                <div class="row">
+                    <div class="formRequestDivWrapper">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <input id="firstName" name="firstName" type="text" placeholder="שם פרטי" class="form-control input-md" required="" ng-model="firstNameTextBox" disabled="true">
+                            </div>
+                            <label class="col-sm-1  control-label   " for="firstName">שם פרטי</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <input id="lastName" name="lastName" type="text" placeholder="שם משפחה" class="form-control input-md" required="" ng-model="lastNameTextBox" disabled="true">
+                            </div>
+                            <label class="col-sm-1 control-label" for="lastName">שם משפחה</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2 ">
+                                <input id="userId" name="userId" type="text" placeholder="תעודת זהות" class="form-control input-md" required="" ng-model="idTextBox" disabled="true">
+                            </div>
+                            <label class="control-label col-sm-1" for="userId">תעודת זהות</label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="formRequestDivWrapper">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <input id="facult" name="facult" type="text" placeholder="פקולטה" class="form-control input-md" required="" ng-model="facultyTextBox" disabled="true">
+                            </div>
+                            <label class="col-sm-1  control-label" for="facult">פקולטה</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <input id="department" name="department" type="text" placeholder="מחלקה" class="form-control input-md" required="" ng-model="departmentTextBox" disabled="true">
+                            </div>
+                            <label class="col-sm-1 control-label" for="department">מחלקה</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2 ">
+                                <input id="position" name="position" type="text" placeholder="תפקיד" class="form-control input-md" required="" ng-model="positionTextBox" disabled="true">
+
+                            </div>
+                            <label class="control-label col-sm-1" for="position">תפקיד</label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="formRequestDivWrapper">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <input id="jogPercent" name="jogPercent" type="text" placeholder="אחוז משרה" class="form-control input-md" required="" ng-model="jogPercentTextBox" disabled="true">
+                            </div>
+                            <label class="col-sm-1  control-label" for="jogPercent">אחוז משרה</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <input id="phone" name="phone" type="tel" placeholder="טלפון" class="form-control input-md" required="" ng-model="phoneTextBox" disabled="true">
+                            </div>
+                            <label class="col-sm-1 control-label" for="department">טלפון</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2 ">
+                                <input id="mail" name="mail" type="mail" placeholder="e-mail" class="form-control input-md" required="" ng-model="mailTextBox" disabled="true">
+
+                            </div>
+                            <label class="control-label col-sm-1" for="mail">מייל</label>
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                            <select ng-model="selectedName" ng-options="x for x in type" class="selectpicker dropDown" data-style="btn-info" ng-change="checkBudjet(selectedName)"></select>
+
+                            <input type="text" id="budgetTextBox" name="budgetTextBox" ng-model="budgetTextBox" ng-show="budgetTextBoxShow" placeholder="מקור תקציב" />
+                </div>
+               
+                <!--<div>
+                    <input id='dateToImport' type='date' uib-datepicker-popup='yyyy-MM-dd' class="container-fluid row col-md-6 col-sm-6 col-xs-12" ng-change='changeDateTime()' ng-model='selectedDate' is-open='index.isDatePickerOpen' />
+                    <input type="date" name="date" />
+                </div>-->
+
+
+            </fieldset>
+        </form>
+    </div>
+</section>

@@ -108,7 +108,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="imeges\logo5.png" />
     <Content Include="imeges\logo6.png" />
+    <Content Include="Scripts\angular-cookies.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular-route.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="includes\scripts\controller.js" />
@@ -221,6 +223,9 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.vi.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="template\createUser.html" />
+    <Content Include="template\login.html" />
+    <Content Include="template\openNewForm.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

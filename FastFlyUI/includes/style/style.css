@@ -106,14 +106,19 @@ aside{
 }
 #budgetTextBox{
     position:relative;
-    top:70px;
-    left:285px;
+    top:20px;
+    right:70px;
     width:205px;
 }
 .pagingClass{
     position:relative;
-    top: 400px;
+    top: 500px;
     left:500px;
+}
+.dateContainer{
+    position:relative;
+   
+    top: 100px;
 }
 /*.formRequestTypeRadio input[type="radio"]{
     margin-right:20px;

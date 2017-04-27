@@ -13,15 +13,33 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         controller: "createUser"
     })
 
+    $routeProvider.when("/deleteUser", {
+        templateUrl: "template/deleteUser.html",
+        controller: "deleteUser"
+    })
+
     //$routeProvider.when("/loginSubmit", {
     //    templateUrl: "index.html",
     //    controller: "index"
     //})
 })
+    .controller("deleteUser", function ($scope, loginService,$http) {
+        var scope = $scope;
+        scope.init = function () {
+            console.log("delete user init");
+            $http.delete('http://localhost:8080/api/users/' + '4')
+            .success(function (response) {
+                console.log(response);
+            })
+            
+        }
+
+    })
     .controller("newFormController", function ($scope, loginService, $window) {
         var scope = $scope;
         $scope.init = function () {
             console.log("new form init");
+            console.log(templateUrl);
             var user = loginService.getData();
          
             if (user == null) {
@@ -53,6 +71,20 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             }
             else {
                 scope.budgetTextBoxShow = false;
+            }
+        }
+
+        scope.setEndDate = function () {
+            console.log(scope.startDate);
+            scope.endDate = scope.startDate;
+        }
+
+        scope.checkDateRange = function () {
+            var startDate = scope.startDate;
+            var endDate = scope.endDate;
+            if (endDate < startDate) {
+                swal("שגיאה", "תאריך החזרה נמוך מתאריך היציאה", "error");
+                scope.endDate = scope.startDate;
             }
         }
        
@@ -109,7 +141,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.title = "Home";
         }
         //dont save cookeis
-        $cookies.remove('cookie');
+        //$cookies.remove('cookie');
         $scope.submit = function () {
             // alert($scope.password);
             $http.get('http://localhost:8080/api/users/' + $scope.id + '/' + $scope.password)

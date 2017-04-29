@@ -1,7 +1,7 @@
 ﻿
 <section ng-show="newForm" id="newFornSection" ng-controller="newFormController" data-ng-init="init()">
     <div class="col-xs-12">
-        <form class="form">
+        <form class="form" ng-show="newFormShow">
             <fieldset>
                 <div class="row">
                     <div class="formRequestDivWrapper">
@@ -79,6 +79,12 @@
                         <div class="formRequestDivWrapper">
                             <div class="form-group">
                                 <div class="col-sm-2">
+                                    <input type="text" class="form-control input-md" name="conferenceDays" ng-model="conferenceDays" disabled />
+                                </div>
+                                <label class="col-sm-1  control-label" for="conferenceDays">ימי השתלמות </label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2">
                                     <input type="date" name="endDatd" ng-model="endDate" ng-change="checkDateRange()" />
                                 </div>
                                 <label class="col-sm-1 control-label" for="endDatd">תאריך חזרה</label>
@@ -91,16 +97,52 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="family">
+                    <div class="formRequestDivWrapper">
+                        <div>
+                            <label> האם מצטרפים בני משפחה</label>
+                            <div class="radioFamily">
+                                <div>
+                                    <input type="radio" name="family" ng-model="familyYes" value="כן" />
+                                    <label> כן</label>
+                                </div>
+                                <div>
+                                    <input type="radio" name="family" ng-model="familyNo" value="לא" />
+                                    <label> לא</label>
+                                </div>
+                            </div>
+                        </div>
 
-
-
-                    <!--<input id='dateToImport' type='date' uib-datepicker-popup='yyyy-MM-dd' class="container-fluid row col-md-6 col-sm-6 col-xs-12" ng-change='changeDateTime()' ng-model='selectedDate' is-open='index.isDatePickerOpen' />-->
-                    <!--<input type="date" name="startDatd" ng-model="startDate" ng-change="setEndDate()" />-->
-                    <!--<input type="date" name="endDatd" ng-model="endDate" ng-change="checkDateRange()" />-->
+                    </div>
                 </div>
 
 
             </fieldset>
         </form>
+    </div>
+
+    <!--טופס יעדי הטיסה-->
+   
+       
+        <div class="col-xs-12">
+            <form class="form"  ng-show="destinationForm">
+                <section class="importent">
+                    <p><h4>שימו לב!</h4></p>
+                    <p> עליכם להציג לאחר החזרה חשבונית/קבלות <span>מקוריות</span> על שמכם בלבד.</p>
+                    <p> עליכם להקפיד על תשלום בכרטיס האשראי <span>שלכם</span> בלבד ולא של בני זוג/ בני משפחה/ אחרים.</p>
+                    <p> <span>התחשבנות תתבצע רק בהצגת כרטיס העלייה למטוס (Boarding Pass) מקוריים</span></p>
+                    
+                </section>
+            </form>
+        </div>
+    
+    <div class="pagingClass" ng-model="paging" ng-show="paging">
+        <ul class="breadcrumb">
+            <li>Home</li>
+            <li>Private</li>
+            <li ng-model="destinationForm" ng-click="showDestinationForm()" ng-class="destinationClass">יעד הטיסה</li>
+            <li ng-model="privateDetails" ng-click="showprivateDetailsForm()" ng-class="privateDetailsClass">פרטים אישיים</li>
+        </ul>
     </div>
 </section>

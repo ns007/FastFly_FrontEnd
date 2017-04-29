@@ -1,125 +1,196 @@
 ﻿body {
-  /*  overflow-x:hidden;
+    /*  overflow-x:hidden;
      overflow: hidden;*/
 }
 
-#logo{
-    display:block;
-    width:50px;
-    height:60px;
-    background-image:url(../../imeges/logo6.png);
-    background-repeat:no-repeat;
-    float:right;
-    margin-top:10px;
-}
-header{
-    width:100%;
-    height:60px;
-    background-color:#000000;
-    border-bottom:solid;
-    border-bottom-color:#BFBFBF;
-    margin-top:-15px;
-}
-header section{
-    margin-right:30px;
-    margin-top:15px;
-}
-header section h1{
-    font-family: 'Rock Salt', cursive;
-    font-size:18px;
-    color:#ff9900;
-    float:right;
-    clear:both;
-    position:relative;
-    bottom:60px;
-    right:50px;
-   
+#logo {
+    display: block;
+    width: 50px;
+    height: 60px;
+    background-image: url(../../imeges/logo6.png);
+    background-repeat: no-repeat;
+    float: right;
+    margin-top: 10px;
 }
 
-header section h5 {
-    font-size:24px;
-    font-family: 'Amatic SC', cursive;
-    color:#ffffff;
-    float:right;
-    position:relative;
-    bottom:60px;
-    right:250px;
+header {
+    width: 100%;
+    height: 60px;
+    background-color: #000000;
+    border-bottom: solid;
+    border-bottom-color: #BFBFBF;
+    margin-top: -15px;
 }
 
-.form{
-   direction:rtl !important;    
+    header section {
+        margin-right: 30px;
+        margin-top: 15px;
+    }
 
+        header section h1 {
+            font-family: 'Rock Salt', cursive;
+            font-size: 18px;
+            color: #ff9900;
+            float: right;
+            clear: both;
+            position: relative;
+            bottom: 60px;
+            right: 50px;
+        }
+
+        header section h5 {
+            font-size: 24px;
+            font-family: 'Amatic SC', cursive;
+            color: #ffffff;
+            float: right;
+            position: relative;
+            bottom: 60px;
+            right: 250px;
+        }
+
+.form {
+    direction: rtl !important;
 }
-#formSection{
-    left:300px;
-    position:relative;
-    top:45px;   
-}
-#submitSection{
-    margin-top:30px;
-}
-.formRequestDivWrapper{
-    position:relative;
-    left:550px;
-}
-#formsButton{
-    float:right;
-    display:block;
-}
-#formsButton ul {
-    text-decoration: none;
-    list-style: none;
+
+#formSection {
+    left: 300px;
     position: relative;
-    left:130px;
-    top:150px;
-    float:right;
+    top: 45px;
 }
-#formsButton ul li{
-    margin-top:10px;
+
+#submitSection {
+    margin-top: 30px;
 }
-aside{
-    float:right;
-    border-left:solid;
-    position:relative;
-    width:70px;
-    height:710px;
+
+.formRequestDivWrapper {
+    position: relative;
+    left: 550px;
 }
-#newFornSection{
-    bottom:600px;
-    right:500px;
-    position:relative;
-     
+
+#formsButton {
+    float: right;
+    display: block;
 }
-#mail{
-    direction:ltr;
+
+    #formsButton ul {
+        text-decoration: none;
+        list-style: none;
+        position: relative;
+        left: 130px;
+        top: 150px;
+        float: right;
+    }
+
+        #formsButton ul li {
+            margin-top: 10px;
+        }
+
+aside {
+    float: right;
+    border-left: solid;
+    position: relative;
+    width: 70px;
+    height: 710px;
 }
-.formRequestTypeRadio{
-    position:relative;
-    right:200px;
-    bottom:50px;
+
+#newFornSection {
+    bottom: 600px;
+    right: 500px;
+    position: relative;
 }
-.dropDown{
-    position:relative;
-    top:20px;
-    left:75px;
-    width:205px;
+
+#mail {
+    direction: ltr;
 }
-#budgetTextBox{
-    position:relative;
-    top:20px;
-    right:70px;
-    width:205px;
+
+.formRequestTypeRadio {
+    position: relative;
+    right: 200px;
+    bottom: 50px;
 }
-.pagingClass{
-    position:relative;
-    top: 500px;
-    left:500px;
+
+.dropDown {
+    position: relative;
+    top: 20px;
+    left: 75px;
+    width: 205px;
 }
-.dateContainer{
-    position:relative;
-   
+
+#budgetTextBox {
+    position: relative;
+    top: 20px;
+    right: 70px;
+    width: 205px;
+}
+
+.pagingClass {
+    position: relative;
+    top: 1200px;
+    left: 950px;
+    width: 485px;
+}
+
+    .pagingClass ul li {
+        cursor: pointer;
+    }
+
+.currentPage {
+    font-weight: bold;
+    color: #2E64FE;
+}
+
+.otherPages {
+    font: bold;
+    color: #000000;
+}
+
+.dateContainer {
+    position: relative;
     top: 100px;
 }
+
+.family {
+    position: relative;
+    right: 460px;
+    top: 120px;
+    margin: 10px;
+}
+
+.radioFamily {
+    position: relative;
+    right: 200px;
+    bottom: 24px;
+}
+
+.importent {
+    width: 50%;
+    position: relative;
+    left: 100px;
+    bottom:100px;
+    direction: rtl;
+    border-style: solid;
+    border-color: #DF0101;
+    font-weight: bold;
+    color: #DF0101;
+}
+
+    .importent h4 {
+        font-weight: bold;
+        color: #DF0101;
+         margin-right:10px;
+         padding-top:10px;
+    }
+
+    .importent span {
+        font-weight: bold;
+        color: #DF0101;
+        text-decoration: underline;
+        font-size:18px;
+    }
+    .importent p{
+        margin-right:10px;
+        margin-top:-10px;
+    }
 /*.formRequestTypeRadio input[type="radio"]{
     margin-right:20px;
 }*/

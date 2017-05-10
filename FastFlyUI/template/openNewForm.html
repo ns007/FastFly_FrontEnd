@@ -123,24 +123,94 @@
     </div>
 
     <!--טופס יעדי הטיסה-->
-   
-       
-        <div class="col-xs-12">
-            <form class="form"  ng-show="destinationForm">
-                <section class="importent">
-                    <p><h4>שימו לב!</h4></p>
-                    <p> עליכם להציג לאחר החזרה חשבונית/קבלות <span>מקוריות</span> על שמכם בלבד.</p>
-                    <p> עליכם להקפיד על תשלום בכרטיס האשראי <span>שלכם</span> בלבד ולא של בני זוג/ בני משפחה/ אחרים.</p>
-                    <p> <span>התחשבנות תתבצע רק בהצגת כרטיס העלייה למטוס (Boarding Pass) מקוריים</span></p>
-                    
+
+
+    <div class="col-xs-12">
+        <form class="form" ng-show="destinationForm">
+            <section class="importent">
+                <p><h4>שימו לב!</h4></p>
+                <p> עליכם להציג לאחר החזרה חשבונית/קבלות <span>מקוריות</span> על שמכם בלבד.</p>
+                <p> עליכם להקפיד על תשלום בכרטיס האשראי <span>שלכם</span> בלבד ולא של בני זוג/ בני משפחה/ אחרים.</p>
+                <p> <span>התחשבנות תתבצע רק בהצגת כרטיס העלייה למטוס (Boarding Pass) מקוריים</span></p>
+            </section>
+
+            <section class="destinationExplain">
+                <p><h4>יעד הנסיעה ומטרתה</h4></p>
+                <p>יש לפרט את מטרת ההשתלמות (השתתפות בקורס/ כנס מקצועי/ הצגה בתערוכה וכו') </p>
+                <p>ולצרף אסמכתא רלוונטית ואקדמית בעברית/ אנגלית המאשרת את קיום ההשתלמות </p>
+                <p>(הזמנות לכנס מקצועי/ מדעי, אישורי השתתפות, פירוט תערוכות במוזיאונים, גלריות וכו')</p>
+            </section>
+            <textarea ng-model="destinationTextBox" name="destinationTextBox" id="destinationTextBox" placeholder="יעדי הנסיעה ומטרתה">
+                ...
+            </textarea>
+
+            <section class="browseClass">
+
+                <input id="files" type="file" multiple ng-model="browse" placeholder="צרץ קובץ...">
+
+            </section>
+
+        </form>
+    </div>
+
+    <div class="col-xs-12">
+
+        <form class="form" ng-show="flightDetailsForm">
+            <section class="flightDetailsSectionClass">
+                <p><h4>להלן פירוט לפי יעדים ותקופות:</h4></p>
+                <p>*תוך ציון אם יש רצף או הפסקה בין ההשתלמויות (לכל מטרה יש לצרף אסמכתא אקדמית רלוונטית) סה"כ מבוקש בדולרים</p>
+            </section>
+            <button type="button" class="btn btn-default btn-lg" id="flightDetailsAddButton" ng-click="addNewFlight()">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> הוסף טיסה
+            </button>
+
+            <section class="flightDetailsAddFlightClass">
+                <select ng-model="selectedCountries" class="btn btn-default" role="group"
+                        ng-options="item.CountryName for item in countries" ng-change="showSelectedCountrie(selectedCountries)">
+                    <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>                   
+                </select>
+                <section class="flaightDetailDateClass">
+                    <section class="form-group">
+                        <div class="col-sm-2">
+                            <input type="date" name="flightDetailsToDate" ng-model="flightDetailsToDate" />
+                        </div>
+                        <label class="col-sm-1  control-label" for="flightDetailsFromDate">עד תאריך</label>
+                    </section>
+                    <section class="form-group">
+                        <div class="col-sm-2">
+                            <input type="date" name="flightDetailsFromDate" ng-model="flightDetailsFromDate" ng-change="setEndDate(flightDetailsFromDate,flightDetailsToDate)" />
+                        </div>
+                        <label class="col-sm-1  control-label" for="flightDetailsFromDate">מתאריך</label>
+                    </section>
                 </section>
-            </form>
-        </div>
-    
+            </section>
+
+
+
+            <!--<select ng-model="selectedCountries"
+                    ng-options="item.CountryName for item in countries" ng-change="showSelectedCountrie(selectedCountries)">
+                <option value="">Select countrie</option>
+            </select>-->
+            <!--************** working dropDown**************
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Dropdown link</a></li>
+                    <li><a href="#">Dropdown link</a></li>
+                </ul>
+            </div>
+            ******************************************-->
+
+        </form>
+    </div>
+
     <div class="pagingClass" ng-model="paging" ng-show="paging">
         <ul class="breadcrumb">
             <li>Home</li>
-            <li>Private</li>
+            <li ng-model="flightDetails" ng-click="showflightDetailsForm()" ng-class="flightDetailsClass">פירוט יעדים</li>
             <li ng-model="destinationForm" ng-click="showDestinationForm()" ng-class="destinationClass">יעד הטיסה</li>
             <li ng-model="privateDetails" ng-click="showprivateDetailsForm()" ng-class="privateDetailsClass">פרטים אישיים</li>
         </ul>

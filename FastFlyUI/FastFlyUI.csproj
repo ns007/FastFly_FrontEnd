@@ -108,6 +108,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="imeges\logo5.png" />
     <Content Include="imeges\logo6.png" />
+    <Content Include="imeges\plusIcon.png" />
     <Content Include="Scripts\angular-cookies.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular-route.min.js" />

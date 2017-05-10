@@ -27,6 +27,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         var scope = $scope;
         scope.init = function () {
             console.log("delete user init");
+
             $http.get('http://localhost:8080/api/users/')
                   .success(function (response) {
                       console.log(response);
@@ -54,8 +55,9 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
 
 
     })
-    .controller("newFormController", function ($scope, loginService, $window, $location) {
+    .controller("newFormController", function ($scope, loginService, $window, $location, $http) {
         var scope = $scope;
+
         $scope.init = function () {
             console.log("new form init");
             scope.newFormShow = true;
@@ -123,15 +125,52 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         scope.showDestinationForm = function () {
             scope.newFormShow = false;
             scope.destinationForm = true;
+            scope.flightDetailsForm = false;
             scope.destinationClass = 'currentPage';
             scope.privateDetailsClass = 'otherPages';
+            scope.flightDetailsClass = 'otherPages';
+
         }
 
         scope.showprivateDetailsForm = function () {
             scope.newFormShow = true;
             scope.destinationForm = false;
+            scope.flightDetailsForm = false;
             scope.destinationClass = 'otherPages';
+            scope.flightDetailsClass = 'otherPages';
             scope.privateDetailsClass = 'currentPage';
+        }
+
+        scope.showflightDetailsForm = function () {
+            scope.newFormShow = false;
+            scope.destinationForm = false;
+            scope.flightDetailsForm = true;
+            scope.destinationClass = 'otherPages';
+            scope.flightDetailsClass = 'currentPage';
+            scope.privateDetailsClass = 'otherPages';
+        }
+
+        scope.addNewFlight = function () {
+            console.log("add new flight");
+            var countriesList = null;
+            countiesList = loginService.getCountries()
+            if (countiesList == null) {
+                $http.get('http://localhost:8080/api/Countries/')
+                         .success(function (response) {
+                             console.log(response);
+                             loginService.setCountries(response);
+                             scope.countries = response;
+                             countiesList = loginService.getCountries();
+                         })
+            }
+           
+            scope.countries = countiesList;
+            scope.selectedCountries = countiesList;
+
+        }
+
+        scope.showSelectedCountrie = function (selectedCountrie) {
+            console.log(selectedCountrie);
         }
     })
     .controller("login", function ($scope, $http, loginService, $window) {

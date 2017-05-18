@@ -79,7 +79,7 @@
                         <div class="formRequestDivWrapper">
                             <div class="form-group">
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control input-md" name="conferenceDays" ng-model="conferenceDays" disabled />
+                                    <input type="text" class="form-control input-md" name="conferenceDays" ng-model="conferenceDays" />
                                 </div>
                                 <label class="col-sm-1  control-label" for="conferenceDays">ימי השתלמות </label>
                             </div>
@@ -168,20 +168,22 @@
             <section class="flightDetailsScrollClass">
                 <div class="form-group" data-ng-repeat="choice in choices">
                     <section class="flightDetailsAddFlightClass">
-                        <select name="" class="btn btn-default" role="group" ng-options="item.CountryName for item in countries" ng-model="choice.name" ng-change="showSelectedCountrie(choice.name)">
+                        <button type="button" class="btn remoneFlightButton" aria-label="Left Align" ng-click="removeNewChoice($index)">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </button>
+                        <select name="" class="btn btn-default" role="group" ng-options="item.CountryName for item in countries" ng-model="choice.countrie" ng-change="showSelectedCountrie(choice.name)">
                             <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>
                         </select>
-                        <lable class="flightDetailLableClass">מתאריך</lable> <input type="date" name="flightDetailsFromDate" ng-model="flightDetailsFromDate" />
-                        <lable class="flightDetailLableClass">עד תאריך</lable> <input type="date" name="flightDetailsToDate" ng-model="flightDetailsToDate" />
-                        <lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable> <input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="dollarsNeeded" />
+                        
+                        <lable class="flightDetailLableClass">מתאריך</lable> <input type="date" name="flightDetailsFromDate" ng-model="choice.flightDetailsFromDate" />
+                        <lable class="flightDetailLableClass">עד תאריך</lable> <input type="date" name="flightDetailsToDate" ng-model="choice.flightDetailsToDate" ng-change="checkDate(choice.flightDetailsToDate,$index)"/>
+                        <lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable> <input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="choice.dollarsNeeded" />
                     </section>
 
-                    <button type="button" class="btn remoneFlightButton" aria-label="Left Align" ng-click="removeNewChoice($index)">
-                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-                    </button>
-                    <div>
+                    
+                    <!--<div>
                         {{choices}}
-                    </div>
+                    </div>-->
                     <!--<button ng-click="removeNewChoice()">Remove Choice</button>-->
 
                 </div>

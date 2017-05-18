@@ -235,7 +235,7 @@ height:100px;
 }
 .flightDetailsAddFlightClass{
     position:relative;  
-   
+  
     
 }
 .flightDetailLableClass{
@@ -249,6 +249,9 @@ height:100px;
 .flightDetailsScrollClass{
      overflow-y:scroll;
      height:250px;
+     position:relative;
+     left:100px;
+     
 }
 .remoneFlightButton{
     background-color:red;

@@ -28,18 +28,17 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         var temp = null;
         scope.init = function () {
             console.log("delete user init");
-            loginService.getDataFromAPI()
-                .then(function (response) {
-                    console.log(response);
-                    temp = response;
-                }, function (error) {
-                    console.log(error);
-                });
-            //$http.get('http://localhost:8080/api/users/')
-            //      .success(function (response) {
-            //          console.log(response);
-            //      });
-
+            //loginService.getDataFromAPI()
+            //    .then(function (response) {
+            //        console.log(response);
+            //        temp = response;
+            //    }, function (error) {
+            //        console.log(error);
+            //    });
+            $http.get('http://localhost:8080/api/users/')
+                  .success(function (response) {
+                      console.log(response);
+                  });
             scope.deleteUser = true;
         }
         scope.showTemp = function () {
@@ -186,7 +185,19 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         }
 
         scope.showSelectedCountrie = function (selectedCountrie) {
-            console.log(selectedCountrie);
+            console.log(scope.choices);           
+        }
+
+        scope.checkDate = function (endDate, index) {
+           // console.log(endDtae);
+           // console.log(scope.choices[index].flightDetailsFromDate);
+            var startDate = scope.choices[index].flightDetailsFromDate;
+            //var endDate = choices.flightDetailsToDate;
+            if (endDate < startDate) {
+                swal("שגיאה", "תאריך החזרה נמוך מתאריך היציאה", "error");
+                scope.choices[index].flightDetailsToDate = startDate;
+                //scope.endDate = scope.startDate;
+            }
         }
 
         //***********************************************//***********************************************

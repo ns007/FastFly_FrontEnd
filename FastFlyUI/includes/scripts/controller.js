@@ -25,14 +25,27 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
 })
     .controller("deleteUser", function ($scope, loginService, $http) {
         var scope = $scope;
+        var temp = null;
         scope.init = function () {
             console.log("delete user init");
+            loginService.getDataFromAPI()
+                .then(function (response) {
+                    console.log(response);
+                    temp = response;
+                }, function (error) {
+                    console.log(error);
+                });
+            //$http.get('http://localhost:8080/api/users/')
+            //      .success(function (response) {
+            //          console.log(response);
+            //      });
 
-            $http.get('http://localhost:8080/api/users/')
-                  .success(function (response) {
-                      console.log(response);
-                  });
+            scope.deleteUser = true;
         }
+        scope.showTemp = function () {
+            console.log(temp);
+        }
+        
 
         /*
         swal({
@@ -149,9 +162,9 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.flightDetailsClass = 'currentPage';
             scope.privateDetailsClass = 'otherPages';
         }
-
-        scope.addNewFlight = function () {
-            console.log("add new flight");
+        scope.choices = [];
+        scope.addNewFlight = function () {        
+            console.log("add new flight");            
             var countriesList = null;
             countiesList = loginService.getCountries()
             if (countiesList == null) {
@@ -162,16 +175,47 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                              scope.countries = response;
                              countiesList = loginService.getCountries();
                          })
-            }
-           
+            }           
             scope.countries = countiesList;
             scope.selectedCountries = countiesList;
-
+           // form.contacts.push({});
+            var newItemNo = scope.choices.length + 1;
+            scope.choices.push({});
+            //var newItemNo = $scope.choices.length + 1;
+            //$scope.choices.push({ 'id': 'choice' + newItemNo });
         }
 
         scope.showSelectedCountrie = function (selectedCountrie) {
             console.log(selectedCountrie);
         }
+
+        //***********************************************//***********************************************
+       
+
+        //$scope.addNewChoice = function () {
+        //    var newItemNo = $scope.choices.length + 1;
+        //    $scope.choices.push({ 'id': 'choice' + newItemNo, 'name': 'choice' + newItemNo });
+        //};
+
+        $scope.removeNewChoice = function (choiseIndex) {
+            console.log(choiseIndex);
+            var newItemNo = scope.choices.length - 1;
+            var removeItem = scope.choices[choiseIndex];
+            console.log(removeItem);
+            var allChoises = scope.choices;
+            //console.log(allChoises);
+            if (newItemNo !== -1) {
+               // scope.choices.pop(choiseIndex,1);
+                $scope.choices.splice(choiseIndex, 1);
+            }
+        };
+
+        scope.showAddChoice = function (choice) {
+            return choice.id === scope.choices[scope.choices.length - 1].id;
+        };
+        //***********************************************//***********************************************
+
+
     })
     .controller("login", function ($scope, $http, loginService, $window) {
         var scope = $scope;

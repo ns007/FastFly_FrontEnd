@@ -1,4 +1,4 @@
-﻿app.service("loginService", function () {
+﻿app.service("loginService", function ($http,$q) {
     var loginData = null;
     var countries = null;
 
@@ -23,4 +23,16 @@
     this.getCountries = function () {
         return countries;
     }
+
+    this.getDataFromAPI = function () {
+        var defer = $q.defer();
+        $http( {method: 'GET',
+            url: 'http://localhost:8080/api/users/'})
+            .success(function (result) {
+                defer.resolve(result);
+            });
+        return defer.promise;
+    };
+
+    
 });

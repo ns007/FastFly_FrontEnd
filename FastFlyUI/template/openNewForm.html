@@ -155,42 +155,49 @@
 
     <div class="col-xs-12">
 
-        <form class="form" ng-show="flightDetailsForm">
-            <section class="flightDetailsSectionClass">
-                <p><h4>להלן פירוט לפי יעדים ותקופות:</h4></p>
-                <p>*תוך ציון אם יש רצף או הפסקה בין ההשתלמויות (לכל מטרה יש לצרף אסמכתא אקדמית רלוונטית) סה"כ מבוקש בדולרים</p>
-            </section>
-            <button type="button" class="btn btn-default btn-lg" id="flightDetailsAddButton" ng-click="addNewFlight()">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> הוסף טיסה
-            </button>
-
-            <section class="flightDetailsAddFlightClass">
-                <select ng-model="selectedCountries" class="btn btn-default" role="group"
-                        ng-options="item.CountryName for item in countries" ng-change="showSelectedCountrie(selectedCountries)">
-                    <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>                   
-                </select>
-                <section class="flaightDetailDateClass">
-                    <section class="form-group">
-                        <div class="col-sm-2">
-                            <input type="date" name="flightDetailsToDate" ng-model="flightDetailsToDate" />
-                        </div>
-                        <label class="col-sm-1  control-label" for="flightDetailsFromDate">עד תאריך</label>
-                    </section>
-                    <section class="form-group">
-                        <div class="col-sm-2">
-                            <input type="date" name="flightDetailsFromDate" ng-model="flightDetailsFromDate" ng-change="setEndDate(flightDetailsFromDate,flightDetailsToDate)" />
-                        </div>
-                        <label class="col-sm-1  control-label" for="flightDetailsFromDate">מתאריך</label>
-                    </section>
+        <form class="form" ng-model="form" name="form" ng-show="flightDetailsForm">
+            
+                <section class="flightDetailsSectionClass">
+                    <p><h4>להלן פירוט לפי יעדים ותקופות:</h4></p>
+                    <p>*תוך ציון אם יש רצף או הפסקה בין ההשתלמויות (לכל מטרה יש לצרף אסמכתא אקדמית רלוונטית) סה"כ מבוקש בדולרים</p>
                 </section>
+                <button type="button" class="btn btn-default btn-lg" id="flightDetailsAddButton" ng-click="addNewFlight()">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> הוסף טיסה
+                </button>
+
+            <section class="flightDetailsScrollClass">
+                <div class="form-group" data-ng-repeat="choice in choices">
+                    <section class="flightDetailsAddFlightClass">
+                        <select name="" class="btn btn-default" role="group" ng-options="item.CountryName for item in countries" ng-model="choice.name" ng-change="showSelectedCountrie(choice.name)">
+                            <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>
+                        </select>
+                        <lable class="flightDetailLableClass">מתאריך</lable> <input type="date" name="flightDetailsFromDate" ng-model="flightDetailsFromDate" />
+                        <lable class="flightDetailLableClass">עד תאריך</lable> <input type="date" name="flightDetailsToDate" ng-model="flightDetailsToDate" />
+                        <lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable> <input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="dollarsNeeded" />
+                    </section>
+
+                    <button type="button" class="btn remoneFlightButton" aria-label="Left Align" ng-click="removeNewChoice($index)">
+                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                    </button>
+                    <div>
+                        {{choices}}
+                    </div>
+                    <!--<button ng-click="removeNewChoice()">Remove Choice</button>-->
+
+                </div>
             </section>
+            <!--<fieldset data-ng-repeat="cont in form.contacts">
+                <section class="flightDetailsAddFlightClass">
+                    <select ng-model="selectedCountries" class="btn btn-default" role="group"
+                            ng-options="item.CountryName for item in countries" ng-change="showSelectedCountrie(selectedCountries)">
+                        <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>
+                    </select>
+                    <lable class="flightDetailLableClass">מתאריך</lable> <input type="date" name="flightDetailsFromDate" ng-model="flightDetailsFromDate" />
+                    <lable class="flightDetailLableClass">עד תאריך</lable> <input type="date" name="flightDetailsToDate" ng-model="flightDetailsToDate" />
+                    <lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable> <input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="dollarsNeeded" />
+                </section>
+            </fieldset>-->
 
-
-
-            <!--<select ng-model="selectedCountries"
-                    ng-options="item.CountryName for item in countries" ng-change="showSelectedCountrie(selectedCountries)">
-                <option value="">Select countrie</option>
-            </select>-->
             <!--************** working dropDown**************
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

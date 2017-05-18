@@ -234,8 +234,27 @@ height:100px;
     bottom:50px;
 }
 .flightDetailsAddFlightClass{
-    position:relative;
-    left:195px;
+    position:relative;  
+   
+    
+}
+.flightDetailLableClass{
+    font-weight:bold;
+    padding-left:10px;
+    padding-right:30px;
+}
+#dollarsNeeded{
+    width:70px;
+}
+.flightDetailsScrollClass{
+     overflow-y:scroll;
+     height:250px;
+}
+.remoneFlightButton{
+    background-color:red;
+}
+.remoneFlightButton .glyphicon-minus{
+    color:white !important;
 }
 /*.formRequestTypeRadio input[type="radio"]{
     margin-right:20px;

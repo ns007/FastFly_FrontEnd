@@ -138,9 +138,11 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.newFormShow = false;
             scope.destinationForm = true;
             scope.flightDetailsForm = false;
+            scope.userStatmentForm = false;
             scope.destinationClass = 'currentPage';
             scope.privateDetailsClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
+            scope.statmentClass = 'otherPages';
 
         }
 
@@ -148,28 +150,44 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.newFormShow = true;
             scope.destinationForm = false;
             scope.flightDetailsForm = false;
+            scope.userStatmentForm = false;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
             scope.privateDetailsClass = 'currentPage';
+            scope.statmentClass = 'otherPages';
         }
 
         scope.showflightDetailsForm = function () {
             scope.newFormShow = false;
             scope.destinationForm = false;
+            scope.userStatmentForm = false;
             scope.flightDetailsForm = true;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'currentPage';
             scope.privateDetailsClass = 'otherPages';
+            scope.statmentClass = 'otherPages';
+        }
+
+        scope.showStatmentForm = function () {
+            scope.newFormShow = false;
+            scope.destinationForm = false;
+            scope.flightDetailsForm = false;
+            scope.userStatmentForm = true;
+            scope.destinationClass = 'otherPages';
+            scope.flightDetailsClass = 'otherPages';
+            scope.privateDetailsClass = 'otherPages';
+            scope.statmentClass = 'currentPage';
         }
         scope.choices = [];
         scope.addNewFlight = function () {        
-            console.log("add new flight");            
+            console.log("add new flight");
+            //console.log(scope.browse);
             var countriesList = null;
             countiesList = loginService.getCountries()
             if (countiesList == null) {
                 $http.get('http://localhost:8080/api/Countries/')
                          .success(function (response) {
-                             console.log(response);
+                             //console.log(response);
                              loginService.setCountries(response);
                              scope.countries = response;
                              countiesList = loginService.getCountries();
@@ -185,7 +203,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         }
 
         scope.showSelectedCountrie = function (selectedCountrie) {
-            console.log(scope.choices);           
+            //console.log(scope.choices);           
         }
 
         scope.checkDate = function (endDate, index) {
@@ -198,6 +216,10 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                 scope.choices[index].flightDetailsToDate = startDate;
                 //scope.endDate = scope.startDate;
             }
+        }
+
+        scope.onFileSelect = function ($file) {
+            console.log($file);
         }
 
         //***********************************************//***********************************************

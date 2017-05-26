@@ -248,9 +248,10 @@ height:100px;
 }
 .flightDetailsScrollClass{
      overflow-y:scroll;
-     height:250px;
+     height:300px;
      position:relative;
-     left:100px;
+     left:200px;
+     width:100%;
      
 }
 .remoneFlightButton{
@@ -258,6 +259,14 @@ height:100px;
 }
 .remoneFlightButton .glyphicon-minus{
     color:white !important;
+}
+.flightExpenseClass{
+    padding-top:15px;
+    position:relative;
+    left:27px;
+}
+.flightCashInputClass{
+    width:55px;
 }
 /*.formRequestTypeRadio input[type="radio"]{
     margin-right:20px;

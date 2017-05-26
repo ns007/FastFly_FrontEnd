@@ -146,7 +146,7 @@
 
             <section class="browseClass">
 
-                <input id="files" type="file" multiple ng-model="browse" placeholder="צרץ קובץ...">
+                <input id="files" type="file" multiple ng-model="browse" ngf-select="onFileSelect($files)" placeholder="צרץ קובץ...">
 
             </section>
 
@@ -177,7 +177,21 @@
                         
                         <lable class="flightDetailLableClass">מתאריך</lable> <input type="date" name="flightDetailsFromDate" ng-model="choice.flightDetailsFromDate" />
                         <lable class="flightDetailLableClass">עד תאריך</lable> <input type="date" name="flightDetailsToDate" ng-model="choice.flightDetailsToDate" ng-change="checkDate(choice.flightDetailsToDate,$index)"/>
-                        <lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable> <input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="choice.dollarsNeeded" />
+                        <lable class="flightDetailLableClass">סכום מבוקש בדולרים לטיסה</lable><input type="number" class="flightCashInputClass" name="flightDollars" id="flightDollars" min="0" ng-model="flightDollars" /> 
+                        <!--<lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable>--> <!--<input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="choice.dollarsNeeded" />-->
+                    </section>
+                    <section class="flightExpenseClass">
+                        <p><lable class="flightDetailLableClass">סכום מבוקש בדולרים:</lable></p>
+                        
+                        <lable class="flightDetailLableClass">ביטוח נסיעות</lable><input type="number" class="flightCashInputClass" name="travelInsureDollars" id="travelInsureDollars" min="0" ng-model="choice.travelInsureDollars" /> 
+                        <lable class="flightDetailLableClass">בתי מלון</lable><input type="number" class="flightCashInputClass" name="hotelsDollars" id="hotelsDollars" min="0" ng-model="choice.hotelsDollars" /> 
+                        <lable class="flightDetailLableClass">שכירות רכב</lable><input type="number" class="flightCashInputClass" name="carRentDollars" id="carRentDollars" min="0" ng-model="choice.carRentDollars" /> 
+                        <lable class="flightDetailLableClass">נסיעות לשד"ת ונסיעות בינעירוניות בלבד!</lable><input type="number" class="flightCashInputClass" name="airportShatelDollars" min="0" id="airportShatelDollars" ng-model="choice.airportShatelDollars" /> 
+                        <lable class="flightDetailLableClass">דמי השתתפות בכנסים/ תערוכות</lable><input type="number" class="flightCashInputClass" name="conferenceDollars" id="conferenceDollars" min="0" ng-model="choice.conferenceDollars" />
+                     </section>
+                    <section class="flightExpenseClass">
+                        
+                        
                     </section>
 
                     
@@ -188,18 +202,6 @@
 
                 </div>
             </section>
-            <!--<fieldset data-ng-repeat="cont in form.contacts">
-                <section class="flightDetailsAddFlightClass">
-                    <select ng-model="selectedCountries" class="btn btn-default" role="group"
-                            ng-options="item.CountryName for item in countries" ng-change="showSelectedCountrie(selectedCountries)">
-                        <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>
-                    </select>
-                    <lable class="flightDetailLableClass">מתאריך</lable> <input type="date" name="flightDetailsFromDate" ng-model="flightDetailsFromDate" />
-                    <lable class="flightDetailLableClass">עד תאריך</lable> <input type="date" name="flightDetailsToDate" ng-model="flightDetailsToDate" />
-                    <lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable> <input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="dollarsNeeded" />
-                </section>
-            </fieldset>-->
-
             <!--************** working dropDown**************
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -216,12 +218,19 @@
         </form>
     </div>
 
-    <div class="pagingClass" ng-model="paging" ng-show="paging">
-        <ul class="breadcrumb">
-            <li>Home</li>
-            <li ng-model="flightDetails" ng-click="showflightDetailsForm()" ng-class="flightDetailsClass">פירוט יעדים</li>
-            <li ng-model="destinationForm" ng-click="showDestinationForm()" ng-class="destinationClass">יעד הטיסה</li>
-            <li ng-model="privateDetails" ng-click="showprivateDetailsForm()" ng-class="privateDetailsClass">פרטים אישיים</li>
-        </ul>
+    <!--user statment form-->
+    <div class="col-xs-12">
+        <form class="form" ng-model="form" name="form" ng-show="userStatmentForm">
+            
+        </form>
     </div>
+
+        <div class="pagingClass" ng-model="paging" ng-show="paging">
+            <ul class="breadcrumb">
+                <li ng-model="userStatment" ng-click="showStatmentForm()" ng-class="statmentClass">הצהרת ממלא הבקשה</li>
+                <li ng-model="flightDetails" ng-click="showflightDetailsForm()" ng-class="flightDetailsClass">פירוט יעדים</li>
+                <li ng-model="destinationForm" ng-click="showDestinationForm()" ng-class="destinationClass">יעד הטיסה</li>
+                <li ng-model="privateDetails" ng-click="showprivateDetailsForm()" ng-class="privateDetailsClass">פרטים אישיים</li>
+            </ul>
+        </div>
 </section>

@@ -161,7 +161,7 @@
                     <p><h4>להלן פירוט לפי יעדים ותקופות:</h4></p>
                     <p>*תוך ציון אם יש רצף או הפסקה בין ההשתלמויות (לכל מטרה יש לצרף אסמכתא אקדמית רלוונטית) סה"כ מבוקש בדולרים</p>
                 </section>
-                <button type="button" class="btn btn-default btn-lg" id="flightDetailsAddButton" ng-click="addNewFlight()">
+                <button type="button" class="btn btn-default btn-md" id="flightDetailsAddButton" ng-click="addNewFlight()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> הוסף טיסה
                 </button>
 
@@ -220,13 +220,134 @@
 
     <!--user statment form-->
     <div class="col-xs-12">
+
         <form class="form" ng-model="form" name="form" ng-show="userStatmentForm">
-            
+            <section class="flightDetailsSectionClass">
+                <p><h4>הצהרת ממלא/ת הבקשה</h4></p>
+            </section>
+            <section class="courseReplaceSectionClass">
+                <label class="teachingRadioClass"> סדרי מילוי מקום בתקופת הנסיעה</label>
+                <input type="radio" name="teaching" ng-model="isTeaching" value="yes" class="teachingRadioClass" ng-click="showTeacingReplace()" />
+                <label class="teachingRadioClass"> מלמד</label>
+                <input type="radio" name="teaching" ng-model="isTeaching" value="no" class="teachingRadioClass" ng-click="showTeacingReplace()" />
+                <label class="teachingRadioClass">לא מלמד</label>
+            </section>
+            <!--<button data-toggle="collapse" href="#courseReplace">test</button>-->
+                <button type="button" class="btn btn-default btn-md" id="addTeacingReplaceButton" ng-click="addNewCourse()" ng-model="addNewClassButton" ng-disabled='addClassDisable'>
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> הוסף קורס
+                </button>
+            <section class="" id="courseReplace">
+                <div class="form-group" data-ng-repeat="course in courses">
+                    <section class="courseInputClass">
+                        <button type="button" class="btn remoneFlightButton" aria-label="Left Align" ng-click="removeCourse($index)">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </button>
+                        <lable class="flightDetailLableClass">שם הקורס</lable> <input type="text" class="courseNameTextBox" name="courseNameTextBox" ng-model="course.courseNameTextBox" placeholder="שם הקורס" />
+                        <select name="" class="btn btn-default" role="group" ng-options="item for item in courseDay" ng-model="course.courseDay">
+                            <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">יום</option>
+                        </select>
+                        <lable class="flightDetailLableClass">משעה</lable><input type="time" id="courseReplaceFromTime" name="courseReplaceFromTime" ng-model="course.courseReplaceFromTime" placeholder="HH:mm:ss" min="08:00:00" max="22:00:00" required />
+                        <lable class="flightDetailLableClass">עד שעה</lable><input type="time" id="courseReplaceToTime" name="courseReplaceToTime" ng-model="course.courseReplaceToTime" placeholder="HH:mm:ss" min="08:00:00" max="22:00:00" required />
+                        <lable class="flightDetailLableClass">אופן ההשלמה</lable> <input type="text" name="courseReplaseComplete" id="courseReplaseComplete" ng-model="course.courseReplaseComplete" placeholder="שם המחליף או מועד שיעור ההשלמה" />
+
+                        <!--<lable class="flightDetailLableClass">עד תאריך</lable> <input type="date" name="flightDetailsToDate" ng-model="choice.flightDetailsToDate" ng-change="checkDate(choice.flightDetailsToDate,$index)" />
+                <lable class="flightDetailLableClass">סכום מבוקש בדולרים לטיסה</lable><input type="number" class="flightCashInputClass" name="flightDollars" id="flightDollars" min="0" ng-model="flightDollars" />-->
+                        <!--<lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable>--> <!--<input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="choice.dollarsNeeded" />-->
+                    </section>
+
+                </div>
+            </section>
+
         </form>
+    </div>
+
+    <div class="col-xs-12">
+        <form class="form" ng-model="form" name="form" ng-show="testForm">
+             <label class="teachingRadioClass"> סדרי מילוי מקום בבחינות בתקופת הנסיעה</label>
+                <input type="radio" name="testing" ng-model="tests" value="yes" class="teachingRadioClass" ng-click="showTestReplace()" />
+                <label class="teachingRadioClass"> יש לי בחינות</label>
+                <input type="radio" name="testing" ng-model="tests" value="no" class="teachingRadioClass" ng-click="showTestReplace()" />
+                <label class="teachingRadioClass">אין לי בחינות</label>
+            <p><h5 class="pTestClass">(יש לוודא שטופס הבחינה והתשובות יועברו למרצה המחליף)</h5></p>
+            <button type="button" class="btn btn-default btn-md" id="addTestButton" ng-click="addNewTest()" ng-model="addNewTestButton" ng-disabled='addTestDisable'>
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> הוסף מבחן
+            </button>
+            <section class="" id="testReplace">
+                <div class="form-group" data-ng-repeat="test in testsGroup">
+                    <section class="courseInputClass">
+                        <button type="button" class="btn remoneFlightButton" aria-label="Left Align" ng-click="removeTest($index)">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </button>
+                        <lable class="flightDetailLableClass">שם הקורס</lable> <input type="text" class="courseNameTextBox" name="TestCourseNameTextBox" ng-model="test.TestCourseNameTextBox" placeholder="שם הקורס" />
+                        <lable class="flightDetailLableClass">מועד הבחינה</lable> <input type="date" name="testDate" ng-model="test.testDate" ng-change="checkValidDate()"/>
+                        <lable class="flightDetailLableClass">מחליף</lable><input type="text" class="courseNameTextBox" id="profesorName" name="profesorName" ng-model="test.profesorName" placeholder="שם מרצה מחליף" required />
+                        <select name="" class="btn btn-default" role="group" ng-options="item for item in appointedTime" ng-model="test.appointedTime">
+                            <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מועד</option>
+                        </select>
+                        <!--<lable class="flightDetailLableClass">עד תאריך</lable> <input type="date" name="flightDetailsToDate" ng-model="choice.flightDetailsToDate" ng-change="checkDate(choice.flightDetailsToDate,$index)" />
+                <lable class="flightDetailLableClass">סכום מבוקש בדולרים לטיסה</lable><input type="number" class="flightCashInputClass" name="flightDollars" id="flightDollars" min="0" ng-model="flightDollars" />-->
+                        <!--<lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable>--> <!--<input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="choice.dollarsNeeded" />-->
+                    </section>
+
+                </div>
+            </section>
+        </form>
+    </div>
+
+    <div class="col-xs-12">
+        <form class="form" ng-model="form" name="form" ng-show="travelDetailsForm">
+            <section class="flightDetailsSectionClass">
+                <p><h4>פרטי הנסיעה (נא לסמן את כל הסעיפים)</h4></p>
+            </section>
+            <section class="travelClass">
+                <p class="teachingRadioClass"> 1. השתלמות (שאינה כנס) מחקר בימי ההוראה שלך </p>
+                <p class="teachingRadioClass"> 2. משך הנסיעה מעל לשבוע בימי ההוראה שלך </p>
+                <p class="teachingRadioClass"> 3. יותר מנסיעה אחת בסמסטר בימי ההוראה שלך </p>
+                <p class="teachingRadioClass">4. היעדרות מבחינות מועד א </p>
+            </section> 
+            <section class="travelDetailsRadioClass">
+                <input type="radio" name="travelDetailsConvention" ng-model="travelDetailsConvention" value="yes" class="teachingRadioClass" required/>
+                <label class="teachingRadioClass"> כן</label>
+                <input type="radio" name="travelDetailsConvention" ng-model="travelDetailsConvention" value="no" class="teachingRadioClass" required/>
+                <label class="teachingRadioClass">לא</label>
+            </section>
+
+            <section class="travelDetailsRadioClass">
+                <input type="radio" name="travelDetailsDuration" ng-model="travelDetailsDuration" value="yes" class="teachingRadioClass" required/>
+                <label class="teachingRadioClass"> כן</label>
+                <input type="radio" name="travelDetailsDuration" ng-model="travelDetailsDuration" value="no" class="teachingRadioClass" required/>
+                <label class="teachingRadioClass">לא</label>
+            </section>
+            <section class="travelDetailsRadioClass">
+                <input type="radio" name="travelDetailsFlightNum" ng-model="travelDetailsFlightNum" value="yes" class="teachingRadioClass" required/>
+                <label class="teachingRadioClass"> כן</label>
+                <input type="radio" name="travelDetailsFlightNum" ng-model="travelDetailsFlightNum" value="no" class="teachingRadioClass" required/>
+                <label class="teachingRadioClass">לא</label>
+            </section>
+            <section class="travelDetailsRadioClass">
+                <input type="radio" name="travelDetailsFirstTestMissing" ng-model="travelDetailsFirstTestMissing" value="yes" class="teachingRadioClass" required/>
+                <label class="teachingRadioClass"> כן</label>
+                <input type="radio" name="travelDetailsFirstTestMissing" ng-model="travelDetailsFirstTestMissing" value="no" class="teachingRadioClass" required/>
+                <label class="teachingRadioClass">לא</label>
+            </section>
+            <section class="signClass">
+                <p>לתשומת ליבך, באם אחד הסעיפים סומן "כן", הבקשה תוגדר כחריגה*, נא הסברך לחשיבות הנסיעה:</p>
+                <p>*נדרשת חתימת דיקן</p>
+                <textarea placeholder="הסבר" rows="5" cols="70" ng-model="travelDetailsExplainTextErea"></textarea>
+                <p>1. הנני מאשר/ת בזאת כי ידוע לי ואני מסכים/מה לכך שבמידה ורשויות מס הכנסה לא יכירו בנסיעה זו או בחלק ממנה כעומדת בדרישות</p>
+                <p>&nbsp;&nbsp;&nbsp; והגדרת ההשתלמות/ מחקר ורשויות המס, אחויב ואשלם על חשבוני את החלק הלא מוכר של ההוצאה והמס בהתאם</p>
+                <p>2. הנני מתחייב/ת להציג דו"ח אקדמי יומי מפורט למזכירות האקדמית עד חודש לאחר סיום ההשתלמות</p>
+            </section>
+            <lable class="flightDetailLableClass">מאשר</lable> <input type="checkbox" name="userSignCheckBox" id="userSignCheckBox" ng-model="userSignCheckBox" required />
+            <input type="submit" class="btn btn-default" id="submitFormButton" value="שלח טופס" ng-model="submitFormButton" ng-click="sendNewForm()" />
+        </form>
+
     </div>
 
         <div class="pagingClass" ng-model="paging" ng-show="paging">
             <ul class="breadcrumb">
+                <li ng-model="travelDetails" ng-click="showtravelDetails()" ng-class="travelDetailsClass">פרטי הנסיעה</li>
+                <li ng-model="testReplace" ng-click="showTestReplaceForm()" ng-class="testReplaceClass">מילוי מקום בבחינות</li>
                 <li ng-model="userStatment" ng-click="showStatmentForm()" ng-class="statmentClass">הצהרת ממלא הבקשה</li>
                 <li ng-model="flightDetails" ng-click="showflightDetailsForm()" ng-class="flightDetailsClass">פירוט יעדים</li>
                 <li ng-model="destinationForm" ng-click="showDestinationForm()" ng-class="destinationClass">יעד הטיסה</li>

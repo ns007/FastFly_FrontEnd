@@ -139,10 +139,14 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.destinationForm = true;
             scope.flightDetailsForm = false;
             scope.userStatmentForm = false;
+            scope.travelDetailsForm = false;
+            scope.testForm = false;
             scope.destinationClass = 'currentPage';
             scope.privateDetailsClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
             scope.statmentClass = 'otherPages';
+            scope.testReplaceClass = 'otherPages';
+            scope.travelDetailsClass = 'otherPages';
 
         }
 
@@ -151,21 +155,29 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.destinationForm = false;
             scope.flightDetailsForm = false;
             scope.userStatmentForm = false;
+            scope.travelDetailsForm = false;
+            scope.testForm = false;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
             scope.privateDetailsClass = 'currentPage';
             scope.statmentClass = 'otherPages';
+            scope.testReplaceClass = 'otherPages';
+            scope.travelDetailsClass = 'otherPages';
         }
 
         scope.showflightDetailsForm = function () {
             scope.newFormShow = false;
             scope.destinationForm = false;
             scope.userStatmentForm = false;
+            scope.travelDetailsForm = false;
             scope.flightDetailsForm = true;
+            scope.testForm = false;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'currentPage';
             scope.privateDetailsClass = 'otherPages';
             scope.statmentClass = 'otherPages';
+            scope.testReplaceClass = 'otherPages';
+            scope.travelDetailsClass = 'otherPages';
         }
 
         scope.showStatmentForm = function () {
@@ -173,10 +185,58 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.destinationForm = false;
             scope.flightDetailsForm = false;
             scope.userStatmentForm = true;
+            scope.travelDetailsForm = false;
+            scope.testForm = false;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
             scope.privateDetailsClass = 'otherPages';
             scope.statmentClass = 'currentPage';
+            scope.testReplaceClass = 'otherPages';
+            scope.travelDetailsClass = 'otherPages';
+            if (!(checkIsTeaching(scope.isTeaching))) {
+                scope.addClassDisable = true;
+                scope.courses = [];
+            }
+            else {
+                scope.addClassDisable = false;
+            }
+        }
+
+        scope.showTestReplaceForm = function () {
+            scope.newFormShow = false;
+            scope.destinationForm = false;
+            scope.flightDetailsForm = false;
+            scope.userStatmentForm = false;
+            scope.travelDetailsForm = false;
+            scope.testForm = true;
+            scope.destinationClass = 'otherPages';
+            scope.flightDetailsClass = 'otherPages';
+            scope.privateDetailsClass = 'otherPages';
+            scope.statmentClass = 'otherPages';
+            scope.travelDetailsClass = 'otherPages';
+            scope.testReplaceClass = 'currentPage';
+            if (!(checkIsTeaching(scope.tests))) {
+                scope.addTestDisable = true;
+                 scope.testsGroup = [];
+            }
+            else {
+                scope.addTestDisable = false;
+            }
+        }
+
+        scope.showtravelDetails = function () {
+            scope.newFormShow = false;
+            scope.destinationForm = false;
+            scope.flightDetailsForm = false;
+            scope.userStatmentForm = false;
+            scope.testForm = false;
+            scope.travelDetailsForm = true;
+            scope.destinationClass = 'otherPages';
+            scope.flightDetailsClass = 'otherPages';
+            scope.privateDetailsClass = 'otherPages';
+            scope.statmentClass = 'otherPages';
+            scope.testReplaceClass = 'otherPages';
+            scope.travelDetailsClass = 'currentPage';
         }
         scope.choices = [];
         scope.addNewFlight = function () {        
@@ -247,7 +307,99 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             return choice.id === scope.choices[scope.choices.length - 1].id;
         };
         //***********************************************//***********************************************
+        scope.courseDay = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי"];
+        scope.appointedTime = ["מועד א", "מועד ב", "מועד מיוחד"];
+        scope.showTeacingReplace = function () {
+            if (!(checkIsTeaching(scope.isTeaching))) {
+                    scope.addClassDisable = true;
+                    scope.courses = [];
+            }
+            else {
+                scope.addClassDisable = false;
+            }
+        }
 
+        function checkIsTeaching(radio) {
+            if (radio == "yes") {
+                console.log("yes");
+                return true;
+                //scope.addClassDisable = false;
+            }
+            else {
+                console.log("no");
+                return false;
+            }
+        }
+        //scope.courses = [];
+        scope.addNewCourse = function () {
+            console.log("add course");
+            if (scope.courses.length == 8) {
+                return;
+            }
+            var newItemNo = scope.courses.length + 1;
+            scope.courses.push({});
+        }
+
+        $scope.removeCourse = function (courseIndex) {
+            //console.log(choiseIndex);
+            var newItemNo = scope.courses.length - 1;
+            var removeItem = scope.courses[courseIndex];
+            console.log(removeItem);
+            var allChoises = scope.courses;
+            //console.log(allChoises);
+            if (newItemNo !== -1) {
+                // scope.choices.pop(choiseIndex,1);
+                $scope.courses.splice(courseIndex, 1);
+            }
+        };
+
+        scope.showTestReplace = function () {
+            if (!(checkIsTeaching(scope.tests))) {
+                scope.addTestDisable = true;
+                 scope.testsGroup = [];
+            }
+            else {
+                scope.addTestDisable = false;
+            }
+        }
+
+        $scope.removeTest = function (testIndex) {
+            //console.log(choiseIndex);
+            var newItemNo = scope.testsGroup.length - 1;
+            var removeItem = scope.testsGroup[testIndex];
+            console.log(removeItem);
+            var allChoises = scope.testsGroup;
+            //console.log(allChoises);
+            if (newItemNo !== -1) {
+                // scope.choices.pop(choiseIndex,1);
+                $scope.testsGroup.splice(testIndex, 1);
+            }
+        }
+
+        scope.addNewTest = function () {
+            console.log("add test");
+            if (scope.testsGroup.length == 7) {
+                return;
+            }
+            var newItemNo = scope.testsGroup.length + 1;
+            scope.testsGroup.push({});
+        }
+
+        scope.checkValidDate = function () {
+            //var today = new Date;
+            //var now = today
+            //console.log(now);
+            //console.log(scope.testsGroup[0].testDate);
+            //if (scope.testDate < today) {
+            //    swal("תאריך לא חוקי", "התאריך קטן מהיום", "error");
+            //}                
+        }
+
+        //*****************send new form*****************
+        scope.sendNewForm = function () {
+
+        }
+        //*****************send new form*****************
 
     })
     .controller("login", function ($scope, $http, loginService, $window) {

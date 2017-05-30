@@ -1,5 +1,5 @@
 ﻿body {
-    /*  overflow-x:hidden;
+      /*overflow-x:hidden;
      overflow: hidden;*/
 }
 
@@ -124,10 +124,10 @@ aside {
 }
 
 .pagingClass {
-    position: relative;
+   position: relative;
     top: 1200px;
     left: 950px;
-    width: 485px;
+    width: 685px;
 }
 
     .pagingClass ul li {
@@ -226,7 +226,7 @@ height:100px;
     /*background: url('../../imeges/plusIcon.png') left center no-repeat;*/
     position:relative;
     left:200px;
-    bottom:40px;
+    bottom:50px;
 }
 .flaightDetailDateClass{
     position:relative;
@@ -234,9 +234,7 @@ height:100px;
     bottom:50px;
 }
 .flightDetailsAddFlightClass{
-    position:relative;  
-  
-    
+    position:relative;   
 }
 .flightDetailLableClass{
     font-weight:bold;
@@ -267,6 +265,66 @@ height:100px;
 }
 .flightCashInputClass{
     width:55px;
+}
+.teachingRadioClass{
+    margin-left:10px;
+}
+#addTeacingReplaceButton{
+    position:relative;
+    left:200px;
+   bottom:50px;
+}
+.courseInputClass{
+    position:relative;
+    bottom:20px;
+    left:200px;
+}
+.courseReplaceSectionClass{
+    position:relative;
+    bottom:80px;
+}
+.courseNameTextBox{
+    margin-left:20px;
+}
+#courseReplaseComplete::placeholder {
+    font-size:12px;
+}
+.courseReplaceSectionHeight{
+
+    height:150px;
+    position:relative;
+    left:30px;
+    margin-right:50px;
+}
+.pTestClass{
+    position:relative;
+    bottom:80px;
+}
+#addTestButton{
+    position:relative;
+    bottom:47px;
+    left:200px;
+}
+.travelClass{
+    float:right;
+    position:relative;
+    bottom:50px;
+}
+.travelClass p{
+    font-weight: bold;
+}
+.travelDetailsRadioClass{
+    position:relative;
+    right:20px;
+    bottom:50px;
+    margin-bottom:3px;  
+}
+.signClass{
+    position:relative;
+    bottom:30px;
+}
+#submitFormButton{
+    margin-right:350px;
 }
 /*.formRequestTypeRadio input[type="radio"]{
     margin-right:20px;

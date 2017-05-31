@@ -397,9 +397,21 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
 
         //*****************send new form*****************
         scope.sendNewForm = function () {
+       
+            //alert(JSON.stringify(scope.testsGroup));
+            var ApplyDocument = apllyDocumentToJson();
+            console.log(ApplyDocument);
+
 
         }
         //*****************send new form*****************
+
+        function apllyDocumentToJson() {
+            var user = loginService.getData();
+            var doc = [{ "UserId": user.Id}]
+            return doc;
+        }
+
 
     })
     .controller("login", function ($scope, $http, loginService, $window) {

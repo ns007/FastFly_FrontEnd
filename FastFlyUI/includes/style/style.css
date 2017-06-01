@@ -246,9 +246,10 @@ height:100px;
 }
 .flightDetailsScrollClass{
      overflow-y:scroll;
-     height:300px;
+     height:280px;
      position:relative;
      left:200px;
+     bottom:30px;
      width:100%;
      
 }

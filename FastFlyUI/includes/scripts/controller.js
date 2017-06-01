@@ -408,8 +408,51 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
 
         function apllyDocumentToJson() {
             var user = loginService.getData();
-            var doc = [{ "UserId": user.Id}]
+            var budget = checkBudgetField();
+            if (budget == null) {
+                return;
+            }
+           
+            var doc = [
+                {
+                    "UserId": user.Id,
+                    "ColleagueType": budget,
+                    "DepartureDate": scope.startDate,
+                    "ReturnDate": scope.endDate,
+                    "TotalDays": parseInt(scope.conferenceDays),
+                    "TravelPurpose": scope.destinationTextBox,
+                    //"TotalRequsetAmount": להשלים
+                    //"TotalEselDays":להשלים
+                    "LastReturnDate": scope.lastFlightFromShenkar,
+                    "TeacheDuringTravel": parseInt(scope.isTeaching),
+                    "ReplacingInTests": parseInt(scope.tests),
+                    "ResearchTraining": parseInt(scope.travelDetailsConvention),
+                    "AboveWeek": parseInt(scope.travelDetailsDuration),
+                    "MoreThenOneTravel": parseInt(acope.travelDetailsFlightNum),
+                    "AbsenceTestA": parseInt(scope.travelDetailsFirstTestMissing),
+                    "ExceptionRequstExplain": scope.travelDetailsExplainTextErea,
+                    "PlusOne": scope.family,
+                    //"ApplicantSign":לשנות בבסיס נתונים את הטיפוס לבוליאן
+                    "ApplyDate"://להכניס את התאריך של אישור הטופס עי הממלא
+
+                }
+            ]
             return doc;
+        }
+
+        function checkBudgetField() {
+            var budget;
+            if (scope.budgetTextBoxShow) {
+                budget = scope.budgetTextBox;
+            }
+            else {
+                budget = scope.selectedName;
+            }
+            if (budget == "" || budget==null) {
+                swal("שדה ריק", "שדה מקור תקציבי אינו מלא", "error");
+                return
+            }
+            return budget;
         }
 
 
@@ -435,7 +478,8 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         //$cookies.remove('cookie');
         $scope.submit = function () {
             // alert($scope.password);
-            $http.get('http://localhost:8080/api/users/' + $scope.id + '/' + $scope.password)
+            $http.get('http://localhost:8080/api/users/' + scope.id + '/' + scope.password)
+            //$http.get('http://localhost:8080/api/users/')
                    .success(function (response) {
                        if (response == null) {
                            swal("שגיאה", "שם משתמש או סיסמה שגויים", "error");

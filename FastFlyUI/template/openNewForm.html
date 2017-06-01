@@ -104,11 +104,11 @@
                             <label> האם מצטרפים בני משפחה</label>
                             <div class="radioFamily">
                                 <div>
-                                    <input type="radio" name="family" ng-model="familyYes" value="כן" />
+                                    <input type="radio" name="family" ng-model="family" value="1" />
                                     <label> כן</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="family" ng-model="familyNo" value="לא" />
+                                    <input type="radio" name="family" ng-model="family" value="0" />
                                     <label> לא</label>
                                 </div>
                             </div>
@@ -189,10 +189,9 @@
                         <lable class="flightDetailLableClass">נסיעות לשד"ת ונסיעות בינעירוניות בלבד!</lable><input type="number" class="flightCashInputClass" name="airportShatelDollars" min="0" id="airportShatelDollars" ng-model="choice.airportShatelDollars" /> 
                         <lable class="flightDetailLableClass">דמי השתתפות בכנסים/ תערוכות</lable><input type="number" class="flightCashInputClass" name="conferenceDollars" id="conferenceDollars" min="0" ng-model="choice.conferenceDollars" />
                      </section>
-                    <section class="flightExpenseClass">
-                        
-                        
-                    </section>
+                    <!--<section class="flightExpenseClass">
+                     
+                    </section>-->
 
                     
                     <!--<div>
@@ -201,6 +200,9 @@
                     <!--<button ng-click="removeNewChoice()">Remove Choice</button>-->
 
                 </div>
+            </section>
+            <section>
+                <lable class="flightDetailLableClass">נא ציין תאריך חזרה של הנסיעה האחרונה ע"ח שנקר</lable> <input type="date" name="lastFlightFromShenkar" ng-model="lastFlightFromShenkar" />
             </section>
             <!--************** working dropDown**************
             <div class="btn-group" role="group">
@@ -227,9 +229,9 @@
             </section>
             <section class="courseReplaceSectionClass">
                 <label class="teachingRadioClass"> סדרי מילוי מקום בתקופת הנסיעה</label>
-                <input type="radio" name="teaching" ng-model="isTeaching" value="yes" class="teachingRadioClass" ng-click="showTeacingReplace()" />
+                <input type="radio" name="teaching" ng-model="isTeaching" value="1" class="teachingRadioClass" ng-click="showTeacingReplace()" />
                 <label class="teachingRadioClass"> מלמד</label>
-                <input type="radio" name="teaching" ng-model="isTeaching" value="no" class="teachingRadioClass" ng-click="showTeacingReplace()" />
+                <input type="radio" name="teaching" ng-model="isTeaching" value="0" class="teachingRadioClass" ng-click="showTeacingReplace()" />
                 <label class="teachingRadioClass">לא מלמד</label>
             </section>
             <!--<button data-toggle="collapse" href="#courseReplace">test</button>-->
@@ -264,9 +266,9 @@
     <div class="col-xs-12">
         <form class="form" ng-model="form" name="form" ng-show="testForm">
              <label class="teachingRadioClass"> סדרי מילוי מקום בבחינות בתקופת הנסיעה</label>
-                <input type="radio" name="testing" ng-model="tests" value="yes" class="teachingRadioClass" ng-click="showTestReplace()" />
+                <input type="radio" name="testing" ng-model="tests" value="1" class="teachingRadioClass" ng-click="showTestReplace()" />
                 <label class="teachingRadioClass"> יש לי בחינות</label>
-                <input type="radio" name="testing" ng-model="tests" value="no" class="teachingRadioClass" ng-click="showTestReplace()" />
+                <input type="radio" name="testing" ng-model="tests" value="0" class="teachingRadioClass" ng-click="showTestReplace()" />
                 <label class="teachingRadioClass">אין לי בחינות</label>
             <p><h5 class="pTestClass">(יש לוודא שטופס הבחינה והתשובות יועברו למרצה המחליף)</h5></p>
             <button type="button" class="btn btn-default btn-md" id="addTestButton" ng-click="addNewTest()" ng-model="addNewTestButton" ng-disabled='addTestDisable'>
@@ -306,28 +308,28 @@
                 <p class="teachingRadioClass">4. היעדרות מבחינות מועד א </p>
             </section> 
             <section class="travelDetailsRadioClass">
-                <input type="radio" name="travelDetailsConvention" ng-model="travelDetailsConvention" value="yes" class="teachingRadioClass" required/>
+                <input type="radio" name="travelDetailsConvention" ng-model="travelDetailsConvention" value="1" class="teachingRadioClass" required/>
                 <label class="teachingRadioClass"> כן</label>
-                <input type="radio" name="travelDetailsConvention" ng-model="travelDetailsConvention" value="no" class="teachingRadioClass" required/>
+                <input type="radio" name="travelDetailsConvention" ng-model="travelDetailsConvention" value="0" class="teachingRadioClass" required/>
                 <label class="teachingRadioClass">לא</label>
             </section>
 
             <section class="travelDetailsRadioClass">
-                <input type="radio" name="travelDetailsDuration" ng-model="travelDetailsDuration" value="yes" class="teachingRadioClass" required/>
+                <input type="radio" name="travelDetailsDuration" ng-model="travelDetailsDuration" value="1" class="teachingRadioClass" required/>
                 <label class="teachingRadioClass"> כן</label>
-                <input type="radio" name="travelDetailsDuration" ng-model="travelDetailsDuration" value="no" class="teachingRadioClass" required/>
+                <input type="radio" name="travelDetailsDuration" ng-model="travelDetailsDuration" value="0" class="teachingRadioClass" required/>
                 <label class="teachingRadioClass">לא</label>
             </section>
             <section class="travelDetailsRadioClass">
-                <input type="radio" name="travelDetailsFlightNum" ng-model="travelDetailsFlightNum" value="yes" class="teachingRadioClass" required/>
+                <input type="radio" name="travelDetailsFlightNum" ng-model="travelDetailsFlightNum" value="1" class="teachingRadioClass" required/>
                 <label class="teachingRadioClass"> כן</label>
-                <input type="radio" name="travelDetailsFlightNum" ng-model="travelDetailsFlightNum" value="no" class="teachingRadioClass" required/>
+                <input type="radio" name="travelDetailsFlightNum" ng-model="travelDetailsFlightNum" value="0" class="teachingRadioClass" required/>
                 <label class="teachingRadioClass">לא</label>
             </section>
             <section class="travelDetailsRadioClass">
-                <input type="radio" name="travelDetailsFirstTestMissing" ng-model="travelDetailsFirstTestMissing" value="yes" class="teachingRadioClass" required/>
+                <input type="radio" name="travelDetailsFirstTestMissing" ng-model="travelDetailsFirstTestMissing" value="1" class="teachingRadioClass" required/>
                 <label class="teachingRadioClass"> כן</label>
-                <input type="radio" name="travelDetailsFirstTestMissing" ng-model="travelDetailsFirstTestMissing" value="no" class="teachingRadioClass" required/>
+                <input type="radio" name="travelDetailsFirstTestMissing" ng-model="travelDetailsFirstTestMissing" value="0" class="teachingRadioClass" required/>
                 <label class="teachingRadioClass">לא</label>
             </section>
             <section class="signClass">

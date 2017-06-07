@@ -67,7 +67,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
 
 
     })
-    .controller("newFormController", function ($scope, loginService, $window, $location, $http) {
+    .controller("newFormController", function ($scope, loginService, $window, $location, $http, $filter) {
         var scope = $scope;
 
         $scope.init = function () {
@@ -320,7 +320,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         }
 
         function checkIsTeaching(radio) {
-            if (radio == "yes") {
+            if (radio == "1") {
                 console.log("yes");
                 return true;
                 //scope.addClassDisable = false;
@@ -401,6 +401,15 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             //alert(JSON.stringify(scope.testsGroup));
             var ApplyDocument = apllyDocumentToJson();
             console.log(ApplyDocument);
+            var config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            $http.post('http://localhost:8080/api/ApplyDocuments', ApplyDocument, config)
+            .success(function (response){
+                console.log(response);
+            })
 
 
         }
@@ -408,35 +417,35 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
 
         function apllyDocumentToJson() {
             var user = loginService.getData();
-            var budget = checkBudgetField();
+            var budget = checkBudgetField();           
             if (budget == null) {
                 return;
             }
            
-            var doc = [
+            var doc = 
                 {
                     "UserId": user.Id,
                     "ColleagueType": budget,
-                    "DepartureDate": scope.startDate,
-                    "ReturnDate": scope.endDate,
+                    "DepartureDate": convertDate(scope.startDate),
+                    "ReturnDate": convertDate(scope.endDate),
                     "TotalDays": parseInt(scope.conferenceDays),
                     "TravelPurpose": scope.destinationTextBox,
                     //"TotalRequsetAmount": להשלים
                     //"TotalEselDays":להשלים
-                    "LastReturnDate": scope.lastFlightFromShenkar,
+                    "LastReturnDate": convertDate(scope.lastFlightFromShenkar),
                     "TeacheDuringTravel": parseInt(scope.isTeaching),
                     "ReplacingInTests": parseInt(scope.tests),
                     "ResearchTraining": parseInt(scope.travelDetailsConvention),
                     "AboveWeek": parseInt(scope.travelDetailsDuration),
-                    "MoreThenOneTravel": parseInt(acope.travelDetailsFlightNum),
+                    "MoreThenOneTravel": parseInt(scope.travelDetailsFlightNum),
                     "AbsenceTestA": parseInt(scope.travelDetailsFirstTestMissing),
                     "ExceptionRequstExplain": scope.travelDetailsExplainTextErea,
-                    "PlusOne": scope.family,
+                    "PlusOne": parseInt(scope.family),
                     //"ApplicantSign":לשנות בבסיס נתונים את הטיפוס לבוליאן
-                    "ApplyDate"://להכניס את התאריך של אישור הטופס עי הממלא
-
-                }
-            ]
+                    //"ApplyDate"://להכניס את התאריך של אישור הטופס עי הממלא
+                    //ApplicantSign להוריד - לא רלוונטי
+                    "ApplyDate": convertDate(scope.startDate)//לשנות לתאריך של היום
+                }        
             return doc;
         }
 
@@ -453,6 +462,11 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                 return
             }
             return budget;
+        }
+
+        function convertDate(dateToConvert) {
+            var date = $filter('date')(dateToConvert, 'yyyy-MM-dd');
+            return date;
         }
 
 

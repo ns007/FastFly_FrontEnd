@@ -327,6 +327,14 @@ height:100px;
 #submitFormButton{
     margin-right:350px;
 }
+.sumEshelDaysClass{
+    position:relative;
+    left:250px;
+    float:right;
+}
+#countriesId{
+    max-width:140px;
+}
 /*.formRequestTypeRadio input[type="radio"]{
     margin-right:20px;
 }*/

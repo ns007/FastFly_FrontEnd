@@ -171,7 +171,7 @@
                         <button type="button" class="btn remoneFlightButton" aria-label="Left Align" ng-click="removeNewChoice($index)">
                             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                         </button>
-                        <select name="" class="btn btn-default" role="group" ng-options="item.CountryName for item in countries" ng-model="choice.countrie" ng-change="showSelectedCountrie(choice.name)">
+                        <select id="countriesId" class="btn btn-default" role="group" ng-options="item.CountryName for item in countries" ng-model="choice.countrie" ng-change="showSelectedCountrie(choice.name)">
                             <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>
                         </select>
                         
@@ -201,8 +201,11 @@
 
                 </div>
             </section>
-            <section>
-                <lable class="flightDetailLableClass">נא ציין תאריך חזרה של הנסיעה האחרונה ע"ח שנקר</lable> <input type="date" name="lastFlightFromShenkar" ng-model="lastFlightFromShenkar" />
+            <section class="sumEshelDaysClass">
+                <lable class="flightDetailLableClass">סה"כ סכום מבוקש ללא אש"ל</lable><input type="number" class="flightCashInputClass" name="sumNoEshel" id="sumNoEshel" min="0" ng-model="sumNoEshel" /> 
+                <lable class="flightDetailLableClass">ימי אש"ל ללא מלון</lable><input type="number" class="flightCashInputClass" name="sumDaysNoEshel" id="sumDaysNoEshel" min="0" ng-model="sumDaysNoEshel" /> 
+                <lable class="flightDetailLableClass">ימי אש"ל כולל מלון</lable><input type="number" class="flightCashInputClass" name="sumDaysEshel" id="sumDaysEshel" min="0" ng-model="sumDaysEshel" /> 
+                <lable class="flightDetailLableClass">תאריך חזרת הנסיעה האחרונה ע"ח שנקר</lable> <input type="date" name="lastFlightFromShenkar" ng-model="lastFlightFromShenkar" />
             </section>
             <!--************** working dropDown**************
             <div class="btn-group" role="group">

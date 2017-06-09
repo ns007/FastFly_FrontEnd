@@ -171,13 +171,13 @@
                         <button type="button" class="btn remoneFlightButton" aria-label="Left Align" ng-click="removeNewChoice($index)">
                             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                         </button>
-                        <select id="countriesId" class="btn btn-default" role="group" ng-options="item.CountryName for item in countries" ng-model="choice.countrie" ng-change="showSelectedCountrie(choice.name)">
+                        <select id="countriesId" class="btn btn-default" role="group" ng-options="item.CountryName for item in countries" ng-model="choice.countrie" ng-change="showSelectedCountrie(choice.countrie)">
                             <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>
                         </select>
                         
                         <lable class="flightDetailLableClass">מתאריך</lable> <input type="date" name="flightDetailsFromDate" ng-model="choice.flightDetailsFromDate" />
                         <lable class="flightDetailLableClass">עד תאריך</lable> <input type="date" name="flightDetailsToDate" ng-model="choice.flightDetailsToDate" ng-change="checkDate(choice.flightDetailsToDate,$index)"/>
-                        <lable class="flightDetailLableClass">סכום מבוקש בדולרים לטיסה</lable><input type="number" class="flightCashInputClass" name="flightDollars" id="flightDollars" min="0" ng-model="flightDollars" /> 
+                        <lable class="flightDetailLableClass">סכום מבוקש בדולרים לטיסה</lable><input type="number" class="flightCashInputClass" name="flightDollars" id="flightDollars" min="0" ng-model="choice.flightDollars" /> 
                         <!--<lable class="flightDetailLableClass">סכום מבוקש בדולרים</lable>--> <!--<input type="number" name="dollarsNeeded" id="dollarsNeeded" ng-model="choice.dollarsNeeded" />-->
                     </section>
                     <section class="flightExpenseClass">
@@ -247,10 +247,11 @@
                         <button type="button" class="btn remoneFlightButton" aria-label="Left Align" ng-click="removeCourse($index)">
                             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                         </button>
-                        <lable class="flightDetailLableClass">שם הקורס</lable> <input type="text" class="courseNameTextBox" name="courseNameTextBox" ng-model="course.courseNameTextBox" placeholder="שם הקורס" />
-                        <select name="" class="btn btn-default" role="group" ng-options="item for item in courseDay" ng-model="course.courseDay">
+                        <lable class="flightDetailLableClass">שם הקורס</lable> <input type="text" class="courseNameTextBox" name="courseNameTextBox" id="courseNameTextBox" ng-model="course.courseNameTextBox" placeholder="שם הקורס" />
+                        <!--<select name="" class="btn btn-default" role="group" ng-options="item for item in courseDay" ng-model="course.courseDay">
                             <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">יום</option>
-                        </select>
+                        </select>-->
+                        <lable class="flightDetailLableClass">יום</lable> <input type="date" id="courseDay" name="courseDay" ng-model="course.courseDay" />
                         <lable class="flightDetailLableClass">משעה</lable><input type="time" id="courseReplaceFromTime" name="courseReplaceFromTime" ng-model="course.courseReplaceFromTime" placeholder="HH:mm:ss" min="08:00:00" max="22:00:00" required />
                         <lable class="flightDetailLableClass">עד שעה</lable><input type="time" id="courseReplaceToTime" name="courseReplaceToTime" ng-model="course.courseReplaceToTime" placeholder="HH:mm:ss" min="08:00:00" max="22:00:00" required />
                         <lable class="flightDetailLableClass">אופן ההשלמה</lable> <input type="text" name="courseReplaseComplete" id="courseReplaseComplete" ng-model="course.courseReplaseComplete" placeholder="שם המחליף או מועד שיעור ההשלמה" />

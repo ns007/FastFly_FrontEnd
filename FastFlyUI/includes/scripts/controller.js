@@ -26,6 +26,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
     .controller("deleteUser", function ($scope, loginService, $http) {
         var scope = $scope;
         var temp = null;
+       
         scope.init = function () {
             console.log("delete user init");
             //loginService.getDataFromAPI()
@@ -38,8 +39,11 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             $http.get('http://localhost:8080/api/users/')
                   .success(function (response) {
                       console.log(response);
+                      scope.users = response;
                   });
             scope.deleteUser = true;
+           
+           
         }
         scope.showTemp = function () {
             console.log(temp);
@@ -65,6 +69,8 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                  })
         });*/
 
+
+        
 
     })
     .controller("newFormController", function ($scope, loginService, $window, $location, $http, $filter) {
@@ -263,7 +269,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         }
 
         scope.showSelectedCountrie = function (selectedCountrie) {
-            //console.log(scope.choices);           
+            console.log(selectedCountrie.CountryCode);
         }
 
         scope.checkDate = function (endDate, index) {
@@ -397,7 +403,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
 
         //*****************send new form*****************
         scope.sendNewForm = function () {
-       
+
             //alert(JSON.stringify(scope.testsGroup));
             var ApplyDocument = apllyDocumentToJson();
             console.log(ApplyDocument);
@@ -407,8 +413,30 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                 }
             }
             $http.post('http://localhost:8080/api/ApplyDocuments', ApplyDocument, config)
-            .success(function (response){
+            .success(function (response) {
                 console.log(response);
+                if (scope.isTeaching == "1") {
+                    var replaceTeachDoc = replaceTeachDocToJson(response.DocId);
+                    $http.post('http://localhost:8080/api/LectureReplacements', replaceTeachDoc, config)
+                    .success(function (response) {
+                        console.log(response);
+                        if (scope.tests == "1") {
+                            console.log("++" + response[0].DocId + "++");
+                            var replaceTestDoc = replaceTestDocToJson(response[0].DocId);
+                            $http.post('http://localhost:8080/api/TestReplacements', replaceTestDoc, config)
+                            .success(function (response) {
+                                console.log(response);
+                                var flightDoc = flightDocToJson(response[0].DocId);
+                                $http.post('http://localhost:8080/api/DestinationPeriods', flightDoc, config)
+                                .success(function (response) {
+                                    console.log(response);
+                                    swal("תודה!", "הטופס נשמר בהצלחה", "success");
+                                })
+                            })
+                        }
+
+                    })
+                }
             })
 
 
@@ -449,6 +477,68 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             return doc;
         }
 
+        function replaceTeachDocToJson(DocId) {
+          //  console.log(DocId);
+            //console.log(scope.courses);
+            var doc=[];
+            angular.forEach(scope.courses, function (item) {
+                var tempDoc =
+                    {
+                        "DocId": DocId,
+                        "CourseName": item.courseNameTextBox,
+                        "Date": convertDate(item.courseDay),
+                        "FromHour": convertTime(item.courseReplaceFromTime),
+                        "ToHour": convertTime(item.courseReplaceToTime),
+                        "CompleteBy": item.courseReplaseComplete
+                    }
+                this.push(tempDoc);
+                //console.log(item);
+            }, doc);
+            // console.log(doc);
+            return doc;
+        }
+
+        function replaceTestDocToJson(DocId) {
+            var doc = [];
+            angular.forEach(scope.testsGroup, function (item) {
+                var tempDoc =
+                    {
+                        "DocId": DocId,
+                        "CourseName": item.TestCourseNameTextBox,
+                        "TestDate": convertDate(item.testDate),
+                        "SubstituteLucterer": item.profesorName,
+                        "ToHour": convertTime(item.courseReplaceToTime),
+                        "ExamPeriod": item.appointedTime
+                    }
+                this.push(tempDoc);
+                //console.log(item);
+            }, doc);
+            // console.log(doc);
+            return doc;
+        }
+
+        function flightDocToJson(DocId) {
+            var doc = [];
+            angular.forEach(scope.choices, function (item) {
+                var tempDoc =
+                    {
+                        "DocId": DocId,
+                        "CountryCode": item.countrie.CountryCode,
+                        "FromDate": convertDate(item.flightDetailsFromDate),
+                        "ToDate": convertDate(item.flightDetailsToDate),
+                        "Flight": item.flightDollars,
+                        "Hotel": item.hotelsDollars,
+                        "RideBy": item.carRentDollars,
+                        "ParticipationFee": item.conferenceDollars,
+                        "TotalAmountRequested": scope.sumNoEshel
+                    }
+                this.push(tempDoc);
+                //console.log(item);
+            }, doc);
+            // console.log(doc);
+            return doc;
+        }
+
         function checkBudgetField() {
             var budget;
             if (scope.budgetTextBoxShow) {
@@ -467,6 +557,13 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         function convertDate(dateToConvert) {
             var date = $filter('date')(dateToConvert, 'yyyy-MM-dd');
             return date;
+        }
+
+        function convertTime(dateToConvert){
+            //var time = dateToConvert.toLocaleTimeString();
+            var time = $filter('date')(dateToConvert, 'HH:mm');
+            //console.log(time);
+            return time;
         }
 
 
@@ -499,9 +596,11 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                            swal("שגיאה", "שם משתמש או סיסמה שגויים", "error");
                        }
                        else {
+                           //var tempCookie = { "Id": response.Id, "Password": response.Password, "FirstName": response.FirstName, "Role": response.ApplicationRoleId };
                            $cookies.putObject('cookie', response);
                            var cookieval = $cookies.getObject('cookie');
                            //console.log("cookie: " + json.stringify(cookieval));
+                           //console.log(cookieval);
                            console.log(response);
                            scope.title = "home";
                            loginService.setData(response);
@@ -541,7 +640,14 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             }
             else {
                 var user = $cookies.getObject('cookie')
-                loginService.setData(user);
+                //var user;
+                //$http.get('http://localhost:8080/api/users/' + resCookie.Id + '/' + resCookie.Password)
+                //.success(function (response) {
+                //    loginService.setData(response);
+                //    user = response;
+                //})
+                //loginService.setData(user);
+                //var user = loginService.getData();
                 console.log(user);
                 scope.title = "home";
                 //loginService.setData(response);

@@ -1,3 +1,10 @@
 ﻿<section ng-show="deleteUser" id="deleteUser" ng-controller="deleteUser" data-ng-init="init()">
-    
+    <div>
+        <input type="text" placeholder="חפש.." ng-model="userSearch">
+    </div>
+    <div ng-repeat="user in users | filter:userSearch">
+        <div>
+            {{user.FirstName}} {{user.LastName}}
+        </div>
+    </div>
 </section>

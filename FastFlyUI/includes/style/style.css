@@ -278,7 +278,13 @@ height:100px;
 .courseInputClass{
     position:relative;
     bottom:20px;
-    left:200px;
+    left:250px;
+}
+#courseDay{
+    width:150px;
+}
+#courseNameTextBox{
+    width:120px;
 }
 .courseReplaceSectionClass{
     position:relative;
@@ -334,6 +340,9 @@ height:100px;
 }
 #countriesId{
     max-width:140px;
+}
+#deleteUser{
+    direction:rtl;
 }
 /*.formRequestTypeRadio input[type="radio"]{
     margin-right:20px;

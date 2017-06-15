@@ -57,6 +57,11 @@ header {
     position: relative;
     top: 45px;
 }
+.createUserHeaderClass {
+    position: relative;
+    right: 500px;
+    float: right;
+}
 
 #submitSection {
     margin-top: 30px;
@@ -347,7 +352,65 @@ height:100px;
 /*.formRequestTypeRadio input[type="radio"]{
     margin-right:20px;
 }*/
+#custom-search-input{
+    padding: 3px;
+    border: solid 1px #E4E4E4;
+    border-radius: 6px;
+    background-color: #fff;
+}
 
+#custom-search-input input{
+    border: 0;
+    box-shadow: none;
+}
 
+#custom-search-input button{
+    margin: 2px 0 0 0;
+    background: none;
+    box-shadow: none;
+    border: 0;
+    color: #666666;
+    padding: 0 8px 0 10px;
+    border-left: solid 1px #ccc;
+}
+
+#custom-search-input button:hover{
+    border: 0;
+    box-shadow: none;
+    border-left: solid 1px #ccc;
+}
+
+#custom-search-input .glyphicon-search{
+    font-size: 23px;
+}
+.deleteUserRepeatClass{
+    position:relative;
+    bottom:500px;
+    right:500px;
+}
+#createUserFormFields{
+    direction:rtl;
+}
+#dashboardOpensFormsRequestParentSection{
+    overflow:hidden;
+    height:600px;
+    float:left;
+    position:relative;
+    left:1000px;
+    top:70px;
+    direction:rtl;
+    
+}
+#dashboardOpensFormsRequest{
+     float:right;
+    direction:rtl;
+    height:600px;
+    overflow-y:scroll;
+}
+#dashboardOpensFormsRequest::-webkit-scrollbar{
+
+  width: 0px;  /* remove scrollbar space */
+    background: transparent;
+}
 
 

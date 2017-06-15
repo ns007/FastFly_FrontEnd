@@ -1,7 +1,7 @@
 ﻿/// <reference path="C:\Users\yinonmanor\Source\Repos\FastFly_FrontEnd\FastFlyUI\Scripts/angular.min.js" />
 
 
-var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
+var app = angular.module("fastFly", ['ngRoute'])
 .config(function ($routeProvider) {
     $routeProvider.when("/newForm", {
         templateUrl: "template/openNewForm.html",
@@ -26,7 +26,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
     .controller("deleteUser", function ($scope, loginService, $http) {
         var scope = $scope;
         var temp = null;
-       
+
         scope.init = function () {
             console.log("delete user init");
             //loginService.getDataFromAPI()
@@ -40,15 +40,39 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                   .success(function (response) {
                       console.log(response);
                       scope.users = response;
+                      scope.usersToDelete = response;
                   });
             scope.deleteUser = true;
            
-           
+
+
+        }
+
+        scope.deleteUserFunction = function (user) {
+            console.log(user);
+            swal({
+                title: "אזהרה",
+                text: "!אתה עומד למחוק את " + user.FirstName + " " + user.LastName + " מהמערכת",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn btn-danger",
+                confirmButtonColor: '#d33',
+                confirmButtonText: "מחק",
+                closeOnConfirm: false,
+                cancelButtonText: 'ביטול',
+            },
+        function () {
+            $http.delete('http://localhost:8080/api/Users/' + user.Id)
+                   .success(function (response) {
+                       console.log(response);
+                       swal("המשתמש נמחק", "מחקת משתמש זה בהצלחה", "success");
+                   })
+        });
         }
         scope.showTemp = function () {
             console.log(temp);
         }
-        
+
 
         /*
         swal({
@@ -70,7 +94,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         });*/
 
 
-        
+
 
     })
     .controller("newFormController", function ($scope, loginService, $window, $location, $http, $filter) {
@@ -81,29 +105,55 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.newFormShow = true;
             scope.destinationClass = 'otherPages';
             scope.privateDetailsClass = 'currentPage';
-            console.log($location.path().split(/[\s/]+/).pop());
+           // console.log($location.path().split(/[\s/]+/).pop());
             var user = loginService.getData();
-
+            scope.title = "Open New Form";
+            //scope.allDocsShow = false;
             if (user == null) {
                 $window.location = "index.html";
             }
-            console.log(user);
-            scope.title = "Open New Form";
-            scope.firstNameTextBox = user.FirstName;
-            scope.lastNameTextBox = user.LastName;
-            scope.idTextBox = user.Id;
-            scope.facultyTextBox = user.Faculty1.FacultyName;
-            scope.departmentTextBox = user.Department1.DepartmentName;
-            scope.positionTextBox = user.Role;
-            scope.jogPercentTextBox = user.PercentageJob;
-            scope.phoneTextBox = user.CellNum;
-            scope.mailTextBox = user.EmailAddress;
-            scope.type = ["קק\"מ אישי", "קק\"מ קבוצתי", "סגל עמית", "מקור תקציבי"];
-            this.myDate = new Date();
-            scope.isDatePickerOpen = true;
-            scope.newForm = true;
-            scope.paging = true;
-            scope.budgetTextBoxShow = false;
+            else {
+                if (loginService.getSignerFlag() == 1) {
+                    console.log(loginService.getSignerFlag());
+                    var userDoc = loginService.getResponse();
+                    console.log(" ....");
+                    console.log(userDoc);
+
+                    //console.log(userDoc.UserId);
+                    //console.log(userDoc[0].User.FirstName);
+                    //scope.idTextBox = userDoc.UserId;
+                    //scope.firstNameTextBox = userDoc[0].User.FirstName;
+                }
+                else {
+                    // console.log(loginService.getSignerFlag());
+                    console.log(user);
+                    scope.firstNameTextBox = user.FirstName;
+                    scope.lastNameTextBox = user.LastName;
+                    scope.idTextBox = user.Id;
+                    scope.facultyTextBox = user.Faculty1.FacultyName;
+                    scope.departmentTextBox = user.Department1.DepartmentName;
+                    scope.positionTextBox = user.Role;
+                    scope.jogPercentTextBox = user.PercentageJob;
+                    scope.phoneTextBox = user.CellNum;
+                    scope.mailTextBox = user.EmailAddress;
+                    //scope.type = ["קק\"מ אישי", "קק\"מ קבוצתי", "סגל עמית", "מקור תקציבי"];
+                    //this.myDate = new Date();
+                    //scope.isDatePickerOpen = true;
+                    //scope.newForm = true;
+                    //scope.paging = true;
+                    //scope.allDocsShow = false;
+                    //scope.budgetTextBoxShow = false;
+                }
+                scope.type = ["קק\"מ אישי", "קק\"מ קבוצתי", "סגל עמית", "מקור תקציבי"];
+                this.myDate = new Date();
+                scope.isDatePickerOpen = true;
+                scope.newForm = true;
+                scope.paging = true;
+                scope.allDocsShow = false;
+                scope.budgetTextBoxShow = false;
+            }
+            
+            
         }
         scope.checkBudjet = function (selectedItem) {
             console.log(selectedItem);
@@ -223,7 +273,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.testReplaceClass = 'currentPage';
             if (!(checkIsTeaching(scope.tests))) {
                 scope.addTestDisable = true;
-                 scope.testsGroup = [];
+                scope.testsGroup = [];
             }
             else {
                 scope.addTestDisable = false;
@@ -245,7 +295,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             scope.travelDetailsClass = 'currentPage';
         }
         scope.choices = [];
-        scope.addNewFlight = function () {        
+        scope.addNewFlight = function () {
             console.log("add new flight");
             //console.log(scope.browse);
             var countriesList = null;
@@ -258,10 +308,10 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                              scope.countries = response;
                              countiesList = loginService.getCountries();
                          })
-            }           
+            }
             scope.countries = countiesList;
             scope.selectedCountries = countiesList;
-           // form.contacts.push({});
+            // form.contacts.push({});
             var newItemNo = scope.choices.length + 1;
             scope.choices.push({});
             //var newItemNo = $scope.choices.length + 1;
@@ -273,8 +323,8 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         }
 
         scope.checkDate = function (endDate, index) {
-           // console.log(endDtae);
-           // console.log(scope.choices[index].flightDetailsFromDate);
+            // console.log(endDtae);
+            // console.log(scope.choices[index].flightDetailsFromDate);
             var startDate = scope.choices[index].flightDetailsFromDate;
             //var endDate = choices.flightDetailsToDate;
             if (endDate < startDate) {
@@ -289,7 +339,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         }
 
         //***********************************************//***********************************************
-       
+
 
         //$scope.addNewChoice = function () {
         //    var newItemNo = $scope.choices.length + 1;
@@ -304,7 +354,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             var allChoises = scope.choices;
             //console.log(allChoises);
             if (newItemNo !== -1) {
-               // scope.choices.pop(choiseIndex,1);
+                // scope.choices.pop(choiseIndex,1);
                 $scope.choices.splice(choiseIndex, 1);
             }
         };
@@ -317,8 +367,8 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         scope.appointedTime = ["מועד א", "מועד ב", "מועד מיוחד"];
         scope.showTeacingReplace = function () {
             if (!(checkIsTeaching(scope.isTeaching))) {
-                    scope.addClassDisable = true;
-                    scope.courses = [];
+                scope.addClassDisable = true;
+                scope.courses = [];
             }
             else {
                 scope.addClassDisable = false;
@@ -362,7 +412,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         scope.showTestReplace = function () {
             if (!(checkIsTeaching(scope.tests))) {
                 scope.addTestDisable = true;
-                 scope.testsGroup = [];
+                scope.testsGroup = [];
             }
             else {
                 scope.addTestDisable = false;
@@ -445,12 +495,12 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
 
         function apllyDocumentToJson() {
             var user = loginService.getData();
-            var budget = checkBudgetField();           
+            var budget = checkBudgetField();
             if (budget == null) {
                 return;
             }
-           
-            var doc = 
+
+            var doc =
                 {
                     "UserId": user.Id,
                     "ColleagueType": budget,
@@ -473,14 +523,14 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                     //"ApplyDate"://להכניס את התאריך של אישור הטופס עי הממלא
                     //ApplicantSign להוריד - לא רלוונטי
                     "ApplyDate": convertDate(scope.startDate)//לשנות לתאריך של היום
-                }        
+                }
             return doc;
         }
 
         function replaceTeachDocToJson(DocId) {
-          //  console.log(DocId);
+            //  console.log(DocId);
             //console.log(scope.courses);
-            var doc=[];
+            var doc = [];
             angular.forEach(scope.courses, function (item) {
                 var tempDoc =
                     {
@@ -547,7 +597,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             else {
                 budget = scope.selectedName;
             }
-            if (budget == "" || budget==null) {
+            if (budget == "" || budget == null) {
                 swal("שדה ריק", "שדה מקור תקציבי אינו מלא", "error");
                 return
             }
@@ -559,7 +609,7 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
             return date;
         }
 
-        function convertTime(dateToConvert){
+        function convertTime(dateToConvert) {
             //var time = dateToConvert.toLocaleTimeString();
             var time = $filter('date')(dateToConvert, 'HH:mm');
             //console.log(time);
@@ -578,54 +628,136 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
         var scope = $scope;
         scope.init = function () {
             console.log("create user init");
+            scope.createUserForm = true;
         }
     })
-    .controller("index", function ($scope, $http, $window, loginService, $cookies, $location) {
+    .controller("index", function ($scope, $http, $window, loginService, $location,$q) {
         var scope = $scope;
         scope.goHome = function () {
-            scope.title = "Home";
+            
+            var user = JSON.parse(localStorage.getItem('user'));
+            if (user != null) {
+                scope.title = "Home";
+                getAllDocs(user);
+                scope.allDocsShow = true;
+            }
         }
         //*********************************dont save cookeis*********************************//
         //$cookies.remove('cookie');
         $scope.submit = function () {
-            // alert($scope.password);
             $http.get('http://localhost:8080/api/users/' + scope.id + '/' + scope.password)
-            //$http.get('http://localhost:8080/api/users/')
                    .success(function (response) {
+                       console.log(response);
                        if (response == null) {
                            swal("שגיאה", "שם משתמש או סיסמה שגויים", "error");
                        }
                        else {
-                           //var tempCookie = { "Id": response.Id, "Password": response.Password, "FirstName": response.FirstName, "Role": response.ApplicationRoleId };
-                           $cookies.putObject('cookie', response);
-                           var cookieval = $cookies.getObject('cookie');
+                           localStorage.setItem('user', JSON.stringify(response));
+                           //var cookieval = $cookies.getObject('cookie');
                            //console.log("cookie: " + json.stringify(cookieval));
                            //console.log(cookieval);
-                           console.log(response);
+                           console.log(JSON.parse(localStorage.getItem(('user'))));
                            scope.title = "home";
                            loginService.setData(response);
                            scope.loginForm = false;
                            scope.paging = false;
-                           scope.userName = response;
+                           scope.userName = response.FirstName;
                            scope.headerText = true;
                            scope.dashboardPage = true;
                            scope.aside = true;
                            //$window.location.href = '/index.html';                    
                            // swal(json.stringify(response));
                        }
-                       if (loginService.checkRoll(response)) {
+                       if (loginService.checkRoll(response) == 2) {
                            console.log("admin");
                            scope.adminGetHistoryButton = true;
                            scope.adminCreateUserButton = true;
                            scope.adminDeleteUserButton = true;
+                           scope.openNewFormButtonShow = true;
+                           scope.getHistoryButtonShow = true;
                        }
 
-                   });
+                       else if (loginService.checkRoll(response) == 4) {
+                           scope.adminGetHistoryButton = false;
+                           scope.adminCreateUserButton = false;
+                           scope.adminDeleteUserButton = false;
+                           scope.openNewFormButtonShow = false;
+                           scope.getHistoryButtonShow = false;
+                       }
+                       //get all apply documents
+                       getAllDocs(response);
+                       scope.allDocsShow = true;
+
+                   })
+                .error(function (response) {
+                    swal("שגיאה", "שם משתמש או סיסמה שגויים", "error");
+                });
         }
 
+        function getAllDocs(data) {
+            var myEl = angular.element(document.querySelector('#dashboardOpensFormsRequest'));
+            myEl.empty();
+            var index = 0;
+            $http.get('http://localhost:8080/api/applydocuments/')
+            .success(function (response) {
+                //console.log(response);
+                var length = response.length;
+                //loginService.setResponse(response);
+                angular.forEach(response, function (res) {
+                    //console.log(res.UserId);
+                    $http.get('http://localhost:8080/api/users/' + res.UserId)
+                    .success(function (userDetails) {
+                                       var para = document.createElement("a");
+                                       para.href = "#/newForm";
+                                       //console.log(index);
+                                       var node = document.createTextNode(userDetails.Id + ' ' + userDetails.FirstName + ' ' + userDetails.LastName + ' ' + res.DocId);
+                                       para.appendChild(node);
+                                       para.addEventListener("click", function () { getUserDetails(res.DocId) }, false);
+                                       var element = document.getElementById("dashboardOpensFormsRequest");
+                                       element.appendChild(para);
+                                       para = document.createElement("p");
+                                       element.appendChild(para);
+                                   })                   
+                })
+            })
+        }
+
+
+        function getUserDetails(id) {
+            var doc = loginService.getUserDetailsFromService(id);
+            //.then(function(data){
+            //    console.log(data.data);
+            //});
+            //loginService.setSignerFlag(1);
+            //console.log(id);
+            //$http.get('http://localhost:8080/api/applydocuments/' + id)
+            //.success(function (response) {
+            //    console.log(response);
+            //    loginService.setResponse(response);               
+            //    openForm();
+            //})
+            console.log(doc.$$state);
+            var userDoc = [];
+           
+            //-------------------------
+            angular.forEach(doc.$$state, function (demoContent, index) {
+
+                angular.forEach(demoContent.value, function (newsGroup, index) {
+                    userDoc.push(newsGroup)
+                });
+            });
+            //------------------------
+            console.log(userDoc);
+            loginService.setResponse(doc);
+            openForm();
+        }
         scope.init = function () {
 
-            if ($cookies.getObject('cookie') == null) {
+            //if ($cookies.getObject('cookie') == null) {
+
+            /**********clear local storage*********/
+            localStorage.clear();
+            if (localStorage.getItem('user') == null) {
                 console.log("init");
                 scope.title = "Login";
                 scope.loginForm = true;
@@ -639,20 +771,13 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                 scope.paging = false;
             }
             else {
-                var user = $cookies.getObject('cookie')
-                //var user;
-                //$http.get('http://localhost:8080/api/users/' + resCookie.Id + '/' + resCookie.Password)
-                //.success(function (response) {
-                //    loginService.setData(response);
-                //    user = response;
-                //})
-                //loginService.setData(user);
-                //var user = loginService.getData();
+                //var user = $cookies.getObject('cookie')
+                var user = JSON.parse(localStorage.getItem('user'));
                 console.log(user);
                 scope.title = "home";
-                //loginService.setData(response);
+                loginService.setData(user);
                 scope.loginForm = false;
-                scope.userName = user;
+                scope.userName = user.FirstName;
                 scope.headerText = true;
                 scope.dashboardPage = true;
                 scope.aside = true;
@@ -663,40 +788,66 @@ var app = angular.module("fastFly", ['ngRoute', 'ngCookies'])
                 }
                 else if ($location.path().split(/[\s/]+/).pop() == 'createUserForm') {
                     scope.title = "Create User";
+                    scope.paging = false;
+                }
+                else if ($location.path().split(/[\s/]+/).pop() == 'index') {
+                    scope.allDocsShow = true;
+                    scope.paging = false;
                 }
 
                 else {
                     scope.paging = false;
                 }
 
-                if (loginService.checkRoll($cookies.getObject('cookie'))) {
+                if (loginService.checkRoll(user) == 2) {
                     console.log("admin");
                     scope.adminGetHistoryButton = true;
                     scope.adminCreateUserButton = true;
                     scope.adminDeleteUserButton = true;
+                    scope.openNewFormButtonShow = true;
+                    scope.getHistoryButtonShow = true;
                 }
+                else if (loginService.checkRoll(user) == 4) {
+                    scope.adminGetHistoryButton = false;
+                    scope.adminCreateUserButton = false;
+                    scope.adminDeleteUserButton = false;
+                    scope.openNewFormButtonShow = true;
+                    scope.getHistory = false;
+
+                }
+                getAllDocs(user);
+                scope.allDocsShow = true;
             }
         }
 
         scope.openNewForm = function () {
-            scope.title = "Open New Form";
-            scope.paging = true;
+            loginService.setSignerFlag(0);
+            openForm();
         }
 
         scope.getHistory = function () {
             console.log("get history");
             scope.newForm = false;
             scope.paging = false;
+            scope.allDocsShow = false;
         }
 
         scope.getUserHistory = function () {
             console.log("get user history");
             scope.paging = false;
+            scope.allDocsShow = false;
         }
 
         scope.adminCreateUser = function () {
             scope.title = "Create User";
             scope.paging = false;
+            scope.allDocsShow = false;
+        }
+
+        function openForm() {
+            scope.title = "Open New Form";
+            scope.paging = true;
+            scope.allDocsShow = false;
         }
 
     });

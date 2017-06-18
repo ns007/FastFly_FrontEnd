@@ -60,7 +60,7 @@
     this.getUserDetailsFromService = function (id) {
         var defer = $q.defer();
         this.setSignerFlag(1);
-        console.log(id);
+        //console.log(id);
         $http.get('http://localhost:8080/api/applydocuments/' + id)
         .success(function (response) {
             defer.resolve(response);            
@@ -69,6 +69,20 @@
             //return response;
         })
         return defer.promise;
+    }
+
+    this.getFlightByDocId = function (docId) {
+        return $http.get('http://localhost:8080/api/DestinationPeriods/' + docId)
+         .then(function (response) {
+             return response;
+         })
+    }
+
+    this.getCoursesByDocId = function (docId) {
+        return $http.get('http://localhost:8080/api/LectureReplacements/' + docId)
+         .then(function (response) {
+             return response;
+         })
     }
 
     

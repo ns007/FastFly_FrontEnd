@@ -102,12 +102,16 @@ var app = angular.module("fastFly", ['ngRoute'])
 
         $scope.init = function () {
             console.log("new form init");
+            //scope.flightsToShow = [{ "CountryCode": "AVA" }];
             scope.newFormShow = true;
             scope.destinationClass = 'otherPages';
             scope.privateDetailsClass = 'currentPage';
            // console.log($location.path().split(/[\s/]+/).pop());
             var user = loginService.getData();
             scope.title = "Open New Form";
+            scope.flightsTableShow = false;
+            scope.coursesTableShow = false;
+            scope.allDocsShow = false;
             //scope.allDocsShow = false;
             if (user == null) {
                 $window.location = "index.html";
@@ -115,8 +119,69 @@ var app = angular.module("fastFly", ['ngRoute'])
             else {
                 if (loginService.getSignerFlag() == 1) {
                     console.log(loginService.getSignerFlag());
+                    
                     var userDoc = loginService.getResponse();
+                    console.log(userDoc);
+                   
                     console.log(" ....");
+                    userDoc.then(function (x) {
+                        //var apllyDocs = x.User.ApplyDocuments;
+                        // console.log(apllyDocs);
+                        //var currentApplyDoc = [];
+                        //angular.forEach(apllyDocs, function (value) {
+                        //    //console.log(value);
+                        //})
+                        console.log(x);
+                        scope.firstNameTextBox = x.User.FirstName;
+                        scope.idTextBox = x.User.Id;
+                        scope.lastNameTextBox = x.User.LastName;
+                        scope.facultyTextBox = x.User.Faculty1.FacultyName;
+                        scope.departmentTextBox = x.User.Department1.DepartmentName;
+                        scope.positionTextBox = x.User.Role;
+                        scope.jogPercentTextBox = x.User.PercentageJob;
+                        scope.phoneTextBox = x.User.CellNum;
+                        scope.mailTextBox = x.User.EmailAddress;
+                        //scope.selectedName = x.ColleagueType; 
+                        checkIfTypeExist(x);
+                        scope.startDate = returnToOriginalDateFormat(x.DepartureDate);
+                        scope.endDate = returnToOriginalDateFormat(x.ReturnDate);
+                        scope.conferenceDays = x.TotalDays;
+                        scope.family = x.PlusOne;
+                        scope.destinationTextBox = x.TravelPurpose;
+                        
+                        var flights = loginService.getFlightByDocId(x.DocId);
+                        flights.then(function (dest) {
+                            //console.log(dest.data);
+                            angular.forEach(dest.data, function (value) {
+                                value.FromDate = convertDate(value.FromDate);
+                                value.ToDate = convertDate(value.ToDate);
+                            })
+                            //dest.data[0].FromDate = convertDate(dest.data[0].FromDate);
+                            scope.flightsToShow = dest.data;
+                            console.log(scope.flightsToShow);
+                            //scope.flightDetailsFromDate = returnToOriginalDateFormat(dest.data[0].FromDate);
+                            scope.flightsTableShow = true;
+
+                        })
+
+
+                        var coursesFromDb = loginService.getCoursesByDocId(x.DocId);
+                        coursesFromDb.then(function (courseReplace) {
+                            console.log(courseReplace.data);
+                            angular.forEach(courseReplace.data, function (value) {
+                                value.Date = convertDate(value.Date);                             
+                            })
+                            scope.coursesTableShow = true;
+                            scope.coursesFromDbToShow = courseReplace.data;
+                            scope.courses = [];
+                        })
+                        scope.isTeaching = x.TeacheDuringTravel;
+                        
+                        //scope.courses = 
+                       // console.log(destination);
+
+                        disableFields();
+                    })
                     console.log(userDoc);
 
                     //console.log(userDoc.UserId);
@@ -155,6 +220,50 @@ var app = angular.module("fastFly", ['ngRoute'])
             
             
         }
+
+        function returnToOriginalDateFormat(date) {
+            return new Date(date);
+        }
+
+        function disableFields() {
+            scope.destinationTextBoxDisabled = true;
+            scope.familyDisabled = true;
+            scope.selectedNameDiabled = true;
+            scope.startDateDisabled = true;
+            scope.endDateDisabled = true;
+            scope.conferenceDaysDisabled = true;
+            scope.browseButtonDisabled = true;
+            scope.addNewFlightButtomDisabled = true;
+            scope.lastFlightFromShenkarDisabled = true;
+            scope.sumDaysEshelDisabled = true;
+            scope.sumDaysNoEshelDisabled = true;
+            scope.sumNoEshelDisabled = true;
+            scope.isTeachingDisabled = true;
+           // scope.addClassDisable = true;
+        }
+
+        function checkIfTypeExist(data) {
+            var typeFlag = 0;
+            angular.forEach(scope.type, function (type) {
+                if (data.ColleagueType == type) {
+                    scope.selectedName = type;
+                    typeFlag = 1;
+                }
+            })
+            if (typeFlag == 0) {
+                scope.budgetTextBoxDisabled = true;
+                scope.budgetTextBoxShow = true;
+                scope.budgetTextBox = data.ColleagueType;
+                scope.selectedName = scope.type[3];
+            }            
+        }
+
+        //function getDataFromResponse(res) {
+        //    res.then(function (data) {
+        //        return data;
+        //    })
+        //}
+
         scope.checkBudjet = function (selectedItem) {
             console.log(selectedItem);
             if (selectedItem == "מקור תקציבי") {
@@ -249,13 +358,24 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.statmentClass = 'currentPage';
             scope.testReplaceClass = 'otherPages';
             scope.travelDetailsClass = 'otherPages';
-            if (!(checkIsTeaching(scope.isTeaching))) {
-                scope.addClassDisable = true;
-                scope.courses = [];
+            if (scope.isTeachingDisabled!=true) {
+                if (!(checkIsTeaching(scope.isTeaching))) {
+                    scope.addClassDisable = true;
+                    scope.courses = [];
+                }
+                else {
+                    if (scope.courses.length == 7) {
+                        scope.addClassDisable = true;
+                    }
+                    else {
+                        scope.addClassDisable = false;
+                    }
+                }
             }
             else {
-                scope.addClassDisable = false;
+                scope.addClassDisable = true;
             }
+
         }
 
         scope.showTestReplaceForm = function () {
@@ -365,6 +485,7 @@ var app = angular.module("fastFly", ['ngRoute'])
         //***********************************************//***********************************************
         scope.courseDay = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי"];
         scope.appointedTime = ["מועד א", "מועד ב", "מועד מיוחד"];
+
         scope.showTeacingReplace = function () {
             if (!(checkIsTeaching(scope.isTeaching))) {
                 scope.addClassDisable = true;
@@ -377,20 +498,26 @@ var app = angular.module("fastFly", ['ngRoute'])
 
         function checkIsTeaching(radio) {
             if (radio == "1") {
-                console.log("yes");
+                //console.log("yes");
                 return true;
                 //scope.addClassDisable = false;
             }
             else {
-                console.log("no");
+                //console.log("no");
                 return false;
             }
         }
         //scope.courses = [];
         scope.addNewCourse = function () {
             console.log("add course");
-            if (scope.courses.length == 8) {
+            if (scope.courses.length == 6) {
+                var newItemNo = scope.courses.length + 1;
+                scope.courses.push({});
+                scope.addClassDisable = true;
                 return;
+            }
+            else {
+                scope.addClassDisable = false;
             }
             var newItemNo = scope.courses.length + 1;
             scope.courses.push({});
@@ -406,6 +533,9 @@ var app = angular.module("fastFly", ['ngRoute'])
             if (newItemNo !== -1) {
                 // scope.choices.pop(choiseIndex,1);
                 $scope.courses.splice(courseIndex, 1);
+            }
+            if (scope.courses.length < 7) {
+                scope.addClassDisable = false;
             }
         };
 
@@ -453,7 +583,6 @@ var app = angular.module("fastFly", ['ngRoute'])
 
         //*****************send new form*****************
         scope.sendNewForm = function () {
-
             //alert(JSON.stringify(scope.testsGroup));
             var ApplyDocument = apllyDocumentToJson();
             console.log(ApplyDocument);
@@ -480,7 +609,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                                 $http.post('http://localhost:8080/api/DestinationPeriods', flightDoc, config)
                                 .success(function (response) {
                                     console.log(response);
-                                    swal("תודה!", "הטופס נשמר בהצלחה", "success");
+                                    swal("!תודה", "הטופס נשמר בהצלחה", "success");
                                 })
                             })
                         }
@@ -724,6 +853,7 @@ var app = angular.module("fastFly", ['ngRoute'])
 
 
         function getUserDetails(id) {
+            console.log(id);
             var doc = loginService.getUserDetailsFromService(id);
             //.then(function(data){
             //    console.log(data.data);
@@ -733,21 +863,25 @@ var app = angular.module("fastFly", ['ngRoute'])
             //$http.get('http://localhost:8080/api/applydocuments/' + id)
             //.success(function (response) {
             //    console.log(response);
-            //    loginService.setResponse(response);               
-            //    openForm();
-            //})
-            console.log(doc.$$state);
-            var userDoc = [];
+            //    loginService.setResponse(response);              
+            //});
+            //openForm();
+            //console.log(doc.$$state);
+           // var userDoc = [];
            
             //-------------------------
-            angular.forEach(doc.$$state, function (demoContent, index) {
-
-                angular.forEach(demoContent.value, function (newsGroup, index) {
-                    userDoc.push(newsGroup)
-                });
-            });
+            //angular.forEach(doc.$$state, function (demoContent, index) {
+            //    angular.forEach(demoContent, function (newsGroup, index) {
+            //        userDoc.push(newsGroup)
+            //    });
+            //});
             //------------------------
-            console.log(userDoc);
+            //console.log(doc);
+            // console.log(userDoc);           
+            //doc.then(function (x) {
+            //    console.log(x.User)
+            //})
+            //console.log(doc);
             loginService.setResponse(doc);
             openForm();
         }
@@ -756,7 +890,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             //if ($cookies.getObject('cookie') == null) {
 
             /**********clear local storage*********/
-            localStorage.clear();
+            //localStorage.clear();
             if (localStorage.getItem('user') == null) {
                 console.log("init");
                 scope.title = "Login";
@@ -784,6 +918,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                 scope.paging = false;
                 if ($location.path().split(/[\s/]+/).pop() == 'newForm') {
                     scope.paging = true;
+                    scope.allDocsShow = false;
                     scope.title = "Open New Form";
                 }
                 else if ($location.path().split(/[\s/]+/).pop() == 'createUserForm') {
@@ -816,7 +951,7 @@ var app = angular.module("fastFly", ['ngRoute'])
 
                 }
                 getAllDocs(user);
-                scope.allDocsShow = true;
+               // scope.allDocsShow = true;
             }
         }
 

@@ -70,8 +70,8 @@
                     </div>
                 </div>
                 <div>
-                    <select ng-model="selectedName" ng-options="x for x in type" class="selectpicker dropDown" data-style="btn-info" ng-change="checkBudjet(selectedName)"></select>
-                    <input type="text" id="budgetTextBox" name="budgetTextBox" ng-model="budgetTextBox" ng-show="budgetTextBoxShow" placeholder="מקור תקציב" />
+                    <select ng-model="selectedName" ng-options="x for x in type" class="selectpicker dropDown" data-style="btn-info" ng-change="checkBudjet(selectedName)" ng-disabled="selectedNameDiabled"></select>
+                    <input type="text" id="budgetTextBox" name="budgetTextBox" ng-model="budgetTextBox" ng-show="budgetTextBoxShow" placeholder="מקור תקציב" ng-disabled="budgetTextBoxDisabled"/>
                 </div>
 
                 <div class="dateContainer">
@@ -79,19 +79,19 @@
                         <div class="formRequestDivWrapper">
                             <div class="form-group">
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control input-md" name="conferenceDays" ng-model="conferenceDays" />
+                                    <input type="text" class="form-control input-md" name="conferenceDays" ng-model="conferenceDays" ng-disabled="conferenceDaysDisabled"/>
                                 </div>
                                 <label class="col-sm-1  control-label" for="conferenceDays">ימי השתלמות </label>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-2">
-                                    <input type="date" name="endDatd" ng-model="endDate" ng-change="checkDateRange()" />
+                                    <input type="date" name="endDatd" ng-model="endDate" ng-change="checkDateRange()" ng-disabled="endDateDisabled"/>
                                 </div>
                                 <label class="col-sm-1 control-label" for="endDatd">תאריך חזרה</label>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-2">
-                                    <input type="date" name="startDatd" ng-model="startDate" ng-change="setEndDate()" />
+                                    <input type="date" name="startDatd" ng-model="startDate" ng-change="setEndDate()" ng-disabled="startDateDisabled" />
                                 </div>
                                 <label class="col-sm-1  control-label   " for="startDatd">תאריך יציאה</label>
                             </div>
@@ -102,13 +102,13 @@
                     <div class="formRequestDivWrapper">
                         <div>
                             <label> האם מצטרפים בני משפחה</label>
-                            <div class="radioFamily">
+                            <div class="radioFamily" >
                                 <div>
-                                    <input type="radio" name="family" ng-model="family" value="1" />
+                                    <input type="radio" name="family" ng-model="family" value="1" ng-disabled="familyDisabled"/>
                                     <label> כן</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="family" ng-model="family" value="0" />
+                                    <input type="radio" name="family" ng-model="family" value="0" ng-disabled="familyDisabled"/>
                                     <label> לא</label>
                                 </div>
                             </div>
@@ -140,13 +140,13 @@
                 <p>ולצרף אסמכתא רלוונטית ואקדמית בעברית/ אנגלית המאשרת את קיום ההשתלמות </p>
                 <p>(הזמנות לכנס מקצועי/ מדעי, אישורי השתתפות, פירוט תערוכות במוזיאונים, גלריות וכו')</p>
             </section>
-            <textarea ng-model="destinationTextBox" name="destinationTextBox" id="destinationTextBox" placeholder="יעדי הנסיעה ומטרתה">
+            <textarea ng-model="destinationTextBox" name="destinationTextBox" id="destinationTextBox" placeholder="יעדי הנסיעה ומטרתה" ng-disabled="destinationTextBoxDisabled">
                 ...
             </textarea>
 
             <section class="browseClass">
 
-                <input id="files" type="file" multiple ng-model="browse" ngf-select="onFileSelect($files)" placeholder="צרץ קובץ...">
+                <input id="files" type="file" multiple ng-model="browse" ngf-select="onFileSelect($files)" placeholder="צרץ קובץ..." ng-disabled="browseButtonDisabled">
 
             </section>
 
@@ -161,9 +161,33 @@
                     <p><h4>להלן פירוט לפי יעדים ותקופות:</h4></p>
                     <p>*תוך ציון אם יש רצף או הפסקה בין ההשתלמויות (לכל מטרה יש לצרף אסמכתא אקדמית רלוונטית) סה"כ מבוקש בדולרים</p>
                 </section>
-                <button type="button" class="btn btn-default btn-md" id="flightDetailsAddButton" ng-click="addNewFlight()">
+                <button type="button" class="btn btn-default btn-md" id="flightDetailsAddButton" ng-click="addNewFlight()" ng-disabled="addNewFlightButtomDisabled">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> הוסף טיסה
                 </button>
+            <section class="flightsTableWrapper">
+                <table ng-model="flightsTable" ng-show="flightsTableShow" class="flightsTableClass">
+                    <tr>
+                        <th>מספר</th>
+                        <th>יעד</th>
+                        <th>תאריך יציאה</th>
+                        <th>תאריך חזרה</th>
+                        <th>סכום מבוקש לטיסות</th>
+                        <th>סכום מבוקש למלון</th>
+                        <th>דמי השתתפות בכנסים</th>
+                    </tr>
+                    <tr ng-repeat="flight in flightsToShow">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ flight.Country.CountryName }}</td>
+                        <td>{{ flight.FromDate }}</td>
+                        <td>{{ flight.ToDate }}</td>
+                        <td>{{ flight.Flight }}</td>
+                        <td>{{ flight.Hotel }}</td>
+                        <td>{{ flight.ParticipationFee }}</td>
+                    </tr>
+                </table>
+            </section>
+            
+
 
             <section class="flightDetailsScrollClass">
                 <div class="form-group" data-ng-repeat="choice in choices">
@@ -189,6 +213,7 @@
                         <lable class="flightDetailLableClass">נסיעות לשד"ת ונסיעות בינעירוניות בלבד!</lable><input type="number" class="flightCashInputClass" name="airportShatelDollars" min="0" id="airportShatelDollars" ng-model="choice.airportShatelDollars" /> 
                         <lable class="flightDetailLableClass">דמי השתתפות בכנסים/ תערוכות</lable><input type="number" class="flightCashInputClass" name="conferenceDollars" id="conferenceDollars" min="0" ng-model="choice.conferenceDollars" />
                      </section>
+                   
                     <!--<section class="flightExpenseClass">
                      
                     </section>-->
@@ -202,10 +227,10 @@
                 </div>
             </section>
             <section class="sumEshelDaysClass">
-                <lable class="flightDetailLableClass">סה"כ סכום מבוקש ללא אש"ל</lable><input type="number" class="flightCashInputClass" name="sumNoEshel" id="sumNoEshel" min="0" ng-model="sumNoEshel" /> 
-                <lable class="flightDetailLableClass">ימי אש"ל ללא מלון</lable><input type="number" class="flightCashInputClass" name="sumDaysNoEshel" id="sumDaysNoEshel" min="0" ng-model="sumDaysNoEshel" /> 
-                <lable class="flightDetailLableClass">ימי אש"ל כולל מלון</lable><input type="number" class="flightCashInputClass" name="sumDaysEshel" id="sumDaysEshel" min="0" ng-model="sumDaysEshel" /> 
-                <lable class="flightDetailLableClass">תאריך חזרת הנסיעה האחרונה ע"ח שנקר</lable> <input type="date" name="lastFlightFromShenkar" ng-model="lastFlightFromShenkar" />
+                <lable class="flightDetailLableClass">סה"כ סכום מבוקש ללא אש"ל</lable><input type="number" class="flightCashInputClass" name="sumNoEshel" id="sumNoEshel" min="0" ng-model="sumNoEshel" ng-disabled="sumNoEshelDisabled" /> 
+                <lable class="flightDetailLableClass">ימי אש"ל ללא מלון</lable><input type="number" class="flightCashInputClass" name="sumDaysNoEshel" id="sumDaysNoEshel" min="0" ng-model="sumDaysNoEshel" ng-disabled="sumDaysNoEshelDisabled" /> 
+                <lable class="flightDetailLableClass">ימי אש"ל כולל מלון</lable><input type="number" class="flightCashInputClass" name="sumDaysEshel" id="sumDaysEshel" min="0" ng-model="sumDaysEshel" ng-disabled="sumDaysEshelDisabled" /> 
+                <lable class="flightDetailLableClass">תאריך חזרת הנסיעה האחרונה ע"ח שנקר</lable> <input type="date" name="lastFlightFromShenkar" ng-model="lastFlightFromShenkar" ng-disabled="lastFlightFromShenkarDisabled" />
             </section>
             <!--************** working dropDown**************
             <div class="btn-group" role="group">
@@ -232,15 +257,37 @@
             </section>
             <section class="courseReplaceSectionClass">
                 <label class="teachingRadioClass"> סדרי מילוי מקום בתקופת הנסיעה</label>
-                <input type="radio" name="teaching" ng-model="isTeaching" value="1" class="teachingRadioClass" ng-click="showTeacingReplace()" />
+                <input type="radio" name="teaching" ng-model="isTeaching" value="1" class="teachingRadioClass" ng-click="showTeacingReplace()" ng-disabled="isTeachingDisabled" />
                 <label class="teachingRadioClass"> מלמד</label>
-                <input type="radio" name="teaching" ng-model="isTeaching" value="0" class="teachingRadioClass" ng-click="showTeacingReplace()" />
+                <input type="radio" name="teaching" ng-model="isTeaching" value="0" class="teachingRadioClass" ng-click="showTeacingReplace()" ng-disabled="isTeachingDisabled"/>
                 <label class="teachingRadioClass">לא מלמד</label>
             </section>
             <!--<button data-toggle="collapse" href="#courseReplace">test</button>-->
                 <button type="button" class="btn btn-default btn-md" id="addTeacingReplaceButton" ng-click="addNewCourse()" ng-model="addNewClassButton" ng-disabled='addClassDisable'>
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> הוסף קורס
                 </button>
+
+            <section class="flightsTableWrapper">
+                <table ng-model="coursesTable" ng-show="coursesTableShow" class="flightsTableClass">
+                    <tr>
+                        <th>מספר</th>
+                        <th>שם הקורס</th>
+                        <th>יום</th>
+                        <th>משעה</th>
+                        <th>עד שעה</th>
+                        <th>מחליף</th>
+                    </tr>
+                    <tr ng-repeat="courseTd in coursesFromDbToShow">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ courseTd.CourseName}}</td>
+                        <td>{{ courseTd.Date }}</td>
+                        <td>{{ courseTd.FromHour }}</td>
+                        <td>{{ courseTd.ToHour }}</td>
+                        <td>{{ courseTd.CompleteBy }}</td>
+                    </tr>
+                </table>
+            </section>
+
             <section class="" id="courseReplace">
                 <div class="form-group" data-ng-repeat="course in courses">
                     <section class="courseInputClass">

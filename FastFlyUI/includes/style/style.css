@@ -131,8 +131,8 @@ aside {
 .pagingClass {
    position: relative;
     top: 1200px;
-    left: 950px;
-    width: 685px;
+    left: 800px;
+    width: 631px;
 }
 
     .pagingClass ul li {
@@ -141,7 +141,7 @@ aside {
 
 .currentPage {
     font-weight: bold;
-    color: #2E64FE;
+    color: #DCAE30;
 }
 
 .otherPages {
@@ -343,6 +343,16 @@ height:100px;
     left:250px;
     float:right;
 }
+.flightsTableWrapper{
+     overflow-y:hidden;
+     position:absolute;
+     
+}
+.flightsTableClass{
+    overflow-y:scroll;
+    position:relative;
+   
+}
 #countriesId{
     max-width:140px;
 }
@@ -409,8 +419,27 @@ height:100px;
 }
 #dashboardOpensFormsRequest::-webkit-scrollbar{
 
-  width: 0px;  /* remove scrollbar space */
-    background: transparent;
+  width: 0px;
+  background: transparent;
+}
+table, th , td  {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+  direction:rtl;
+  text-align:center;
+  position:relative;
+  
+  /*align-content:center;*/
+}
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+  direction:rtl;
+  
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+  direction:rtl;
 }
 
 

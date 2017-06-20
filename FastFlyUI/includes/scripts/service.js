@@ -85,5 +85,10 @@
          })
     }
 
-    
+    this.getTestsByDocId = function (docId) {
+        return $http.get('http://localhost:8080/api/TestReplacements/' + docId)
+         .then(function (response) {
+             return response;
+         })
+    }
 });

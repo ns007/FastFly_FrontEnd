@@ -111,6 +111,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.title = "Open New Form";
             scope.flightsTableShow = false;
             scope.coursesTableShow = false;
+            scope.testsTableShow = false;
             scope.allDocsShow = false;
             //scope.allDocsShow = false;
             if (user == null) {
@@ -175,11 +176,28 @@ var app = angular.module("fastFly", ['ngRoute'])
                             scope.coursesFromDbToShow = courseReplace.data;
                             scope.courses = [];
                         })
-                        scope.isTeaching = x.TeacheDuringTravel;
-                        
-                        //scope.courses = 
-                       // console.log(destination);
 
+                        var testsFromDb = loginService.getTestsByDocId(x.DocId);
+                        testsFromDb.then(function (testsReplase) {
+                            console.log(testsReplase.data);
+                            angular.forEach(testsReplase.data, function (value) {
+                                value.TestDate = convertDate(value.TestDate);
+                            })
+                            scope.testsTableShow = true;
+                            scope.testsFromDbToShow = testsReplase.data;
+                            scope.testsGroup = [];
+                        })
+                        scope.isTeaching = x.TeacheDuringTravel;
+                        scope.tests = x.ReplacingInTests;
+                        scope.travelDetailsDuration = x.AboveWeek;
+                        scope.travelDetailsFlightNum = x.MoreThenOneTravel;
+                        scope.travelDetailsFirstTestMissing = x.AbsenceTestA;
+                        scope.travelDetailsConvention = x.ResearchTraining;
+                        scope.travelDetailsExplainTextErea = x.ExceptionRequstExplain;
+                        scope.userSignCheckBox = true;
+
+                        
+                        //disabled all fields in the main form
                         disableFields();
                     })
                     console.log(userDoc);
@@ -239,6 +257,14 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.sumDaysNoEshelDisabled = true;
             scope.sumNoEshelDisabled = true;
             scope.isTeachingDisabled = true;
+            scope.testsDisabled = true;
+            scope.travelDetailsConventionDisabled = true;
+            scope.travelDetailsDurationDisabled = true;
+            scope.travelDetailsFlightNumDisabled = true;
+            scope.travelDetailsFirstTestMissingDisabled = true;
+            scope.travelDetailsExplainTextEreaDisabled = true;
+            scope.submitFormButtonDisabled = true;
+            scope.userSignCheckBoxDisabled = true;
            // scope.addClassDisable = true;
         }
 
@@ -306,11 +332,13 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.userStatmentForm = false;
             scope.travelDetailsForm = false;
             scope.testForm = false;
+            scope.signsForm = false;
             scope.destinationClass = 'currentPage';
             scope.privateDetailsClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
             scope.statmentClass = 'otherPages';
             scope.testReplaceClass = 'otherPages';
+            scope.signsFormClass = 'otherPages';
             scope.travelDetailsClass = 'otherPages';
 
         }
@@ -322,11 +350,13 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.userStatmentForm = false;
             scope.travelDetailsForm = false;
             scope.testForm = false;
+            scope.signsForm = false;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
             scope.privateDetailsClass = 'currentPage';
             scope.statmentClass = 'otherPages';
             scope.testReplaceClass = 'otherPages';
+            scope.signsFormClass = 'otherPages';
             scope.travelDetailsClass = 'otherPages';
         }
 
@@ -337,11 +367,13 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.travelDetailsForm = false;
             scope.flightDetailsForm = true;
             scope.testForm = false;
+            scope.signsForm = false;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'currentPage';
             scope.privateDetailsClass = 'otherPages';
             scope.statmentClass = 'otherPages';
             scope.testReplaceClass = 'otherPages';
+            scope.signsFormClass = 'otherPages';
             scope.travelDetailsClass = 'otherPages';
         }
 
@@ -352,11 +384,13 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.userStatmentForm = true;
             scope.travelDetailsForm = false;
             scope.testForm = false;
+            scope.signsForm = false;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
             scope.privateDetailsClass = 'otherPages';
             scope.statmentClass = 'currentPage';
             scope.testReplaceClass = 'otherPages';
+            scope.signsFormClass = 'otherPages';
             scope.travelDetailsClass = 'otherPages';
             if (scope.isTeachingDisabled!=true) {
                 if (!(checkIsTeaching(scope.isTeaching))) {
@@ -385,18 +419,31 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.userStatmentForm = false;
             scope.travelDetailsForm = false;
             scope.testForm = true;
+            scope.signsForm = false;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
             scope.privateDetailsClass = 'otherPages';
             scope.statmentClass = 'otherPages';
             scope.travelDetailsClass = 'otherPages';
+            scope.signsFormClass = 'otherPages';
             scope.testReplaceClass = 'currentPage';
-            if (!(checkIsTeaching(scope.tests))) {
-                scope.addTestDisable = true;
-                scope.testsGroup = [];
+            if (scope.testsDisabled != true) {
+                if (!(checkIsTeaching(scope.tests))) {
+                    scope.addTestDisable = true;
+                    scope.testsGroup = [];
+                }
+                else {
+                    if (scope.testsGroup.length == 7) {
+                        scope.addTestDisable = true;
+                    }
+                    else {
+                        scope.addTestDisable = false;
+                    }
+                }
             }
+           
             else {
-                scope.addTestDisable = false;
+                scope.addTestDisable = true;
             }
         }
 
@@ -407,13 +454,34 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.userStatmentForm = false;
             scope.testForm = false;
             scope.travelDetailsForm = true;
+            scope.signsForm = false;
             scope.destinationClass = 'otherPages';
             scope.flightDetailsClass = 'otherPages';
             scope.privateDetailsClass = 'otherPages';
             scope.statmentClass = 'otherPages';
             scope.testReplaceClass = 'otherPages';
+            scope.signsFormClass = 'otherPages';
             scope.travelDetailsClass = 'currentPage';
         }
+
+        scope.showsignsForm = function(){
+            scope.newFormShow = false;
+            scope.destinationForm = false;
+            scope.flightDetailsForm = false;
+            scope.userStatmentForm = false;
+            scope.testForm = false;
+            scope.travelDetailsForm = false;
+            scope.signsForm = true;
+            scope.destinationClass = 'otherPages';
+            scope.flightDetailsClass = 'otherPages';
+            scope.privateDetailsClass = 'otherPages';
+            scope.statmentClass = 'otherPages';
+            scope.testReplaceClass = 'otherPages';
+            scope.travelDetailsClass = 'otherPages';
+            scope.signsFormClass = 'currentPage'; 
+        }
+
+
         scope.choices = [];
         scope.addNewFlight = function () {
             console.log("add new flight");
@@ -560,11 +628,16 @@ var app = angular.module("fastFly", ['ngRoute'])
                 // scope.choices.pop(choiseIndex,1);
                 $scope.testsGroup.splice(testIndex, 1);
             }
+            if (scope.testsGroup.length < 7) {
+                scope.addTestDisable = false;
+            }
         }
 
         scope.addNewTest = function () {
             console.log("add test");
-            if (scope.testsGroup.length == 7) {
+            if (scope.testsGroup.length == 6) {
+                scope.testsGroup.push({});
+                scope.addTestDisable = true;
                 return;
             }
             var newItemNo = scope.testsGroup.length + 1;

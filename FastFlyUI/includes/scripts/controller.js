@@ -126,12 +126,6 @@ var app = angular.module("fastFly", ['ngRoute'])
                    
                     console.log(" ....");
                     userDoc.then(function (x) {
-                        //var apllyDocs = x.User.ApplyDocuments;
-                        // console.log(apllyDocs);
-                        //var currentApplyDoc = [];
-                        //angular.forEach(apllyDocs, function (value) {
-                        //    //console.log(value);
-                        //})
                         console.log(x);
                         scope.firstNameTextBox = x.User.FirstName;
                         scope.idTextBox = x.User.Id;
@@ -142,7 +136,6 @@ var app = angular.module("fastFly", ['ngRoute'])
                         scope.jogPercentTextBox = x.User.PercentageJob;
                         scope.phoneTextBox = x.User.CellNum;
                         scope.mailTextBox = x.User.EmailAddress;
-                        //scope.selectedName = x.ColleagueType; 
                         checkIfTypeExist(x);
                         scope.startDate = returnToOriginalDateFormat(x.DepartureDate);
                         scope.endDate = returnToOriginalDateFormat(x.ReturnDate);
@@ -196,6 +189,19 @@ var app = angular.module("fastFly", ['ngRoute'])
                         scope.travelDetailsExplainTextErea = x.ExceptionRequstExplain;
                         scope.userSignCheckBox = true;
 
+
+
+
+
+                        scope.signs = [];
+                        scope.signs.push({ "name": "ינון" });
+                        console.log(scope.signs);
+                       
+
+
+
+
+
                         
                         //disabled all fields in the main form
                         disableFields();
@@ -208,6 +214,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     //scope.firstNameTextBox = userDoc[0].User.FirstName;
                 }
                 else {
+                    //fill form state
                     // console.log(loginService.getSignerFlag());
                     console.log(user);
                     scope.firstNameTextBox = user.FirstName;
@@ -478,7 +485,13 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.statmentClass = 'otherPages';
             scope.testReplaceClass = 'otherPages';
             scope.travelDetailsClass = 'otherPages';
-            scope.signsFormClass = 'currentPage'; 
+            scope.signsFormClass = 'currentPage';
+            scope.signs = [];
+            scope.signs.push({ "name": "ינון", "id": "1", "dis": false }, { "name": "נתי", "id": "2", "dis": false }, { "name": "יניב", "id": "3", "dis": false }, { "name": "גינדוס", "id": "4", "dis": false });
+            console.log(scope.signs);
+            //var signUsers = loginService.getAllSignUsers();
+            //console.log(signUsers);
+            //scope.sign .dis = true;
         }
 
 
@@ -867,10 +880,11 @@ var app = angular.module("fastFly", ['ngRoute'])
                            scope.headerText = true;
                            scope.dashboardPage = true;
                            scope.aside = true;
+                           scope.signOutButtonShow = true;
                            //$window.location.href = '/index.html';                    
                            // swal(json.stringify(response));
                        }
-                       if (loginService.checkRoll(response) == 2) {
+                       if (loginService.checkRoll(response) == 1) {
                            console.log("admin");
                            scope.adminGetHistoryButton = true;
                            scope.adminCreateUserButton = true;
@@ -962,8 +976,9 @@ var app = angular.module("fastFly", ['ngRoute'])
 
             //if ($cookies.getObject('cookie') == null) {
 
-            /**********clear local storage*********/
+            /**********clear local storage - start*********/
             //localStorage.clear();
+            /**********clear local storage - end*********/
             if (localStorage.getItem('user') == null) {
                 console.log("init");
                 scope.title = "Login";
@@ -976,6 +991,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                 scope.adminCreateUserButton = false;
                 scope.adminDeleteUserButton = false;
                 scope.paging = false;
+                scope.signOutButtonShow = false;
             }
             else {
                 //var user = $cookies.getObject('cookie')
@@ -989,6 +1005,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                 scope.dashboardPage = true;
                 scope.aside = true;
                 scope.paging = false;
+                scope.signOutButtonShow = true;
                 if ($location.path().split(/[\s/]+/).pop() == 'newForm') {
                     scope.paging = true;
                     scope.allDocsShow = false;
@@ -999,6 +1016,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.paging = false;
                 }
                 else if ($location.path().split(/[\s/]+/).pop() == 'index') {
+                    getAllDocs(user);
                     scope.allDocsShow = true;
                     scope.paging = false;
                 }
@@ -1007,7 +1025,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.paging = false;
                 }
 
-                if (loginService.checkRoll(user) == 2) {
+                if (loginService.checkRoll(user) == 1) {
                     console.log("admin");
                     scope.adminGetHistoryButton = true;
                     scope.adminCreateUserButton = true;
@@ -1056,6 +1074,12 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.title = "Open New Form";
             scope.paging = true;
             scope.allDocsShow = false;
+        }
+
+        scope.signOut = function () {
+            localStorage.clear();
+            // $location.path("index.html");
+            $window.location.reload();
         }
 
     });

@@ -417,18 +417,23 @@
         <form class="form" ng-model="form" name="form" ng-show="signsForm">
             <section class="flightDetailsSectionClass">
                 <p><h4>עמוד מאשרי החתימה</h4></p>
-            </section>
-            <section class="travelClass">
-                <p class="teachingRadioClass"> 1. השתלמות (שאינה כנס) מחקר בימי ההוראה שלך </p>
-                <p class="teachingRadioClass"> 2. משך הנסיעה מעל לשבוע בימי ההוראה שלך </p>
-                <p class="teachingRadioClass"> 3. יותר מנסיעה אחת בסמסטר בימי ההוראה שלך </p>
-                <p class="teachingRadioClass">4. היעדרות מבחינות מועד א </p>
-            </section>
-            <section class="travelDetailsRadioClass">
-                <input type="radio" name="sign1" ng-model="sign1" value="1" class="teachingRadioClass" ng-disabled="sign1Disabled" />
-                <label class="teachingRadioClass"> מאשר</label>
-                <input type="radio" name="sign1" ng-model="sign1" value="0" class="teachingRadioClass" ng-disabled="sign1Disabled" />
-                <label class="teachingRadioClass">לא מאשר</label>
+                <div class="form-group" ng-repeat="sign in signs">
+                    <section class="signPClass">
+                        <p class="teachingRadioClass" > {{sign.name}} </p>
+                    </section>
+                    <section class="signRadioClass">
+                        <input type="radio" name="" ng-model="sign.id" value="1" class="teachingRadioClass" ng-disabled="sign.dis" />
+                        <label class="teachingRadioClass"> מאשר</label>
+                        <input type="radio" name="" ng-model="sign.id" value="0" class="teachingRadioClass" ng-disabled="sign.dis" />
+                        <label class="teachingRadioClass">לא מאשר</label>
+                       
+                    </section>
+                    <section>
+                        <textarea class="signTextEreaClass" rows="2" cols="60"></textarea>
+                    </section>
+                   
+                </div>
+                <!--{{signs[0].name}}-->
             </section>
         </form>
     </div>

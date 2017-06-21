@@ -441,5 +441,17 @@ table tr:nth-child(even) {
   background-color: #ffffff;
   direction:rtl;
 }
+.signPClass{
+   font-weight:bold;
+   float:right;
+   width:10%;
+}
+.signRadioClass{
+
+}
+.signTextEreaClass {
+    position: relative;
+    left: 150px;
+}
 
 

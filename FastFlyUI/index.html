@@ -33,6 +33,7 @@
             <h1>Fast Fly</h1>
             <h5 ng-show="headerText">שלום {{userName}}</h5>
         </section>
+        <button class="btn btn-danger" ng-model="signOutButton" ng-show="signOutButtonShow" ng-click="signOut()">התנתק</button>
     </header>
 
     <section id="formSection" ng-show="loginForm">
@@ -42,7 +43,7 @@
                 <input type="text" class="form-control" id="id" ng-model="id">
                 <label for="pwd">סיסמה:</label>
                 <input type="password" class="form-control" id="pwd" ng-model="password">
-                <button type="submit" class="btn btn-primary" id="submitSection">Submit</button>
+                <button type="submit" class="btn btn-primary" id="submitSection">כניסה</button>
             </div>
         </form>
     </section>

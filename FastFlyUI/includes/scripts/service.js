@@ -14,10 +14,11 @@
     }
 
     this.checkRoll = function (data) {
-        if (data.ApplicationRoleId == 2) {
-            return 2;
+        console.log(data.ApplicationRoleId);
+        if (data.ApplicationRoleId == 1) {
+            return 1;
         }
-        else if(data.ApplicationRoleId == 2){
+        else if(data.ApplicationRoleId == 4){
             return 4;
         }
         
@@ -87,6 +88,13 @@
 
     this.getTestsByDocId = function (docId) {
         return $http.get('http://localhost:8080/api/TestReplacements/' + docId)
+         .then(function (response) {
+             return response;
+         })
+    }
+
+    this.getAllSignUsers = function (docId) {
+        return $http.get('http://localhost:8080/api/Users/Signers')
          .then(function (response) {
              return response;
          })

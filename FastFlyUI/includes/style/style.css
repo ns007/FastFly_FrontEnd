@@ -141,7 +141,7 @@ aside {
 
 .currentPage {
     font-weight: bold;
-    color: #DCAE30;
+    color: #FF8000;
 }
 
 .otherPages {
@@ -445,13 +445,17 @@ table tr:nth-child(even) {
    font-weight:bold;
    float:right;
    width:10%;
+   padding-top:10px;
 }
 .signRadioClass{
 
 }
 .signTextEreaClass {
     position: relative;
-    left: 150px;
+   
 }
-
+.signertRadioClass{
+    margin-left:10px;
+    margin-bottom:-15px;
+}
 

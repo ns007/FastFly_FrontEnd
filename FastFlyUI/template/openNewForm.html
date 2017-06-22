@@ -416,24 +416,34 @@
     <div class="col-xs-12">
         <form class="form" ng-model="form" name="form" ng-show="signsForm">
             <section class="flightDetailsSectionClass">
-                <p><h4>עמוד מאשרי החתימה</h4></p>
+                <p><h3>עמוד מאשרי החתימה</h3></p>
+                <p><h4>ראש המחלקה</h4></p>
+                <div class="form-group">
+                    <section class="signPClass">
+                        <p class="teachingRadioClass"> {{headOfDepartment.name}} </p>
+                    </section>
+                    <section class="signRadioClass">
+                        <input type="radio" name="" ng-model="headOfDepartment" value="1" class="signertRadioClass" ng-disabled="headOfDepartmentDisabled" />
+                        <label class="signertRadioClass"> מאשר</label>
+                        <input type="radio" name="" ng-model="headOfDepartment" value="0" class="signertRadioClass" ng-disabled="headOfDepartmentDisabled" />
+                        <label class="signertRadioClass">לא מאשר</label>
+                        <textarea class="signertRadioClass" rows="2" cols="60"></textarea>
+                    </section>
+                </div>
+                <p><h4>מאשרי חתימה</h4></p>
                 <div class="form-group" ng-repeat="sign in signs">
                     <section class="signPClass">
                         <p class="teachingRadioClass" > {{sign.name}} </p>
                     </section>
                     <section class="signRadioClass">
-                        <input type="radio" name="" ng-model="sign.id" value="1" class="teachingRadioClass" ng-disabled="sign.dis" />
-                        <label class="teachingRadioClass"> מאשר</label>
-                        <input type="radio" name="" ng-model="sign.id" value="0" class="teachingRadioClass" ng-disabled="sign.dis" />
-                        <label class="teachingRadioClass">לא מאשר</label>
-                       
+                        <input type="radio" name="" ng-model="sign.id" value="1" class="signertRadioClass" ng-disabled="sign.dis" />
+                        <label class="signertRadioClass"> מאשר</label>
+                        <input type="radio" name="" ng-model="sign.id" value="0" class="signertRadioClass" ng-disabled="sign.dis" />
+                        <label class="signertRadioClass">לא מאשר</label>
+                        <textarea class="signertRadioClass" rows="2" cols="60" ng-model="sign.text" ng-disabled="sign.dis"></textarea>
                     </section>
-                    <section>
-                        <textarea class="signTextEreaClass" rows="2" cols="60"></textarea>
-                    </section>
-                   
                 </div>
-                <!--{{signs[0].name}}-->
+                <button ng-model="signSubmit" ng-click="sendSignerData()" ng-disabled="signerButtonDisabled" class="btn btn-default">שלח</button>
             </section>
         </form>
     </div>

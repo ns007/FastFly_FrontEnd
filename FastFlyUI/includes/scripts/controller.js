@@ -119,14 +119,14 @@ var app = angular.module("fastFly", ['ngRoute'])
             }
             else {
                 if (loginService.getSignerFlag() == 1) {
-                    console.log(loginService.getSignerFlag());
-                    
+                    //console.log(loginService.getSignerFlag());
                     var userDoc = loginService.getResponse();
-                    console.log(userDoc);
+                    //console.log(userDoc);
                    
                     console.log(" ....");
                     userDoc.then(function (x) {
-                        console.log(x);
+                        //console.log(x);
+                        loginService.setDocId(x.DocId);
                         scope.firstNameTextBox = x.User.FirstName;
                         scope.idTextBox = x.User.Id;
                         scope.lastNameTextBox = x.User.LastName;
@@ -152,7 +152,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                             })
                             //dest.data[0].FromDate = convertDate(dest.data[0].FromDate);
                             scope.flightsToShow = dest.data;
-                            console.log(scope.flightsToShow);
+                            //console.log(scope.flightsToShow);
                             //scope.flightDetailsFromDate = returnToOriginalDateFormat(dest.data[0].FromDate);
                             scope.flightsTableShow = true;
 
@@ -161,7 +161,7 @@ var app = angular.module("fastFly", ['ngRoute'])
 
                         var coursesFromDb = loginService.getCoursesByDocId(x.DocId);
                         coursesFromDb.then(function (courseReplace) {
-                            console.log(courseReplace.data);
+                            //console.log(courseReplace.data);
                             angular.forEach(courseReplace.data, function (value) {
                                 value.Date = convertDate(value.Date);                             
                             })
@@ -172,7 +172,7 @@ var app = angular.module("fastFly", ['ngRoute'])
 
                         var testsFromDb = loginService.getTestsByDocId(x.DocId);
                         testsFromDb.then(function (testsReplase) {
-                            console.log(testsReplase.data);
+                            //console.log(testsReplase.data);
                             angular.forEach(testsReplase.data, function (value) {
                                 value.TestDate = convertDate(value.TestDate);
                             })
@@ -188,35 +188,54 @@ var app = angular.module("fastFly", ['ngRoute'])
                         scope.travelDetailsConvention = x.ResearchTraining;
                         scope.travelDetailsExplainTextErea = x.ExceptionRequstExplain;
                         scope.userSignCheckBox = true;
-
-
-
-
-
-                        scope.signs = [];
-                        scope.signs.push({ "name": "ינון" });
-                        console.log(scope.signs);
                        
 
+                        //disabled all sign field exept the current signer
+                        var signUsers = loginService.getAllSignUsers();
+                        //console.log(signUsers);
+                        scope.signs = [];
+                        signUsers.then(function (signRes) {
+                            // console.log(signRes.data);
+                            var user = JSON.parse(localStorage.getItem(('user')));
+                            var i = 1;
+                            var dis;
+                            angular.forEach(signRes.data, function (value) {
+                                var name = value.FirstName + ' ' + value.LastName;
+                                var id = value.Id;
+                                if (id == user.Id) {
+                                    dis = false;
+                                }
+                                else {
+                                    dis = true;
+                                }
+                                //var temp = "Sign" + pars.toString();
+                                var text = x.Reason1;
+                                var check = x.Sign1;
+                                scope.signs.push({ "name": name, "id": check, "dis": dis, "text": text, "DocId": x.DocId });
+                            })
+                            //angular.forEach(scope.signs, function (sign) {
+                            //           console.log(sign);
+                            //           if (sign.id == id) {
+                    
+                            //               sign.dis = false;
+                            //           }
+                            //       })
+                            //scope.signs[0].dis = false;
+                            //console.log(scope.signs.length);
 
-
-
-
-                        
+                        })
+                       // console.log(scope.signs);
+                        //checkHwoIsTheSigner(signUser);
                         //disabled all fields in the main form
                         disableFields();
+                        scope.signerButtonDisabled = false;
                     })
                     console.log(userDoc);
-
-                    //console.log(userDoc.UserId);
-                    //console.log(userDoc[0].User.FirstName);
-                    //scope.idTextBox = userDoc.UserId;
-                    //scope.firstNameTextBox = userDoc[0].User.FirstName;
                 }
                 else {
                     //fill form state
                     // console.log(loginService.getSignerFlag());
-                    console.log(user);
+                    //console.log(user);
                     scope.firstNameTextBox = user.FirstName;
                     scope.lastNameTextBox = user.LastName;
                     scope.idTextBox = user.Id;
@@ -250,6 +269,37 @@ var app = angular.module("fastFly", ['ngRoute'])
             return new Date(date);
         }
 
+        //function checkHwoIsTheSigner(signUser) {
+        //    var user = JSON.parse(localStorage.getItem(('user')));
+        //    var id = user.Id;
+        //    console.log(scope.signs.length);
+        //    angular.forEach(scope.signs, function (sign) {
+        //        console.log(sign);
+        //        if (sign.id == id) {
+                    
+        //            sign.dis = false;
+        //        }
+        //    })
+        //    //signUser.then(function (su) {
+        //    //    //console.log(su.data);
+        //    //    angular.forEach(su.data, function (value) {
+        //    //        if (value.Id == id) {
+        //    //            angular.forEach(scope.signs,function(sign){
+        //    //                if(sign.id ==id){
+        //    //                    sign.dis=false;
+        //    //                }
+        //    //            })
+        //    //            //console.log("@@@");
+        //    //            //console.log(value);
+        //    //            //console.log(value.dis);
+        //    //            //console.log(scope.signs[0]);
+        //    //           // scope.signs[1].dis=false;
+        //    //        }
+        //    //    })
+
+        //    //})
+        //}
+
         function disableFields() {
             scope.destinationTextBoxDisabled = true;
             scope.familyDisabled = true;
@@ -272,6 +322,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.travelDetailsExplainTextEreaDisabled = true;
             scope.submitFormButtonDisabled = true;
             scope.userSignCheckBoxDisabled = true;
+            //scope.headOfDepartmentDisabled = true;
            // scope.addClassDisable = true;
         }
 
@@ -313,6 +364,24 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.endDate = scope.startDate;
         }
 
+        scope.sendSignerData = function () {
+            var docId = loginService.getDocId();
+            var doc = loginService.getDocByDocId(docId);
+            doc.then(function (value) {
+                console.log(value.data);
+                value.data.Sign1 =parseInt(scope.signs[1].id);
+                value.data.Reason1 = scope.signs[1].text;
+                var res = loginService.setSign(value.data, docId);
+                if (res != null) {
+                    swal("!תודה", "חתימתך נקלטה במערכת", "success");
+                    backHome();
+                }
+                else {
+                    swal("שגיאה", "הטופס לא נקלט במערכת", "error");
+                }
+            })
+           // console.log(scope.signs);
+        }
         scope.checkDateRange = function () {
             var startDate = scope.startDate;
             var endDate = scope.endDate;
@@ -321,6 +390,11 @@ var app = angular.module("fastFly", ['ngRoute'])
                 scope.endDate = scope.startDate;
             }
             setConferenceDays();
+        }
+
+        function backHome() {
+            scope.allDocsShow = true;
+            $window.location = '/#index';
         }
 
         function setConferenceDays() {
@@ -487,14 +561,97 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.travelDetailsClass = 'otherPages';
             scope.signsFormClass = 'currentPage';
             scope.signs = [];
-            scope.signs.push({ "name": "ינון", "id": "1", "dis": false }, { "name": "נתי", "id": "2", "dis": false }, { "name": "יניב", "id": "3", "dis": false }, { "name": "גינדוס", "id": "4", "dis": false });
-            console.log(scope.signs);
-            //var signUsers = loginService.getAllSignUsers();
+            //scope.signs.push({ "name": "ינון", "id": "1", "dis": false }, { "name": "נתי", "id": "2", "dis": false }, { "name": "יניב", "id": "3", "dis": false }, { "name": "גינדוס", "id": "4", "dis": false },{ "name": "ליאור", "id": "5", "dis": false });
+            //console.log(scope.signs);
+            var signUsers = loginService.getAllSignUsers();
             //console.log(signUsers);
-            //scope.sign .dis = true;
+            signUsers.then(function (signRes) {
+                var user = JSON.parse(localStorage.getItem(('user')));
+                var DocId = loginService.getDocId();
+                if (DocId != null) {
+                    var doc = loginService.getDocByDocId(DocId);
+                    doc.then(function (value) {
+                        var i=1;
+                        angular.forEach(signRes.data, function (val) {
+                            var name = val.FirstName + ' ' + val.LastName;
+                            var id;
+                            var text;
+                            if (val.Id == user.Id) {
+                                var dis = false;
+                            }
+                            else {
+                                var dis = true;
+                            }
+                            switch (i) {
+                                case 1:
+                                    id = value.data.Sign1;
+                                    text = value.data.Reason1;
+                                    i++;
+                                    break;
+                                case 2:
+                                    id = value.data.Sign2;
+                                    text = value.data.Reason2;
+                                    i++;
+                                    break;
+                                case 3:
+                                    id = value.data.Sign3;
+                                    text = value.data.Reason3;
+                                    i++;
+                                    break;
+                                case 4:
+                                    id = value.data.Sign4;
+                                    text = value.data.Reason4;
+                                    i++;
+                                    break;
+                                case 5:
+                                    id = value.data.Sign5;
+                                    text = value.data.Reason5;
+                                    i++;
+                                    break;
+                            }
+                            scope.signs.push({ "name": name, "id": id, "dis": dis, "text": text, "DocId": DocId });
+                        })
+                    })
+                }
+                else {
+                    angular.forEach(signRes.data, function (value) {
+                        var name = value.FirstName + ' ' + value.LastName;
+                        var id = value.Id;
+                        if (id == user.Id) {
+                            var dis = false;
+                        }
+                        else {
+                            var dis = true;
+                        }
+                        var text = '';
+                        scope.signs.push({ "name": name, "id": id, "dis": dis, "text": text, "DocId": DocId });
+                    })
+                }
+                
+
+            })
         }
 
-
+        //function setSignersForm() {
+        //    scope.signs = [];
+        //    //scope.signs.push({ "name": "ינון", "id": "1", "dis": false }, { "name": "נתי", "id": "2", "dis": false }, { "name": "יניב", "id": "3", "dis": false }, { "name": "גינדוס", "id": "4", "dis": false },{ "name": "ליאור", "id": "5", "dis": false });
+        //    //console.log(scope.signs);
+        //    var signUsers = loginService.getAllSignUsers();
+        //    //console.log(signUsers);
+        //    signUsers.then(function (signRes) {
+        //       // console.log(signRes.data);
+        //        angular.forEach(signRes.data, function (value) {
+        //            var name = value.FirstName + ' ' + value.LastName;
+        //            var id = value.Id;
+        //            var dis = true;
+        //            var text = '';
+        //            scope.signs.push({ "name": name, "id": id, "dis": dis,"text":text });
+        //        })
+        //         //scope.signs[0].dis = false;
+        //        console.log(scope.signs.length);
+        //    })
+            
+        //}
         scope.choices = [];
         scope.addNewFlight = function () {
             console.log("add new flight");
@@ -942,33 +1099,6 @@ var app = angular.module("fastFly", ['ngRoute'])
         function getUserDetails(id) {
             console.log(id);
             var doc = loginService.getUserDetailsFromService(id);
-            //.then(function(data){
-            //    console.log(data.data);
-            //});
-            //loginService.setSignerFlag(1);
-            //console.log(id);
-            //$http.get('http://localhost:8080/api/applydocuments/' + id)
-            //.success(function (response) {
-            //    console.log(response);
-            //    loginService.setResponse(response);              
-            //});
-            //openForm();
-            //console.log(doc.$$state);
-           // var userDoc = [];
-           
-            //-------------------------
-            //angular.forEach(doc.$$state, function (demoContent, index) {
-            //    angular.forEach(demoContent, function (newsGroup, index) {
-            //        userDoc.push(newsGroup)
-            //    });
-            //});
-            //------------------------
-            //console.log(doc);
-            // console.log(userDoc);           
-            //doc.then(function (x) {
-            //    console.log(x.User)
-            //})
-            //console.log(doc);
             loginService.setResponse(doc);
             openForm();
         }
@@ -1016,7 +1146,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.paging = false;
                 }
                 else if ($location.path().split(/[\s/]+/).pop() == 'index') {
-                    getAllDocs(user);
+                   // getAllDocs(user);
                     scope.allDocsShow = true;
                     scope.paging = false;
                 }
@@ -1037,7 +1167,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.adminGetHistoryButton = false;
                     scope.adminCreateUserButton = false;
                     scope.adminDeleteUserButton = false;
-                    scope.openNewFormButtonShow = true;
+                    scope.openNewFormButtonShow = false;
                     scope.getHistory = false;
 
                 }

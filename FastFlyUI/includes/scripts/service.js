@@ -1,8 +1,9 @@
-﻿app.service("loginService", function ($http,$q) {
+﻿app.service("loginService", function ($http, $q) {
     var loginData = null;
     var countries = null;
     var res = null;
     var signFlag = null;
+    var DocId = null;
 
 
     this.getData = function () {
@@ -18,24 +19,34 @@
         if (data.ApplicationRoleId == 1) {
             return 1;
         }
-        else if(data.ApplicationRoleId == 4){
+        else if (data.ApplicationRoleId == 4) {
             return 4;
         }
-        
+
     }
 
-    this.setCountries = function(data){
-        countries=data;
+    this.setCountries = function (data) {
+        countries = data;
     }
 
     this.getCountries = function () {
         return countries;
     }
 
+    this.setDocId = function (id) {
+        DocId = id;
+    }
+
+    this.getDocId = function () {
+        return DocId;
+    }
+
     this.getDataFromAPI = function () {
         var defer = $q.defer();
-        $http( {method: 'GET',
-            url: 'http://localhost:8080/api/users/'})
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8080/api/users/'
+        })
             .success(function (result) {
                 defer.resolve(result);
             });
@@ -43,7 +54,7 @@
     };
 
     this.setResponse = function (data) {
-         res = data;
+        res = data;
     }
 
     this.getResponse = function () {
@@ -64,7 +75,7 @@
         //console.log(id);
         $http.get('http://localhost:8080/api/applydocuments/' + id)
         .success(function (response) {
-            defer.resolve(response);            
+            defer.resolve(response);
             //console.log(response);
             //this.setResponse(response);
             //return response;
@@ -93,10 +104,26 @@
          })
     }
 
-    this.getAllSignUsers = function (docId) {
-        return $http.get('http://localhost:8080/api/Users/Signers')
+    this.getDocByDocId = function (docId) {
+        return $http.get('http://localhost:8080/api/ApplyDocuments/' + docId)
          .then(function (response) {
              return response;
          })
     }
+
+    this.getAllSignUsers = function (docId) {
+        return $http.get('http://localhost:8080/api/Users/signers')
+         .then(function (response) {
+             return response;
+         })
+    }
+
+    this.setSign = function (doc, docId) {
+        return $http.put('http://localhost:8080/api/ApplyDocuments/' + docId, doc)
+        .then(function (response) {
+            return response;
+        })
+        
+    }
+
 });

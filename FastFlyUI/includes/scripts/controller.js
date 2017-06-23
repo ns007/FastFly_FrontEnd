@@ -1147,6 +1147,14 @@ var app = angular.module("fastFly", ['ngRoute'])
                            scope.openNewFormButtonShow = false;
                            scope.getHistoryButtonShow = false;
                        }
+                       else if (loginService.checkRoll(response) == 2) {
+                           scope.adminGetHistoryButton = false;
+                           scope.adminCreateUserButton = false;
+                           scope.adminDeleteUserButton = false;
+                           scope.openNewFormButtonShow = true;
+                           scope.getHistoryButtonShow = true;
+
+                       }
                        //get all apply documents
                        getAllDocs(response);
                        scope.allDocsShow = true;
@@ -1227,6 +1235,9 @@ var app = angular.module("fastFly", ['ngRoute'])
                 scope.paging = false;
                 scope.signOutButtonShow = true;
                 if ($location.path().split(/[\s/]+/).pop() == 'newForm') {
+                    if (loginService.checkRoll(user) == 4) {
+                        $location.path('/#index');
+                    }
                     scope.paging = true;
                     scope.allDocsShow = false;
                     scope.title = "Open New Form";
@@ -1258,7 +1269,15 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.adminCreateUserButton = false;
                     scope.adminDeleteUserButton = false;
                     scope.openNewFormButtonShow = false;
-                    scope.getHistory = false;
+                    scope.getHistoryButtonShow = false;
+
+                }
+                else if (loginService.checkRoll(user) == 2) {
+                    scope.adminGetHistoryButton = false;
+                    scope.adminCreateUserButton = false;
+                    scope.adminDeleteUserButton = false;
+                    scope.openNewFormButtonShow = true;
+                    scope.getHistory = true;
 
                 }
                 getAllDocs(user);

@@ -19,10 +19,12 @@
         if (data.ApplicationRoleId == 1) {
             return 1;
         }
+        else if (data.ApplicationRoleId == 2) {
+            return 2;
+        }
         else if (data.ApplicationRoleId == 4) {
             return 4;
         }
-
     }
 
     this.setCountries = function (data) {

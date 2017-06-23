@@ -209,8 +209,8 @@ var app = angular.module("fastFly", ['ngRoute'])
                                     dis = true;
                                 }
                                 //var temp = "Sign" + pars.toString();
-                                var text = x.Reason1;
-                                var check = x.Sign1;
+                                var text = '';
+                                var check = '';
                                 scope.signs.push({ "name": name, "id": check, "dis": dis, "text": text, "DocId": x.DocId });
                             })
                             //angular.forEach(scope.signs, function (sign) {
@@ -369,16 +369,126 @@ var app = angular.module("fastFly", ['ngRoute'])
             var doc = loginService.getDocByDocId(docId);
             doc.then(function (value) {
                 console.log(value.data);
-                value.data.Sign1 =parseInt(scope.signs[1].id);
-                value.data.Reason1 = scope.signs[1].text;
-                var res = loginService.setSign(value.data, docId);
-                if (res != null) {
-                    swal("!תודה", "חתימתך נקלטה במערכת", "success");
-                    backHome();
-                }
-                else {
-                    swal("שגיאה", "הטופס לא נקלט במערכת", "error");
-                }
+                var allSigners = loginService.getAllSignUsers(docId);
+                allSigners.then(function (signer) {
+                    var count = signer.data.length;
+                    console.log(scope.signs[2].id * 1);
+                    console.log(parseInt(scope.signs[2].id) * 1);
+                    for (var i = 1; i <= count; i++) {
+                        switch (i) {
+                            case 1:
+                                if (scope.signs[0].id == null) {
+                                    break;
+                                }
+                                if (scope.signs[0].id*1==0) {
+                                    value.data.Sign1 = 0;
+                                }
+                                else if (scope.signs[0].id*1 == 1) {
+                                    value.data.Sign1 = 1;
+                                }
+                                else {
+                                    value.data.Sign1 = parseInt(scope.signs[0].id);
+                                }
+                                //value.data.Sign1 = parseInt(scope.signs[0].id);
+                                value.data.Reason1 = scope.signs[0].text;
+                                break;
+                            case 2:
+                                if (scope.signs[1].id == null) {
+                                    break;
+                                }
+                                if (scope.signs[1].id*1 == 0) {
+                                    value.data.Sign2 = 0;
+                                }
+                                else if (scope.signs[1].id*1 == 1) {
+                                    value.data.Sign2 = 1;
+                                }
+                                else {
+                                    value.data.Sign2 = parseInt(scope.signs[1].id);
+                                }
+                                //value.data.Sign2 = parseInt(scope.signs[1].id);
+                                value.data.Reason2 = scope.signs[1].text;
+                                break;
+                            case 3:
+                                if (scope.signs[2].id == null) {
+                                    break;
+                                }
+                                if (scope.signs[2].id*1 == 0) {
+                                    value.data.Sign3 = 0;
+                                }
+                                else if (scope.signs[2].id*1 == 1) {
+                                    value.data.Sign3 = 1;
+                                }
+                                else {
+                                    value.data.Sign3 = parseInt(scope.signs[2].id);
+                                }
+                                //value.data.Sign3 = parseInt(scope.signs[2].id);
+                                value.data.Reason3 = scope.signs[2].text;
+                                break;
+                            case 4:
+                                if (scope.signs[3].id == null) {
+                                    break;
+                                }
+                                if (scope.signs[3].id*1 == 0) {
+                                    value.data.Sign4 = 0;
+                                }
+                                else if (scope.signs[3].id*1 == 1) {
+                                    value.data.Sign4 = 1;
+                                }
+                                else {
+                                    value.data.Sign4 = parseInt(scope.signs[3].id);
+                                }
+                                //value.data.Sign4 = parseInt(scope.signs[3].id);
+                                value.data.Reason4 = scope.signs[3].text;
+                            case 5:
+                                if (scope.signs[4].id == null) {
+                                    break;
+                                }
+                                if (scope.signs[4].id*1 == 0) {
+                                    value.data.Sign5 = 0;
+                                }
+                                else if (scope.signs[4].id*1 == 1) {
+                                    value.data.Sign5 = 1;
+                                }
+                                else {
+                                    value.data.Sign5 = parseInt(scope.signs[4].id);
+                                }
+                                //value.data.Sign5 = parseInt(scope.signs[4].id);
+                                value.data.Reason5 = scope.signs[4].text;
+                                break;
+                        }
+                    }
+                    var res = loginService.setSign(value.data, docId);
+                    if (res != null) {
+                        swal("!תודה", "חתימתך נקלטה במערכת", "success");
+                        res.then(function (re) {
+                            console.log(re.data);
+                            loginService.setResponse(re.data);
+                        })
+                        backHome();
+                    }
+                    else {
+                        swal("שגיאה", "הטופס לא נקלט במערכת", "error");
+                    }
+                    //angular.forEach(signer, function (sign) {
+                        
+                    //})
+
+                    
+                })
+                //value.data.Sign1 =parseInt(scope.signs[1].id);
+                //value.data.Reason1 = scope.signs[1].text;
+                //var res = loginService.setSign(value.data, docId);
+                //if (res != null) {
+                //    swal("!תודה", "חתימתך נקלטה במערכת", "success");
+                //    res.then(function (re) {
+                //        console.log(re.data);
+                //        loginService.setResponse(re.data);
+                //    })
+                //    backHome();
+                //}
+                //else {
+                //    swal("שגיאה", "הטופס לא נקלט במערכת", "error");
+                //}
             })
            // console.log(scope.signs);
         }
@@ -632,26 +742,6 @@ var app = angular.module("fastFly", ['ngRoute'])
             })
         }
 
-        //function setSignersForm() {
-        //    scope.signs = [];
-        //    //scope.signs.push({ "name": "ינון", "id": "1", "dis": false }, { "name": "נתי", "id": "2", "dis": false }, { "name": "יניב", "id": "3", "dis": false }, { "name": "גינדוס", "id": "4", "dis": false },{ "name": "ליאור", "id": "5", "dis": false });
-        //    //console.log(scope.signs);
-        //    var signUsers = loginService.getAllSignUsers();
-        //    //console.log(signUsers);
-        //    signUsers.then(function (signRes) {
-        //       // console.log(signRes.data);
-        //        angular.forEach(signRes.data, function (value) {
-        //            var name = value.FirstName + ' ' + value.LastName;
-        //            var id = value.Id;
-        //            var dis = true;
-        //            var text = '';
-        //            scope.signs.push({ "name": name, "id": id, "dis": dis,"text":text });
-        //        })
-        //         //scope.signs[0].dis = false;
-        //        console.log(scope.signs.length);
-        //    })
-            
-        //}
         scope.choices = [];
         scope.addNewFlight = function () {
             console.log("add new flight");

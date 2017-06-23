@@ -119,7 +119,12 @@
     }
 
     this.setSign = function (doc, docId) {
-        return $http.put('http://localhost:8080/api/ApplyDocuments/' + docId, doc)
+        var config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        return $http.put('http://localhost:8080/api/ApplyDocuments/' + docId, doc, config)
         .then(function (response) {
             return response;
         })

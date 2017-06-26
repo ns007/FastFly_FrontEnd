@@ -930,8 +930,40 @@ var app = angular.module("fastFly", ['ngRoute'])
                                 })
                             })
                         }
+                        else {
+                            var flightDoc = flightDocToJson(response.DocId);
+                            $http.post('http://localhost:8080/api/DestinationPeriods', flightDoc, config)
+                                .success(function (response) {
+                                    console.log(response);
+                                    swal("!תודה", "הטופס נשמר בהצלחה", "success");
+                                })
+                        }
 
                     })
+                }
+                else {
+                    if (scope.tests == "1") {
+                        console.log("++" + response.DocId + "++");
+                        var replaceTestDoc = replaceTestDocToJson(response.DocId);
+                        $http.post('http://localhost:8080/api/TestReplacements', replaceTestDoc, config)
+                        .success(function (response) {
+                            console.log(response);
+                            var flightDoc = flightDocToJson(response[0].DocId);
+                            $http.post('http://localhost:8080/api/DestinationPeriods', flightDoc, config)
+                            .success(function (response) {
+                                console.log(response);
+                                swal("!תודה", "הטופס נשמר בהצלחה", "success");
+                            })
+                        })
+                    }
+                    else {
+                        var flightDoc = flightDocToJson(response.DocId);
+                        $http.post('http://localhost:8080/api/DestinationPeriods', flightDoc, config)
+                            .success(function (response) {
+                                console.log(response);
+                                swal("!תודה", "הטופס נשמר בהצלחה", "success");
+                            })
+                    }
                 }
             })
 

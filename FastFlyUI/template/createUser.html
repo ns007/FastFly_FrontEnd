@@ -1,6 +1,6 @@
 ﻿<section ng-show="createUserForm" id="createUser" ng-controller="createUser" data-ng-init="init()">
     <h2 class="createUserHeaderClass">יצירת משתמש חדש</h2>
-    <form id="createUserFormFields" class="form">
+    <form id="createUserFormFields" class="">
         <section class="createUserFieldsClass">
             <section class="createUserPClass">
                 <h4><label for="createUserFirstName">שם פרטי</label></h4>
@@ -8,6 +8,11 @@
                 <h4><label for="createUserId">תעודת זהות</label></h4>
                 <h4><label for="createUserPassword">סיסמה</label></h4>
                 <h4><label for="createUserEmail">מייל</label></h4>
+                <h4><label for="CellNum">טלפון</label></h4>
+                <h4><label for="PercentageJob">אחוז משרה</label></h4>
+                <h4><label for="roleOptions">תפקיד</label></h4>               
+                <h4><label for="facultyOptions">פקולטה</label></h4>
+                <h4><label for="departmentsOptions">מחלקה</label></h4>
                 
             </section>
             <section class="createUserInputClass">
@@ -15,43 +20,14 @@
                 <p><input type="text" id="createUserLastName" name="createUserLastName" placeholder="שם משפחה" ng-model="createUserLastNameTextBox"></p>
                 <p><input type="text" id="createUserId" name="createUserId" placeholder="תעודת זהות" ng-model="createUserIdTextBox"></p>
                 <p><input type="text" id="createUserPassword" name="createUserPassword" placeholder="סיסמה" ng-model="createUserPasswordTextBox"></p>
-                <p><input type="email" id="createUserEmail" name="createUserEmail" placeholder="מייל" ng-model="createUserEmailTextBox"></p>
+                <p><input type="email" id="createUserEmail" name="createUserEmail" placeholder="example@example.com" ng-model="createUserEmailTextBox"></p>
+                <p><input type="tel" id="CellNum" name="CellNum" placeholder="0500000000" ng-model="CellNumTextBox"></p>
+                <p><input type="number" id="PercentageJob" name="PercentageJob" placeholder="אחוז משרה" ng-model="PercentageJob" min="0" max="100"></p>
+                <p><select ng-model="roleOptions" id="roleOptions" ng-options="x.Description for x in appRoles" ng-change="showRole(roleOptions)"></select></p>               
+                <p><select ng-model="facultyOptions" id="facultyOptions" ng-options="x.FacultyName for x in facultyList"></select></p>
+                <p><select ng-model="departmentsOptions" id="departmentsOptions" ng-options="x.DepartmentName for x in deprtmentsList"></select></p>
+                <button ng-model="createUserSubmitButton" ng-click="createUser()" class="btn btn-default">צור משתמש</button>
             </section>
-            <!--<div class="form-group">
-                <div class="col-sm-2">
-                    <label for="createUserFirstName">שם פרטי</label>
-                    <input type="text" id="createUserFirstName" name="createUserFirstName" placeholder="שם פרטי" ng-model="createUserFirstNameTextBox" class="form-control input-md">
-                </div>
-            </div>
-            <div class="form-group-lg">
-                <div class="col-sm-2">
-                    <label for="createUserFirstName">שם פרטי</label>
-                    <input type="text" id="createUserFirstName" name="createUserFirstName" placeholder="שם פרטי" ng-model="createUserFirstNameTextBox" class="form-control input-md">
-                </div>
-            </div>-->
         </section>
-        
-        <!--<div>
-            <label for="createUserLastName">שם משפחה</label>
-            <input type="text" id="createUserLastName" name="createUserLastName" placeholder="שם משפחה" ng-model="createUserLastNameTextBox">
-        </div>-->
-       
-        
-        <!--<div class="row">
-            <div class="form-group">
-                <div class="col-sm-2">
-                    <input id="createUserFirstName" name="createUserFirstName" type="text" placeholder="שם פרטי" class="form-control input-md" ng-model="createUserFirstNameTextBox">
-                </div>
-                <label class="col-sm-1  control-label" for="createUserFirstName">שם פרטי</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <div class="col-sm-2">
-                    <input id="createUserLastName" name="createUserLastName" type="text" placeholder="שם משפחה" class="form-control input-md" ng-model="createUserLastNameTextBox">
-                </div>
-                <label class="col-sm-1 control-label" for="createUserLastName">שם משפחה</label>
-            </div>
-        </div>-->
     </form>
 </section>

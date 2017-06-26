@@ -25,6 +25,9 @@
         else if (data.ApplicationRoleId == 4) {
             return 4;
         }
+        else if (data.ApplicationRoleId == 5) {
+            return 5;
+        }
     }
 
     this.setCountries = function (data) {
@@ -131,6 +134,45 @@
             return response;
         })
         
+    }
+
+    this.getAppRoles = function () {
+        var defer = $q.defer();
+        $http.get('http://localhost:8080/api/ApplicationRoles/')
+        .success(function (response) {
+            defer.resolve(response);
+        })
+        return defer.promise;
+    }
+
+    this.getAllDepartments = function () {
+        var defer = $q.defer();
+        $http.get('http://localhost:8080/api/Departments/')
+        .success(function (response) {
+            defer.resolve(response);
+        })
+        return defer.promise;
+    }
+
+    this.getAllFaculty = function () {
+        var defer = $q.defer();
+        $http.get('http://localhost:8080/api/Faculties/')
+        .success(function (response) {
+            defer.resolve(response);
+        })
+        return defer.promise;
+    }
+
+    this.createUser = function (user) {
+        var config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        return $http.post('http://localhost:8080/api/Users/',user, config)
+        .then(function (response) {
+            return response;
+        })
     }
 
 });

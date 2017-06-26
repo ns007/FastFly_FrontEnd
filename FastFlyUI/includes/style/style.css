@@ -59,7 +59,7 @@ header {
 }
 .createUserHeaderClass {
     position: relative;
-    right: 500px;
+    right: 425px;
     float: right;
 }
 
@@ -461,15 +461,44 @@ table tr:nth-child(even) {
 .createUserFieldsClass{
     position:relative;
     top:100px;
+    right:10%;
 }
 .createUserPClass{
     float:right;
     padding-left:50px;
-
+}
+.createUserPClass h4{
+    padding-bottom:2px;
+    color:#8e8c8c;
 }
 .createUserInputClass{
     float:right;
     padding-top:5px;
 }
+.createUserInputClass p select{
+    width:175px;
+    height:25px;
+}
+.createUserInputClass p input{
+    width:175px;
+}
+.createUserInputClass button{
+    width:175px;
+}
+
+.createUserInputClass input, .createUserInputClass select{
+    width: 100%;
+    border-radius: 7px;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+.createUserInputClass input:focus, .createUserInputClass select:focus {
+    border: 3px solid #555;
+}
+
 
 

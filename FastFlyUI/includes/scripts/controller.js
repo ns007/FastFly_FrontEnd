@@ -72,37 +72,12 @@ var app = angular.module("fastFly", ['ngRoute'])
         scope.showTemp = function () {
             console.log(temp);
         }
-
-
-        /*
-        swal({
-            title: "בטוח?",
-            text: "אתה עומד למחוק משתמש זה מהמערכת!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn-danger",
-            confirmButtonText: "מחק",
-            closeOnConfirm: false,
-            cancelButtonText: 'ביטול',
-        },
-        function () {
-            $http.delete('http://localhost:8080/api/users/' + '2')
-                   .success(function (response) {
-                     console.log(response);
-                     swal("Deleted!", "מחקת משתמש זה בהצלחה", "success");
-                 })
-        });*/
-
-
-
-
     })
     .controller("newFormController", function ($scope, loginService, $window, $location, $http, $filter) {
         var scope = $scope;
 
         $scope.init = function () {
-            console.log("new form init");
-            //scope.flightsToShow = [{ "CountryCode": "AVA" }];
+            console.log("new form init");   
             scope.newFormShow = true;
             scope.destinationClass = 'otherPages';
             scope.privateDetailsClass = 'currentPage';
@@ -227,8 +202,9 @@ var app = angular.module("fastFly", ['ngRoute'])
                        // console.log(scope.signs);
                         //checkHwoIsTheSigner(signUser);
                         //disabled all fields in the main form
-                        disableFields();
-                        scope.signerButtonDisabled = false;
+                        disableFields(user);
+                       
+                        
                     })
                     console.log(userDoc);
                 }
@@ -245,6 +221,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.jogPercentTextBox = user.PercentageJob;
                     scope.phoneTextBox = user.CellNum;
                     scope.mailTextBox = user.EmailAddress;
+                    scope.signerButtonDisabled = true;
                     //scope.type = ["קק\"מ אישי", "קק\"מ קבוצתי", "סגל עמית", "מקור תקציבי"];
                     //this.myDate = new Date();
                     //scope.isDatePickerOpen = true;
@@ -300,7 +277,7 @@ var app = angular.module("fastFly", ['ngRoute'])
         //    //})
         //}
 
-        function disableFields() {
+        function disableFields(user) {
             scope.destinationTextBoxDisabled = true;
             scope.familyDisabled = true;
             scope.selectedNameDiabled = true;
@@ -323,7 +300,13 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.submitFormButtonDisabled = true;
             scope.userSignCheckBoxDisabled = true;
             //scope.headOfDepartmentDisabled = true;
-           // scope.addClassDisable = true;
+            // scope.addClassDisable = true;
+            if (loginService.checkRoll(user) == 4 || loginService.checkRoll(user) == 5) {
+                scope.signerButtonDisabled = false;
+            }
+            else {
+                scope.signerButtonDisabled = true;
+            }
         }
 
         function checkIfTypeExist(data) {
@@ -372,8 +355,8 @@ var app = angular.module("fastFly", ['ngRoute'])
                 var allSigners = loginService.getAllSignUsers(docId);
                 allSigners.then(function (signer) {
                     var count = signer.data.length;
-                    console.log(scope.signs[2].id * 1);
-                    console.log(parseInt(scope.signs[2].id) * 1);
+                    //console.log(scope.signs[2].id * 1);
+                    //console.log(parseInt(scope.signs[2].id) * 1);
                     for (var i = 1; i <= count; i++) {
                         switch (i) {
                             case 1:
@@ -461,7 +444,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     if (res != null) {
                         swal("!תודה", "חתימתך נקלטה במערכת", "success");
                         res.then(function (re) {
-                            console.log(re.data);
+                            //console.log(re.data);
                             loginService.setResponse(re.data);
                         })
                         backHome();
@@ -505,6 +488,7 @@ var app = angular.module("fastFly", ['ngRoute'])
         function backHome() {
             scope.allDocsShow = true;
             $window.location = '/#index';
+            $window.location.reload();
         }
 
         function setConferenceDays() {
@@ -984,7 +968,8 @@ var app = angular.module("fastFly", ['ngRoute'])
                     //"ApplicantSign":לשנות בבסיס נתונים את הטיפוס לבוליאן
                     //"ApplyDate"://להכניס את התאריך של אישור הטופס עי הממלא
                     //ApplicantSign להוריד - לא רלוונטי
-                    "ApplyDate": convertDate(scope.startDate)//לשנות לתאריך של היום
+                    "ApplyDate": convertDate(scope.startDate),//לשנות לתאריך של היום
+                    "DocStatus":1
                 }
             return doc;
         }
@@ -1092,6 +1077,123 @@ var app = angular.module("fastFly", ['ngRoute'])
             console.log("create user init");
             scope.createUserForm = true;
         }
+
+        var Rolse = loginService.getAppRoles();
+        Rolse.then(function (val) {
+            //console.log(val);
+            scope.appRoles = val;
+        })
+
+        var departments = loginService.getAllDepartments();
+        departments.then(function (val) {
+            scope.deprtmentsList = val;
+        })
+
+        var faculties = loginService.getAllFaculty();
+        faculties.then(function (val) {
+            //console.log(val);
+            scope.facultyList = val;
+        })
+
+        scope.showRole = function (role) {
+            //console.log(role.Id);
+        }
+
+        scope.createUser = function () {
+            createUserValidCheck();
+            //var user = createUserJson();
+            //console.log(user);
+            //var response = loginService.createUser(user);
+            //if (response != null) {
+            //    swal("המשתמש נוצר", "יצרת משתמש חדש בהצלחה", "success");
+            //    clearFields();
+            //}
+            //else {
+            //    swal("השמירה נכשלה", "המשתמש לא נשמר במערכת", "error");
+            //}
+            //console.log(response);
+        }
+
+        function clearFields() {
+            scope.createUserIdTextBox = null;
+            scope.createUserPasswordTextBox = null;
+            scope.createUserEmailTextBox = null;
+            scope.createUserFirstNameTextBox = null;
+            scope.createUserLastNameTextBox = null;
+            //scope.roleOptions = null;
+            scope.PercentageJob = null;
+            scope.CellNumTextBox = null;
+        }
+
+        function createUserValidCheck() {
+            if (createUserCheckId()) {
+                return;
+            }
+            if (createUserCheckMail()) {
+                return
+            }
+            if (createUserCheckPhone()) {
+                return;
+            }
+           if(createUserCheckPercentageJob()){
+                return;
+            }
+            console.log("hi");
+           
+        }
+
+        function createUserCheckPercentageJob() {
+            if (scope.PercentageJob > 0 || PercentageJob <= 100) {
+                return 0;
+            }
+            swal("אחוז משרה לא חוקי", "יש להזין אחוז משרה חוקי ", "error");
+            return 1
+        }
+
+        function createUserCheckPhone() {
+            var validPhone = /^\[\+]\d{3}[0-9]{9}|05[0,2,4,8][0-9]{7}|077[0-9]{7}|0[2,3,4,8,9][0-9]{7}/;
+            if (scope.CellNumTextBox.match(validPhone)) {
+                return 0
+            }
+            swal("מספר טלפון לא חוקי", "יש להזין מספר טלפון חוקי ", "error");
+            return 1
+            
+        }
+
+        function createUserCheckId() {
+            if ((isNaN(scope.createUserIdTextBox)) || (scope.createUserIdTextBox == null)) {
+                console.log(scope.createUserIdTextBox);
+                swal("תעודת זהות לא חוקית", "יש להזין מספרים בלבד ", "error");
+                return 1;
+            }
+        }
+
+        function createUserCheckMail() {
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(scope.createUserEmailTextBox)) {
+                return 0
+            }
+            swal("מייל לא חוקי", "יש להזין כתובת מייל חוקית ", "error");
+            return 1
+        }
+
+        function createUserJson() {
+            var user =
+                    {
+                        "Id": scope.createUserIdTextBox,
+                        "Password": scope.createUserPasswordTextBox,
+                        "EmailAddress": scope.createUserEmailTextBox,
+                        "FirstName": scope.createUserFirstNameTextBox,
+                        "LastName": scope.createUserLastNameTextBox,
+                        "Role": scope.roleOptions.Description,
+                        "PercentageJob": parseInt(scope.PercentageJob),
+                        "CellNum": scope.CellNumTextBox,
+                        "DepartmentId": scope.departmentsOptions.Id,
+                        "FacultyId": scope.facultyOptions.Id,
+                        "ApplicationRoleId": scope.roleOptions.Id,
+                        "UserEnable": 1,
+                    }
+            return user;
+        }
     })
     .controller("index", function ($scope, $http, $window, loginService, $location,$q) {
         var scope = $scope;
@@ -1153,6 +1255,13 @@ var app = angular.module("fastFly", ['ngRoute'])
                            scope.adminDeleteUserButton = false;
                            scope.openNewFormButtonShow = true;
                            scope.getHistoryButtonShow = true;
+                       }
+                       else if (loginService.checkRoll(response) == 5) {
+                           scope.adminGetHistoryButton = false;
+                           scope.adminCreateUserButton = false;
+                           scope.adminDeleteUserButton = false;
+                           scope.openNewFormButtonShow = true;
+                           scope.getHistoryButtonShow = true;
 
                        }
                        //get all apply documents
@@ -1166,10 +1275,18 @@ var app = angular.module("fastFly", ['ngRoute'])
         }
 
         function getAllDocs(data) {
+            console.log(data);
+            var url;
+            if (data.ApplicationRoleId == 1 || data.ApplicationRoleId == 4) {
+                url = 'http://localhost:8080/api/applydocuments/docs/open';
+            }
+            else if (data.ApplicationRoleId == 2) {
+                url = 'http://localhost:8080/api/applydocuments/docs/' + data.Id + '/open';
+            }
             var myEl = angular.element(document.querySelector('#dashboardOpensFormsRequest'));
             myEl.empty();
             var index = 0;
-            $http.get('http://localhost:8080/api/applydocuments/')
+            $http.get(url)
             .success(function (response) {
                 //console.log(response);
                 var length = response.length;
@@ -1215,6 +1332,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                 //scope.newForm = false;
                 scope.adminGetHistoryButton = false;
                 scope.aside = false;
+                scope.createUserForm = false;
                 scope.isDatePickerOpen = false;
                 scope.adminCreateUserButton = false;
                 scope.adminDeleteUserButton = false;
@@ -1277,7 +1395,15 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.adminCreateUserButton = false;
                     scope.adminDeleteUserButton = false;
                     scope.openNewFormButtonShow = true;
-                    scope.getHistory = true;
+                    scope.getHistoryButtonShow = true;
+
+                }
+                else if (loginService.checkRoll(user) == 5) {
+                    scope.adminGetHistoryButton = false;
+                    scope.adminCreateUserButton = false;
+                    scope.adminDeleteUserButton = false;
+                    scope.openNewFormButtonShow = true;
+                    scope.getHistoryButtonShow = true;
 
                 }
                 getAllDocs(user);
@@ -1316,8 +1442,10 @@ var app = angular.module("fastFly", ['ngRoute'])
         }
 
         scope.signOut = function () {
+            //scope.createUserForm = false;
             localStorage.clear();
-            // $location.path("index.html");
+            
+             $location.path("/#index");
             $window.location.reload();
         }
 

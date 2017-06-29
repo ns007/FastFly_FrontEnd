@@ -100,12 +100,17 @@ var app = angular.module("fastFly", ['ngRoute'])
                    
                     console.log(" ....");
                     userDoc.then(function (x) {
-                        //console.log(x);
+                        console.log(x);
                         loginService.setDocId(x.DocId);
                         scope.firstNameTextBox = x.User.FirstName;
                         scope.idTextBox = x.User.Id;
                         scope.lastNameTextBox = x.User.LastName;
-                        scope.facultyTextBox = x.User.Faculty1.FacultyName;
+                        var faculty = loginService.getFaculty(x.User.FacultyId);
+                        faculty.then(function (val) {
+                            //console.log(val);
+                            scope.facultyTextBox = val.FacultyName;
+                        })
+                        //scope.facultyTextBox = x.User.Faculty1.FacultyName;
                         scope.departmentTextBox = x.User.Department1.DepartmentName;
                         scope.positionTextBox = x.User.Role;
                         scope.jogPercentTextBox = x.User.PercentageJob;
@@ -683,14 +688,16 @@ var app = angular.module("fastFly", ['ngRoute'])
             //console.log(signUsers);
             signUsers.then(function (signRes) {
                 var user = JSON.parse(localStorage.getItem(('user')));
-                var headOfDep = loginService.getHeadOfDepartment(user.Id);
+                
                 
                 var DocId = loginService.getDocId();
                 if (DocId != null) {
                     var doc = loginService.getDocByDocId(DocId);
                     doc.then(function (value) {
                         var i = 1;
+                        console.log(value);
                         //head of department
+                        var headOfDep = loginService.getHeadOfDepartment(value.data.User.Id);
                         headOfDep.then(function (val) {
                             console.log(val);
                             var name = val.FirstName + ' ' + val.LastName;
@@ -747,6 +754,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     })
                 }
                 else {
+                    var headOfDep = loginService.getHeadOfDepartment(user.Id);
                     headOfDep.then(function (val) {
                         var name = val.FirstName + ' ' + val.LastName;
                         if (val.Id == user.Id) {
@@ -953,6 +961,9 @@ var app = angular.module("fastFly", ['ngRoute'])
         //*****************send new form*****************
         scope.sendNewForm = function () {
             //alert(JSON.stringify(scope.testsGroup));
+            if (mainFormValidCheck()) {
+                return;
+            }
             var ApplyDocument = apllyDocumentToJson();
             console.log(ApplyDocument);
             var config = {
@@ -1022,6 +1033,13 @@ var app = angular.module("fastFly", ['ngRoute'])
 
         }
         //*****************send new form*****************
+
+        function mainFormValidCheck() {
+            if (scope.userSignCheckBox == null || scope.userSignCheckBox == false) {
+                swal("דרושה חתימה", "נא אשר את הטופס בתיבה המתאימה", "error");
+                return 1;
+            }
+        }
 
         function apllyDocumentToJson() {
             var user = loginService.getData();
@@ -1189,8 +1207,24 @@ var app = angular.module("fastFly", ['ngRoute'])
             console.log(user);
             var response = loginService.createUser(user);
             if (response != null) {
+            //swal({
+            //    title: 'יצרת משתמש חדש בהצלחה',
+            //    text: 'המשתמש נוצר  ',
+            //    type: 'success',
+            //    timer: 2000
+            //    //}).then(function (dismiss) {
+            //    //          if (dismiss === 'timer') {
+            //    //              console.log('I was closed by the timer')
+            //    //          }
+            //    //      }
+            //}).then(function () {
+            //    console.log("hhhi");
+            //})
+
+
                 swal("המשתמש נוצר", "יצרת משתמש חדש בהצלחה", "success");
                 clearFields();
+
             }
             else {
                 swal("השמירה נכשלה", "המשתמש לא נשמר במערכת", "error");
@@ -1222,8 +1256,6 @@ var app = angular.module("fastFly", ['ngRoute'])
            if(createUserCheckPercentageJob()){
                 return;
             }
-            console.log("hi");
-           
         }
 
         function createUserCheckPercentageJob() {
@@ -1374,6 +1406,11 @@ var app = angular.module("fastFly", ['ngRoute'])
             .success(function (response) {
                 //console.log(response);
                 var length = response.length;
+                console.log(0);
+                if (length == 0) {
+                    console.log(1);
+                }
+                //scope.noDocsShow = true;
                 //loginService.setResponse(response);
                 angular.forEach(response, function (res) {
                     //console.log(res.UserId);
@@ -1490,6 +1527,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.getHistoryButtonShow = true;
 
                 }
+                //scope.noDocsShow = false;
                 getAllDocs(user);
                // scope.allDocsShow = true;
             }

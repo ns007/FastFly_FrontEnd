@@ -21,7 +21,7 @@
                 <p><input type="text" id="createUserId" name="createUserId" placeholder="תעודת זהות" ng-model="createUserIdTextBox"></p>
                 <p><input type="text" id="createUserPassword" name="createUserPassword" placeholder="סיסמה" ng-model="createUserPasswordTextBox"></p>
                 <p><input type="email" id="createUserEmail" name="createUserEmail" placeholder="example@example.com" ng-model="createUserEmailTextBox"></p>
-                <p><input type="tel" id="CellNum" name="CellNum" placeholder="0500000000" ng-model="CellNumTextBox"></p>
+                <p><input type="tel" id="CellNum" name="CellNum" placeholder="0500000000" ng-model="CellNumTextBox" maxlength="10"></p>
                 <p><input type="number" id="PercentageJob" name="PercentageJob" placeholder="אחוז משרה" ng-model="PercentageJob" min="0" max="100"></p>
                 <p><select ng-model="roleOptions" id="roleOptions" ng-options="x.Description for x in appRoles" ng-change="showRole(roleOptions)"></select></p>               
                 <p><select ng-model="facultyOptions" id="facultyOptions" ng-options="x.FacultyName for x in facultyList"></select></p>

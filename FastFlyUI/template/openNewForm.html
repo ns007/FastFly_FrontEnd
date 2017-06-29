@@ -418,16 +418,16 @@
             <section class="flightDetailsSectionClass">
                 <p><h3>עמוד מאשרי החתימה</h3></p>
                 <p><h4>ראש המחלקה</h4></p>
-                <div class="form-group">
+                <div class="form-group" ng-repeat="headOfDepartment in heads">
                     <section class="signPClass">
                         <p class="teachingRadioClass"> {{headOfDepartment.name}} </p>
                     </section>
                     <section class="signRadioClass">
-                        <input type="radio" name="" ng-model="headOfDepartment" value="1" class="signertRadioClass" ng-disabled="headOfDepartmentDisabled" />
+                        <input type="radio" name="" ng-model="headOfDepartment.id" value="1" class="signertRadioClass" ng-disabled="headOfDepartment.dis" />
                         <label class="signertRadioClass"> מאשר</label>
-                        <input type="radio" name="" ng-model="headOfDepartment" value="0" class="signertRadioClass" ng-disabled="headOfDepartmentDisabled" />
+                        <input type="radio" name="" ng-model="headOfDepartment.id" value="0" class="signertRadioClass" ng-disabled="headOfDepartment.dis" />
                         <label class="signertRadioClass">לא מאשר</label>
-                        <textarea class="signertRadioClass" rows="2" cols="60"></textarea>
+                        <textarea class="signertRadioClass" rows="2" cols="60" ng-model="headOfDepartment.text" ng-disabled="headOfDepartment.dis"></textarea>
                     </section>
                 </div>
                 <p><h4>מאשרי חתימה</h4></p>

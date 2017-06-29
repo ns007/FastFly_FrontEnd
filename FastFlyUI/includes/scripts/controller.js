@@ -215,7 +215,12 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.firstNameTextBox = user.FirstName;
                     scope.lastNameTextBox = user.LastName;
                     scope.idTextBox = user.Id;
-                    scope.facultyTextBox = user.Faculty1.FacultyName;
+                    var faculty = loginService.getFaculty(user.FacultyId);
+                    faculty.then(function (val) {
+                        //console.log(val);
+                        scope.facultyTextBox = val.FacultyName;
+                    })
+                    //scope.facultyTextBox = user.Faculty1.FacultyName;
                     scope.departmentTextBox = user.Department1.DepartmentName;
                     scope.positionTextBox = user.Role;
                     scope.jogPercentTextBox = user.PercentageJob;
@@ -350,8 +355,23 @@ var app = angular.module("fastFly", ['ngRoute'])
         scope.sendSignerData = function () {
             var docId = loginService.getDocId();
             var doc = loginService.getDocByDocId(docId);
+            var user = JSON.parse(localStorage.getItem(('user')));
             doc.then(function (value) {
                 console.log(value.data);
+                if (user.ApplicationRoleId == 5) {
+                    if (scope.heads[0].id == null) {
+                        value.data.DepartmentHeadSign = null;
+                    }
+                    else if (scope.heads[0].id * 1 == 0) {
+                        value.data.DepartmentHeadSign = 0;
+                    }
+                    else if (scope.heads[0].id * 1 == 1) {
+                        value.data.DepartmentHeadSign = 1;
+                    }
+                    else {
+                        value.data.DepartmentHeadSign = parseInt(scope.heads[0].id);
+                    }
+                }
                 var allSigners = loginService.getAllSignUsers(docId);
                 allSigners.then(function (signer) {
                     var count = signer.data.length;
@@ -447,7 +467,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                             //console.log(re.data);
                             loginService.setResponse(re.data);
                         })
-                        backHome();
+                        //backHome();
                     }
                     else {
                         swal("שגיאה", "הטופס לא נקלט במערכת", "error");
@@ -655,17 +675,36 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.travelDetailsClass = 'otherPages';
             scope.signsFormClass = 'currentPage';
             scope.signs = [];
+            scope.heads = [];
             //scope.signs.push({ "name": "ינון", "id": "1", "dis": false }, { "name": "נתי", "id": "2", "dis": false }, { "name": "יניב", "id": "3", "dis": false }, { "name": "גינדוס", "id": "4", "dis": false },{ "name": "ליאור", "id": "5", "dis": false });
             //console.log(scope.signs);
             var signUsers = loginService.getAllSignUsers();
+            
             //console.log(signUsers);
             signUsers.then(function (signRes) {
                 var user = JSON.parse(localStorage.getItem(('user')));
+                var headOfDep = loginService.getHeadOfDepartment(user.Id);
+                
                 var DocId = loginService.getDocId();
                 if (DocId != null) {
                     var doc = loginService.getDocByDocId(DocId);
                     doc.then(function (value) {
-                        var i=1;
+                        var i = 1;
+                        //head of department
+                        headOfDep.then(function (val) {
+                            console.log(val);
+                            var name = val.FirstName + ' ' + val.LastName;
+                            if (val.Id == user.Id) {
+                                var dis = false;
+                            }
+                            else {
+                                var dis = true;
+                            }
+                            var id = value.data.DepartmentHeadSign;
+                            var text = '';
+                            scope.heads.push({ "name": name, "id": id, "dis": dis, "text": text, "DocId": DocId });
+                        })
+                        //signers
                         angular.forEach(signRes.data, function (val) {
                             var name = val.FirstName + ' ' + val.LastName;
                             var id;
@@ -708,6 +747,19 @@ var app = angular.module("fastFly", ['ngRoute'])
                     })
                 }
                 else {
+                    headOfDep.then(function (val) {
+                        var name = val.FirstName + ' ' + val.LastName;
+                        if (val.Id == user.Id) {
+                            var dis = false;
+                        }
+                        else {
+                            var dis = true;
+                        }
+                        var id = val.Id;
+                        var text = '';
+                        scope.heads.push({ "name": name, "id": id, "dis": dis, "text": text, "DocId": DocId });
+                    })
+                    
                     angular.forEach(signRes.data, function (value) {
                         var name = value.FirstName + ' ' + value.LastName;
                         var id = value.Id;
@@ -1133,17 +1185,17 @@ var app = angular.module("fastFly", ['ngRoute'])
 
         scope.createUser = function () {
             createUserValidCheck();
-            //var user = createUserJson();
-            //console.log(user);
-            //var response = loginService.createUser(user);
-            //if (response != null) {
-            //    swal("המשתמש נוצר", "יצרת משתמש חדש בהצלחה", "success");
-            //    clearFields();
-            //}
-            //else {
-            //    swal("השמירה נכשלה", "המשתמש לא נשמר במערכת", "error");
-            //}
-            //console.log(response);
+            var user = createUserJson();
+            console.log(user);
+            var response = loginService.createUser(user);
+            if (response != null) {
+                swal("המשתמש נוצר", "יצרת משתמש חדש בהצלחה", "success");
+                clearFields();
+            }
+            else {
+                swal("השמירה נכשלה", "המשתמש לא נשמר במערכת", "error");
+            }
+            console.log(response);
         }
 
         function clearFields() {
@@ -1309,7 +1361,7 @@ var app = angular.module("fastFly", ['ngRoute'])
         function getAllDocs(data) {
             console.log(data);
             var url;
-            if (data.ApplicationRoleId == 1 || data.ApplicationRoleId == 4) {
+            if (data.ApplicationRoleId == 1 || data.ApplicationRoleId == 4 || data.ApplicationRoleId == 5) {
                 url = 'http://localhost:8080/api/applydocuments/docs/open';
             }
             else if (data.ApplicationRoleId == 2) {

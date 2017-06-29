@@ -175,4 +175,24 @@
         })
     }
 
+    this.getHeadOfDepartment = function (userId) {
+        var defer = $q.defer();
+        $http.get('http://localhost:8080/api/Users/HeadOfDep/'+ userId)
+        .success(function (response) {
+            defer.resolve(response);
+            
+        })
+        return defer.promise;
+    }
+
+    this.getFaculty = function (id) {
+        var defer = $q.defer();
+        $http.get('http://localhost:8080/api/Faculties/' + id)
+        .success(function (response) {
+            defer.resolve(response);
+
+        })
+        return defer.promise;
+    }
+
 });

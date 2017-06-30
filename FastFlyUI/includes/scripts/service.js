@@ -77,13 +77,9 @@
     this.getUserDetailsFromService = function (id) {
         var defer = $q.defer();
         this.setSignerFlag(1);
-        //console.log(id);
         $http.get('http://localhost:8080/api/applydocuments/' + id)
         .success(function (response) {
             defer.resolve(response);
-            //console.log(response);
-            //this.setResponse(response);
-            //return response;
         })
         return defer.promise;
     }
@@ -188,6 +184,26 @@
     this.getFaculty = function (id) {
         var defer = $q.defer();
         $http.get('http://localhost:8080/api/Faculties/' + id)
+        .success(function (response) {
+            defer.resolve(response);
+
+        })
+        return defer.promise;
+    }
+
+    this.getDocs = function (url) {
+        var defer = $q.defer();
+        $http.get(url)
+        .success(function (response) {
+            defer.resolve(response);
+
+        })
+        return defer.promise;
+    }
+
+    this.getUserById = function (id) {
+        var defer = $q.defer();
+        $http.get('http://localhost:8080/api/users/' + id)
         .success(function (response) {
             defer.resolve(response);
 

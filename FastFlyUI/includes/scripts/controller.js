@@ -1399,40 +1399,56 @@ var app = angular.module("fastFly", ['ngRoute'])
             else if (data.ApplicationRoleId == 2) {
                 url = 'http://localhost:8080/api/applydocuments/docs/' + data.Id + '/open';
             }
-            var myEl = angular.element(document.querySelector('#dashboardOpensFormsRequest'));
-            myEl.empty();
+            //var myEl = angular.element(document.querySelector('#dashboardOpensFormsRequest'));
+            //myEl.empty();
             var index = 0;
-            $http.get(url)
-            .success(function (response) {
-                //console.log(response);
-                var length = response.length;
-                console.log(0);
-                if (length == 0) {
-                    console.log(1);
-                }
-                //scope.noDocsShow = true;
-                //loginService.setResponse(response);
-                angular.forEach(response, function (res) {
-                    //console.log(res.UserId);
-                    $http.get('http://localhost:8080/api/users/' + res.UserId)
-                    .success(function (userDetails) {
-                                       var para = document.createElement("a");
-                                       para.href = "#/newForm";
-                                       //console.log(index);
-                                       var node = document.createTextNode(userDetails.Id + ' ' + userDetails.FirstName + ' ' + userDetails.LastName + ' ' + res.DocId);
-                                       para.appendChild(node);
-                                       para.addEventListener("click", function () { getUserDetails(res.DocId) }, false);
-                                       var element = document.getElementById("dashboardOpensFormsRequest");
-                                       element.appendChild(para);
-                                       para = document.createElement("p");
-                                       element.appendChild(para);
-                                   })                   
+            var res = loginService.getDocs(url);
+            scope.formsFromDbToShow = [];
+            res.then(function (val) {
+                //console.log(val);
+                angular.forEach(val, function (obj) {
+                    //console.log(obj);
+                    var docId = obj.DocId;
+                    var id = obj.UserId;
+                    var name;
+                    var thisUser = loginService.getUserById(obj.UserId);
+                    thisUser.then(function (val) {
+                        name = val.FirstName + ' ' + val.LastName;
+                        scope.formsFromDbToShow.push({ "Id": id, "name": name, "DocId": docId });
+                    })
                 })
+                scope.formsTablesShow = true;
+                scope.allDocsShow = true;
             })
+            //$http.get(url)
+            //.success(function (response) {
+            //    //console.log(response);
+            //    //scope.formsFromDbToShow = response;
+            //    //scope.formsTablesShow = true;
+            //    //scope.allDocsShow = true;
+            ////    var length = response.length;
+            //    //scope.noDocsShow = true;
+            //    //loginService.setResponse(response);
+            //    //angular.forEach(response, function (res) {
+            //    //    //console.log(res.UserId);
+            //    //    $http.get('http://localhost:8080/api/users/' + res.UserId)
+            //    //    .success(function (userDetails) {
+            //    //                       var para = document.createElement("a");
+            //    //                       para.href = "#/newForm";
+            //    //                       //console.log(index);
+            //    //                       var node = document.createTextNode(userDetails.Id + ' ' + userDetails.FirstName + ' ' + userDetails.LastName + ' ' + res.DocId);
+            //    //                       para.appendChild(node);
+            //    //                       para.addEventListener("click", function () { getUserDetails(res.DocId) }, false);
+            //    //                       var element = document.getElementById("dashboardOpensFormsRequest");
+            //    //                       element.appendChild(para);
+            //    //                       para = document.createElement("p");
+            //    //                       element.appendChild(para);
+            //    //                   })                   
+            //    //})
+            //})
         }
 
-
-        function getUserDetails(id) {
+        scope.getUserDetails = function(id) {
             console.log(id);
             var doc = loginService.getUserDetailsFromService(id);
             loginService.setResponse(doc);
@@ -1549,18 +1565,21 @@ var app = angular.module("fastFly", ['ngRoute'])
             console.log("get user history");
             scope.paging = false;
             scope.allDocsShow = false;
+            scope.formsTablesShow = false;
         }
 
         scope.adminCreateUser = function () {
             scope.title = "Create User";
             scope.paging = false;
             scope.allDocsShow = false;
+            scope.formsTablesShow = false;
         }
 
         function openForm() {
             scope.title = "Open New Form";
             scope.paging = true;
             scope.allDocsShow = false;
+            scope.formsTablesShow = false;
         }
 
         scope.signOut = function () {

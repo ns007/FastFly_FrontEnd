@@ -167,13 +167,13 @@
             <section class="flightsTableWrapper">
                 <table ng-model="flightsTable" ng-show="flightsTableShow" class="flightsTableClass">
                     <tr>
-                        <th>מספר</th>
-                        <th>יעד</th>
-                        <th>תאריך יציאה</th>
-                        <th>תאריך חזרה</th>
-                        <th>סכום מבוקש לטיסות</th>
-                        <th>סכום מבוקש למלון</th>
-                        <th>דמי השתתפות בכנסים</th>
+                        <td class="tdHeaderClass">מספר</td>
+                        <td class="tdHeaderClass">יעד</td>
+                        <td class="tdHeaderClass">תאריך יציאה</td>
+                        <td class="tdHeaderClass">תאריך חזרה</td>
+                        <td class="tdHeaderClass">סכום מבוקש לטיסות</td>
+                        <td class="tdHeaderClass">סכום מבוקש למלון</td>
+                        <td class="tdHeaderClass">דמי השתתפות בכנסים</td>
                     </tr>
                     <tr ng-repeat="flight in flightsToShow">
                         <td>{{ $index + 1 }}</td>
@@ -268,12 +268,12 @@
             <section class="flightsTableWrapper">
                 <table ng-model="coursesTable" ng-show="coursesTableShow" class="flightsTableClass">
                     <tr>
-                        <th>מספר</th>
-                        <th>שם הקורס</th>
-                        <th>יום</th>
-                        <th>משעה</th>
-                        <th>עד שעה</th>
-                        <th>מחליף</th>
+                        <td class="tdHeaderClass">מספר</td>
+                        <td class="tdHeaderClass">שם הקורס</td>
+                        <td class="tdHeaderClass">יום</td>
+                        <td class="tdHeaderClass">משעה</td>
+                        <td class="tdHeaderClass">עד שעה</td>
+                        <td class="tdHeaderClass">מחליף</td>
                     </tr>
                     <tr ng-repeat="courseTd in coursesFromDbToShow">
                         <td>{{ $index + 1 }}</td>
@@ -327,11 +327,11 @@
             <section class="flightsTableWrapper">
                 <table ng-model="testsTable" ng-show="testsTableShow" class="flightsTableClass">
                     <tr>
-                        <th>מספר</th>
-                        <th>שם הקורס</th>
-                        <th>יום</th>
-                        <th>מרצה מחליף</th>
-                        <th>מועד</th>
+                        <td class="tdHeaderClass">מספר</td>
+                        <td class="tdHeaderClass">שם הקורס</td>
+                        <td class="tdHeaderClass">יום</td>
+                        <td class="tdHeaderClass">מרצה מחליף</td>
+                        <td class="tdHeaderClass">מועד</td>
                     </tr>
                     <tr ng-repeat="testsTd in testsFromDbToShow">
                         <td>{{ $index + 1 }}</td>

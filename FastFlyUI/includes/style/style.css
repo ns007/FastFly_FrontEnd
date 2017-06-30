@@ -346,12 +346,10 @@ height:100px;
 .flightsTableWrapper{
      overflow-y:hidden;
      position:absolute;
-     
 }
-.flightsTableClass{
+.flightsTableClass{ 
     overflow-y:scroll;
-    position:relative;
-   
+    position:relative;   
 }
 #countriesId{
     max-width:140px;
@@ -412,7 +410,7 @@ height:100px;
     
 }
 #dashboardOpensFormsRequest{
-     float:right;
+    float:right;
     direction:rtl;
     height:600px;
     overflow-y:scroll;
@@ -422,7 +420,7 @@ height:100px;
   width: 0px;
   background: transparent;
 }
-table, th , td  {
+table, td  {
   border: 1px solid grey;
   border-collapse: collapse;
   padding: 5px;
@@ -441,6 +439,14 @@ table tr:nth-child(even) {
   background-color: #ffffff;
   direction:rtl;
 }
+td{
+    min-width:100px;
+}
+.tdHeaderClass{
+    font-weight:bold;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
 .signPClass{
    font-weight:bold;
    float:right;
@@ -517,7 +523,12 @@ table tr:nth-child(even) {
 #dashboardOpensFormsRequest a:hover{
     
 }
-
+.formsTableClass{
+   float:left;
+   position:relative;
+   left:800px;
+   top:100px;
+}
 
 
 

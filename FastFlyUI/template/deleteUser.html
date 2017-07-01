@@ -12,7 +12,7 @@
             <td>{{ deleteTd.FirstName}} </td>
             <td>{{ deleteTd.LastName}} </td>
             <td>{{ deleteTd.UserEnable}} </td>
-            <td> <button ng-class="updateUserStatusButton" ng-click="changeUserStatus(deleteTd)"> {{ deleteTd.UserChangeTo}}</button> </td>
+            <td> <button class="updateUserStatusButton" ng-class="updateUserStatusDynam(deleteTd)" ng-click="changeUserStatus(deleteTd)"> {{ deleteTd.UserChangeTo}}</button> </td>
         </tr>
     </table>
     <!--<select name="" class="btn btn-default" role="group" ng-options="item.FirstName+ ' ' + item.LastName + ' - ' + item.Id for item in usersToDelete" ng-model="usersToDeleteModel" ng-change="deleteUserFunction(usersToDeleteModel)">

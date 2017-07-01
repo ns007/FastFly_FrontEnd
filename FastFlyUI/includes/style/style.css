@@ -539,7 +539,13 @@ tr:nth-child(even){background-color: #f2f2f2}
 .updateUserStatusButton{
     width:100px;
     height:30px;
+    
+}
+.updateUserStatusDynamLock{
     background-color:#EE5D5D;
+}
+.updateUserStatusDynamUnlock{
+    background-color:#48C54A;
 }
 
 

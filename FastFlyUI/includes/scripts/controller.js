@@ -104,16 +104,28 @@ var app = angular.module("fastFly", ['ngRoute'])
        });
         }
 
+        scope.updateUserStatusDynam = function(user){
+            if (user.UserEnable == 'פעיל') {
+                //console.log('dd');
+                return { updateUserStatusDynamLock:user};
+            }
+            else {
+                return { updateUserStatusDynamUnlock: user };
+            }
+        }
+
         function makeUserJson(user) {
             var UserEnable;
             var UserChangeTo;
             if (user.UserEnable == true) {
                 UserEnable = 'פעיל';
                 UserChangeTo = 'חסום משתמש';
+                //scope.updateUserStatusDynam = "updateUserStatusDynamLock";
             }
             else {
                 UserEnable = 'חסום';
                 UserChangeTo = 'הפעל משתמש';
+                //scope.updateUserStatusDynam = "updateUserStatusDynamUnlock";
             }
 
             var jUser = {

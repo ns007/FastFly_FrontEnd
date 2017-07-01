@@ -1,27 +1,23 @@
 ﻿<section ng-show="deleteUser" id="deleteUser" ng-controller="deleteUser" data-ng-init="init()">
-    <!--<div>
-        <input type="text" placeholder="חפש.." ng-model="userSearch">
-    </div>-->
-    <!--<div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>חפש משתמש</h2>
-                <div id="custom-search-input">
-                    <div class="input-group col-md-12">
-                        <input type="text" class="form-control input-lg" placeholder="חפש.." ng-model="userSearch"/>
-                        <span class="input-group-btn">
-                            <button class="btn btn-info btn-lg" type="button">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </button>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
-    <select name="" class="btn btn-default" role="group" ng-options="item.FirstName+ ' ' + item.LastName + ' - ' + item.Id for item in usersToDelete" ng-model="usersToDeleteModel" ng-change="deleteUserFunction(usersToDeleteModel)">
+    <table ng-model="deleteUsersTables" ng-show="deleteUsersTablesShow" class="deleteUsersTableClass">
+        <tr>
+            <td class="tdHeaderClass">תעודת זהות</td>
+            <td class="tdHeaderClass">שם פרטי</td>
+            <td class="tdHeaderClass">שם משפחה</td>
+            <td class="tdHeaderClass">סטטוס</td>
+            <td class="tdHeaderClass">עדכן סטטוס</td>
+        </tr>
+        <tr ng-repeat="deleteTd in usersFromDbToShow">
+            <td>{{ deleteTd.Id }}</td>
+            <td>{{ deleteTd.FirstName}} </td>
+            <td>{{ deleteTd.LastName}} </td>
+            <td>{{ deleteTd.UserEnable}} </td>
+            <td> <button ng-class="updateUserStatusButton" ng-click="changeUserStatus(deleteTd)"> {{ deleteTd.UserChangeTo}}</button> </td>
+        </tr>
+    </table>
+    <!--<select name="" class="btn btn-default" role="group" ng-options="item.FirstName+ ' ' + item.LastName + ' - ' + item.Id for item in usersToDelete" ng-model="usersToDeleteModel" ng-change="deleteUserFunction(usersToDeleteModel)">
         <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">בחר משתמש</option>
-    </select>
+    </select>-->
     <!--<div ng-repeat="user in users | filter:userSearch" class="deleteUserRepeatClass">
         <div>
             {{user.FirstName}} {{user.LastName}} - {{user.Id}}

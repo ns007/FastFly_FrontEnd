@@ -530,5 +530,17 @@ tr:nth-child(even){background-color: #f2f2f2}
    top:100px;
 }
 
+.deleteUsersTableClass{
+   float:left;
+   position:relative;
+   left:600px;
+   top:100px;
+}
+.updateUserStatusButton{
+    width:100px;
+    height:30px;
+    background-color:#EE5D5D;
+}
+
 
 

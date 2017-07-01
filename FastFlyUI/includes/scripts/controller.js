@@ -23,52 +23,139 @@ var app = angular.module("fastFly", ['ngRoute'])
     //    controller: "index"
     //})
 })
-    .controller("deleteUser", function ($scope, loginService, $http) {
+    .controller("deleteUser", function ($scope, loginService, $http , $window) {
         var scope = $scope;
         var temp = null;
-
+        scope.usersFromDbToShow = [];
         scope.init = function () {
             console.log("delete user init");
-            //loginService.getDataFromAPI()
-            //    .then(function (response) {
-            //        console.log(response);
-            //        temp = response;
-            //    }, function (error) {
-            //        console.log(error);
-            //    });
             $http.get('http://localhost:8080/api/users/')
                   .success(function (response) {
-                      console.log(response);
-                      scope.users = response;
-                      scope.usersToDelete = response;
+                      angular.forEach(response, function (val) {
+                          //console.log(val);
+                          scope.usersFromDbToShow.push(makeUserJson(val));
+                      })
                   });
             scope.deleteUser = true;
+            scope.deleteUsersTablesShow = true;
            
 
 
         }
 
-        scope.deleteUserFunction = function (user) {
-            console.log(user);
+        scope.changeUserStatus = function(user) {
+            //console.log(user.UserEnable);
+            if (user.UserEnable == 'פעיל') {
+                lockUser(user);
+            }
+            else if (user.UserEnable == 'חסום') {
+                unlockUser(user);
+            } 
+        }
+
+        function unlockUser(user) {
             swal({
                 title: "אזהרה",
-                text: "!אתה עומד למחוק את " + user.FirstName + " " + user.LastName + " מהמערכת",
+                text: "אתה עומד לאפשר ל - " + user.FirstName + " " + user.LastName + " כניסה למערכת",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: "btn btn-danger",
                 confirmButtonColor: '#d33',
-                confirmButtonText: "מחק",
+                confirmButtonText: "הפעל",
                 closeOnConfirm: false,
                 cancelButtonText: 'ביטול',
             },
-        function () {
-            $http.delete('http://localhost:8080/api/Users/' + user.Id)
-                   .success(function (response) {
-                       console.log(response);
-                       swal("המשתמש נמחק", "מחקת משתמש זה בהצלחה", "success");
-                   })
-        });
+      function () {
+          user.UserEnable = 1;
+          console.log(user);
+          var config = {
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          }
+          $http.put('http://localhost:8080/api/Users/' + user.Id,user,config)
+                 .success(function (response) {
+                     console.log(response);
+                     swal("המשתמש שוחרר", "שיחררת משתמש זה בהצלחה", "success");
+                     $window.location.reload();
+                 })
+      });
         }
+
+        function lockUser(user) {
+            swal({
+                title: "אזהרה",
+                text: "!אתה עומד לחסום את " + user.FirstName + " " + user.LastName + " מהמערכת",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn btn-danger",
+                confirmButtonColor: '#d33',
+                confirmButtonText: "חסום",
+                closeOnConfirm: false,
+                cancelButtonText: 'ביטול',
+            },
+       function () {
+           $http.delete('http://localhost:8080/api/Users/' + user.Id)
+                  .success(function (response) {
+                      console.log(response);
+                      swal("המשתמש נחסם", "חסמת משתמש זה בהצלחה", "success");
+                      $window.location.reload();
+                  })
+       });
+        }
+
+        function makeUserJson(user) {
+            var UserEnable;
+            var UserChangeTo;
+            if (user.UserEnable == true) {
+                UserEnable = 'פעיל';
+                UserChangeTo = 'חסום משתמש';
+            }
+            else {
+                UserEnable = 'חסום';
+                UserChangeTo = 'הפעל משתמש';
+            }
+
+            var jUser = {
+                "FirstName": user.FirstName,
+                "LastName": user.LastName,
+                "Id": user.Id,
+                "UserEnable": UserEnable,
+                "UserChangeTo": UserChangeTo,
+                "ApplicationRoleId": user.ApplicationRoleId,
+                "CellNum": user.CellNum,
+                "DepartmentId": user.DepartmentId,
+                "EmailAddress": user.EmailAddress,
+                "FacultyId": user.FacultyId,
+                "Password": user.Password,
+                "PercentageJob": user.PercentageJob,
+                "Role": user.Role
+            }
+            return jUser;
+        }
+
+        //scope.deleteUserFunction = function (user) {
+        //    console.log(user);
+        //    swal({
+        //        title: "אזהרה",
+        //        text: "!אתה עומד לחסום את " + user.FirstName + " " + user.LastName + " מהמערכת",
+        //        type: "warning",
+        //        showCancelButton: true,
+        //        confirmButtonClass: "btn btn-danger",
+        //        confirmButtonColor: '#d33',
+        //        confirmButtonText: "חסום",
+        //        closeOnConfirm: false,
+        //        cancelButtonText: 'ביטול',
+        //    },
+        //function () {
+        //    $http.delete('http://localhost:8080/api/Users/' + user.Id)
+        //           .success(function (response) {
+        //               console.log(response);
+        //               swal("המשתמש נחסם", "חסמת משתמש זה בהצלחה", "success");
+        //               $window.location.reload();
+        //           })
+        //});
+        //}
         scope.showTemp = function () {
             console.log(temp);
         }
@@ -1493,8 +1580,10 @@ var app = angular.module("fastFly", ['ngRoute'])
                     if (loginService.checkRoll(user) == 4) {
                         $location.path('/#index');
                     }
+                    console.log('ggff');
                     scope.paging = true;
                     scope.allDocsShow = false;
+                    scope.formsTablesShow = false;
                     scope.title = "Open New Form";
                 }
                 else if ($location.path().split(/[\s/]+/).pop() == 'createUserForm') {
@@ -1505,6 +1594,9 @@ var app = angular.module("fastFly", ['ngRoute'])
                    // getAllDocs(user);
                     scope.allDocsShow = true;
                     scope.paging = false;
+                    scope.formsTablesShow = true;
+                    getAllDocs(user);
+                    scope.allDocsShow = true;
                 }
 
                 else {
@@ -1544,8 +1636,8 @@ var app = angular.module("fastFly", ['ngRoute'])
 
                 }
                 //scope.noDocsShow = false;
-                getAllDocs(user);
-               // scope.allDocsShow = true;
+                //getAllDocs(user);
+                //scope.allDocsShow = true;
             }
         }
 
@@ -1588,6 +1680,12 @@ var app = angular.module("fastFly", ['ngRoute'])
             
              $location.path("/#index");
             $window.location.reload();
+        }
+
+        scope.adminDeleteUser = function () {
+            scope.title = "Delete User";
+            scope.allDocsShow = false;
+            scope.formsTablesShow = false;
         }
 
     });

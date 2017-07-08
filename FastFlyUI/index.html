@@ -72,8 +72,8 @@
         <section id="formsButton" ng-show="dashboardPage">
             <ul>
                 <li><a href="#/newForm" id="openNewForm" ng-model="openNewForm" class="btn btn-primary mainButton" ng-click="openNewForm()" ng-show="openNewFormButtonShow">פתח טופס נסיעה חדש</a></li>
-                <li><a href="#" id="historyButton" ng-model="getHistory" class="btn btn-primary mainButton" ng-click="getHistory()" ng-show="getHistoryButtonShow">היסטוריית טספים</a></li>
-                <li><a href="#" id="adminGetHistoryButton" ng-model="adminGetHistoryButton" class="btn btn-primary mainButton" ng-click="getUserHistory()" ng-show="adminGetHistoryButton">היסטוריית משתמשים</a></li>
+                <li><a href="#/getHistory" id="historyButton" ng-model="getHistory" class="btn btn-primary mainButton" ng-click="getHistory()" ng-show="getHistoryButtonShow">היסטוריית טספים</a></li>
+                <li><a href="#/getUserHistory" id="adminGetHistoryButton" ng-model="adminGetHistoryButton" class="btn btn-primary mainButton" ng-click="getUserHistory()" ng-show="adminGetHistoryButton">היסטוריית משתמשים</a></li>
                 <li><a href="#/createUserForm" id="adminCreateUserButton" ng-model="adminCreateUserButton" class="btn btn-primary mainButton" ng-click="adminCreateUser()" ng-show="adminCreateUserButton">יצירת משתמש</a></li>
                 <li><a href="#/deleteUser" id="adminDeleteUserButton" ng-model="adminDeleteUserButton" class="btn btn-primary mainButton" ng-click="adminDeleteUser()" ng-show="adminDeleteUserButton">מחיקת משתמש</a></li>
             </ul>

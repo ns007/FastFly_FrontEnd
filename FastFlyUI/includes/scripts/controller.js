@@ -18,11 +18,135 @@ var app = angular.module("fastFly", ['ngRoute'])
         controller: "deleteUser"
     })
 
+    $routeProvider.when("/getHistory", {
+        templateUrl: "template/getHistory.html",
+        controller: "getHistoryController"
+    })
+    $routeProvider.when("/getUserHistory", {
+        templateUrl: "template/getUserHistory.html",
+        controller: "getUserHistoryController"
+    })
+
     //$routeProvider.when("/loginSubmit", {
     //    templateUrl: "index.html",
     //    controller: "index"
     //})
 })
+    .controller("getUserHistoryController", function ($scope, loginService, $http, $window) {
+        var scope = $scope;
+        scope.init = function () {
+            console.log("get user history");
+            scope.getUsersHistoryShow = true;
+            var user = JSON.parse(localStorage.getItem(('user')));
+            getCloseDocs(user,0);
+        }
+
+        function getCloseDocs(user, isMyDoc) {
+            var url;
+            if (isMyDoc == 1) {
+                url = 'http://localhost:8080/api/applydocuments/docs/' + user.Id;
+            }
+            else {
+                if (user.ApplicationRoleId == 1 || user.ApplicationRoleId == 4 || user.ApplicationRoleId == 5) {
+                    url = 'http://localhost:8080/api/applydocuments/docs/close';
+                }
+                else if (data.ApplicationRoleId == 2) {
+                    url = 'http://localhost:8080/api/applydocuments/docs/' + user.Id;
+                }
+            }
+            var index = 0;
+            var res = loginService.getDocs(url);
+            scope.formsFromDbToShow = [];
+            res.then(function (val) {
+                angular.forEach(val, function (obj) {
+                    //console.log(obj);
+                    var docId = obj.DocId;
+                    var id = obj.UserId;
+                    var name;
+                    var thisUser = loginService.getUserById(obj.UserId);
+                    thisUser.then(function (val) {
+                        name = val.FirstName + ' ' + val.LastName;
+                        scope.formsFromDbToShow.push({ "Id": id, "name": name, "DocId": docId });
+                    })
+                })
+                scope.formsTablesShow = true;
+            })
+        }
+    })
+    .controller("getHistoryController", function ($scope, loginService, $http, $window) {
+        var scope = $scope;
+        scope.init = function () {
+            console.log("get history");
+            scope.getHistoryShow = true;
+            var user = JSON.parse(localStorage.getItem(('user')));
+            getCloseDocs(user,1);
+        }
+
+        function getCloseDocs(user,isMyDoc) {
+            var url;
+            if (isMyDoc == 1) {
+                url = 'http://localhost:8080/api/applydocuments/docs/' + user.Id;
+            }
+            else {
+                if (user.ApplicationRoleId == 1 || user.ApplicationRoleId == 4 || user.ApplicationRoleId == 5) {
+                    url = 'http://localhost:8080/api/applydocuments/docs/close';
+                }
+                else if (data.ApplicationRoleId == 2) {
+                    url = 'http://localhost:8080/api/applydocuments/docs/' + user.Id;
+                }
+            }          
+            var index = 0;
+            var res = loginService.getDocs(url);
+            scope.formsFromDbToShow = [];
+            res.then(function (val) {
+                angular.forEach(val, function (obj) {
+                    //console.log(obj);
+                    var docId = obj.DocId;
+                    var id = obj.UserId;
+                    var name;
+                    var thisUser = loginService.getUserById(obj.UserId);
+                    thisUser.then(function (val) {
+                        name = val.FirstName + ' ' + val.LastName;
+                        scope.formsFromDbToShow.push({ "Id": id, "name": name, "DocId": docId });
+                    })
+                })
+                scope.formsTablesShow = true;
+            })
+        }
+
+        function getAllDocs(data) {
+            console.log(data);
+            var url;
+            if (data.ApplicationRoleId == 1 || data.ApplicationRoleId == 4 || data.ApplicationRoleId == 5) {
+                url = 'http://localhost:8080/api/applydocuments/docs/open';
+            }
+            else if (data.ApplicationRoleId == 2) {
+                url = 'http://localhost:8080/api/applydocuments/docs/' + data.Id;
+            }
+            //url = 'http://localhost:8080/api/ApplyDocuments/docs/' + data.Id + '/close';
+            //var myEl = angular.element(document.querySelector('#dashboardOpensFormsRequest'));
+            //myEl.empty();
+            var index = 0;
+            var res = loginService.getDocs(url);
+            scope.formsFromDbToShow = [];
+            res.then(function (val) {
+                //console.log(val);
+                angular.forEach(val, function (obj) {
+                    //console.log(obj);
+                    var docId = obj.DocId;
+                    var id = obj.UserId;
+                    var name;
+                    var thisUser = loginService.getUserById(obj.UserId);
+                    thisUser.then(function (val) {
+                        name = val.FirstName + ' ' + val.LastName;
+                        scope.formsFromDbToShow.push({ "Id": id, "name": name, "DocId": docId });
+                    })
+                })
+                scope.formsTablesShow = true;
+                //scope.allDocsShow = true;
+            })
+        }
+    })
     .controller("deleteUser", function ($scope, loginService, $http , $window) {
         var scope = $scope;
         var temp = null;
@@ -146,28 +270,6 @@ var app = angular.module("fastFly", ['ngRoute'])
             return jUser;
         }
 
-        //scope.deleteUserFunction = function (user) {
-        //    console.log(user);
-        //    swal({
-        //        title: "אזהרה",
-        //        text: "!אתה עומד לחסום את " + user.FirstName + " " + user.LastName + " מהמערכת",
-        //        type: "warning",
-        //        showCancelButton: true,
-        //        confirmButtonClass: "btn btn-danger",
-        //        confirmButtonColor: '#d33',
-        //        confirmButtonText: "חסום",
-        //        closeOnConfirm: false,
-        //        cancelButtonText: 'ביטול',
-        //    },
-        //function () {
-        //    $http.delete('http://localhost:8080/api/Users/' + user.Id)
-        //           .success(function (response) {
-        //               console.log(response);
-        //               swal("המשתמש נחסם", "חסמת משתמש זה בהצלחה", "success");
-        //               $window.location.reload();
-        //           })
-        //});
-        //}
         scope.showTemp = function () {
             console.log(temp);
         }
@@ -1065,6 +1167,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             }
             var ApplyDocument = apllyDocumentToJson();
             console.log(ApplyDocument);
+            // scursor: wait;
             var config = {
                 headers: {
                     'Content-Type': 'application/json'
@@ -1134,6 +1237,10 @@ var app = angular.module("fastFly", ['ngRoute'])
         //*****************send new form*****************
 
         function mainFormValidCheck() {
+            //if (scope.course.courseReplaseComplete == null || scope.course.courseReplaseComplete == '') {
+            //    swal("נא למלא מחליף", "חסר מחליף", "error");
+            //    return 1;
+            //}
             if (scope.userSignCheckBox == null || scope.userSignCheckBox == false) {
                 swal("דרושה חתימה", "נא אשר את הטופס בתיבה המתאימה", "error");
                 return 1;
@@ -1660,9 +1767,11 @@ var app = angular.module("fastFly", ['ngRoute'])
 
         scope.getHistory = function () {
             console.log("get history");
+            scope.formsTablesShow = false;
             scope.newForm = false;
             scope.paging = false;
             scope.allDocsShow = false;
+           
         }
 
         scope.getUserHistory = function () {

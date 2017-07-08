@@ -108,6 +108,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="imeges\logo5.png" />
     <Content Include="imeges\logo6.png" />
+    <Content Include="imeges\paperfly.png" />
     <Content Include="imeges\plusIcon.png" />
     <Content Include="Scripts\angular-cookies.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
@@ -226,6 +227,8 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.min.js" />
     <Content Include="template\createUser.html" />
     <Content Include="template\deleteUser.html" />
+    <Content Include="template\getHistory.html" />
+    <Content Include="template\getUserHistory.html" />
     <Content Include="template\openNewForm.html" />
     <Content Include="Web.config" />
   </ItemGroup>

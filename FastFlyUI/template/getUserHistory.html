@@ -1,0 +1,16 @@
+﻿<section ng-show="getUsersHistoryShow" id="getUsersHistoryShow" ng-controller="getUserHistoryController" data-ng-init="init()">
+
+    <table ng-model="formsTables" ng-show="formsTablesShow" class="formsTableClass">
+        <tr>
+            <td class="tdHeaderClass">תעודת זהות</td>
+            <td class="tdHeaderClass">שם</td>
+            <td class="tdHeaderClass">מספר טופס</td>
+        </tr>
+        <tr ng-repeat="formsTd in formsFromDbToShow">
+            <td>{{ formsTd.Id }}</td>
+            <td> <a href="#/newForm" ng-click="getUserDetails(formsTd.DocId)">{{ formsTd.name}}</a> </td>
+            <td>{{ formsTd.DocId }}</td>
+        </tr>
+    </table>
+</section>
+

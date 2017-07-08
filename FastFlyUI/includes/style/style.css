@@ -1,7 +1,12 @@
 ﻿body {
-      /*overflow-x:hidden;
-     overflow: hidden;*/
+    overflow-x:hidden;
+     overflow: hidden;
+    /*background-image: url('../../imeges/paperfly.png');
+    background-repeat:no-repeat;
+    background-position-x:80px;
+    background-position-y:300px;*/  
 }
+
 
 #logo {
     display: block;
@@ -132,7 +137,7 @@ aside {
    position: relative;
     top: 1200px;
     left: 750px;
-    width: 731px;
+    width: 740px;
 }
 
     .pagingClass ul li {
@@ -539,13 +544,14 @@ tr:nth-child(even){background-color: #f2f2f2}
 .updateUserStatusButton{
     width:100px;
     height:30px;
-    
+    font-weight:bold;
 }
 .updateUserStatusDynamLock{
-    background-color:#EE5D5D;
+    background-color:#D81C1C;
+    color:#ffffff;
 }
 .updateUserStatusDynamUnlock{
-    background-color:#48C54A;
+    background-color:#7CFA8D;
 }
 
 

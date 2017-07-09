@@ -331,6 +331,10 @@ var app = angular.module("fastFly", ['ngRoute'])
                                 value.FromDate = convertDate(value.FromDate);
                                 value.ToDate = convertDate(value.ToDate);
                             })
+                            scope.sumNoEshel = 1;
+                            scope.sumDaysNoEshel = 1;
+                            scope.sumDaysEshel = 1;
+                            scope.lastFlightFromShenkar = new Date('07/10/2017');
                             //dest.data[0].FromDate = convertDate(dest.data[0].FromDate);
                             scope.flightsToShow = dest.data;
                             //console.log(scope.flightsToShow);
@@ -1196,7 +1200,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                             })
                         }
                         else {
-                            var flightDoc = flightDocToJson(response.DocId);
+                            var flightDoc = flightDocToJson(response[0].DocId);
                             $http.post('http://localhost:8080/api/DestinationPeriods', flightDoc, config)
                                 .success(function (response) {
                                     console.log(response);
@@ -1525,6 +1529,9 @@ var app = angular.module("fastFly", ['ngRoute'])
             if (user != null) {
                 scope.title = "Home";
                 getAllDocs(user);
+                if (scope.formsFromDbToShow.lengt == 0) {
+                    scope.noDocMsgShow = true;
+                }
                 scope.allDocsShow = true;
             }
         }
@@ -1588,6 +1595,9 @@ var app = angular.module("fastFly", ['ngRoute'])
                        }
                        //get all apply documents
                        getAllDocs(response);
+                       if (scope.formsFromDbToShow.lengt == 0) {
+                           scope.noDocMsgShow = true;
+                       }
                        scope.allDocsShow = true;
 
                    })
@@ -1609,9 +1619,10 @@ var app = angular.module("fastFly", ['ngRoute'])
             //myEl.empty();
             var index = 0;
             var res = loginService.getDocs(url);
+            console.log(res);
             scope.formsFromDbToShow = [];
             res.then(function (val) {
-                //console.log(val);
+                console.log(val);
                 angular.forEach(val, function (obj) {
                     //console.log(obj);
                     var docId = obj.DocId;
@@ -1625,6 +1636,8 @@ var app = angular.module("fastFly", ['ngRoute'])
                 })
                 scope.formsTablesShow = true;
                 scope.allDocsShow = true;
+                scope.noDocMsgShow = false;
+
             })
             //$http.get(url)
             //.success(function (response) {

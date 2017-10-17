@@ -230,7 +230,10 @@
     <Content Include="template\getHistory.html" />
     <Content Include="template\getUserHistory.html" />
     <Content Include="template\openNewForm.html" />
-    <Content Include="Web.config" />
+    <Content Include="template\returnForm.html" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

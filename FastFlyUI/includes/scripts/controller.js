@@ -26,6 +26,10 @@ var app = angular.module("fastFly", ['ngRoute'])
         templateUrl: "template/getUserHistory.html",
         controller: "getUserHistoryController"
     })
+    $routeProvider.when("/returnForm", {
+        templateUrl: "template/returnForm.html",
+        controller: "returnFormController"
+    })
 
     //$routeProvider.when("/loginSubmit", {
     //    templateUrl: "index.html",
@@ -38,7 +42,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             console.log("get user history");
             scope.getUsersHistoryShow = true;
             var user = JSON.parse(localStorage.getItem(('user')));
-            getCloseDocs(user,0);
+            getCloseDocs(user, 0);
         }
 
         function getCloseDocs(user, isMyDoc) {
@@ -73,28 +77,616 @@ var app = angular.module("fastFly", ['ngRoute'])
             })
         }
     })
+ .controller("returnFormController", function ($scope, loginService, $http, $window, $filter) {
+     var scope = $scope;
+     var user;
+     var currentDocId;
+     var countriesList = null;
+     scope.init = function () {
+         scope.rf_sendFormDisabled = true;
+         scope.flights = [];
+         scope.nights = [];
+         scope.exps = [];
+         var newItemNo = scope.flights.length + 1;
+         scope.flights.push({});
+         scope.returnFormsTables = false;
+         scope.adminReturnFormButton = false;
+         scope.rf_formShow = false;
+         $http.get('http://localhost:8080/api/Countries/')
+                         .success(function (response) {
+                             //console.log(response);
+                             debugger;
+                             loginService.setCountries(response);
+                             scope.countries = response;
+                             countiesList = loginService.getCountries();
+                         });
+         //countries = loginService.countiesList
+         console.log("return form");
+         scope.returnFormsFromDbToShow = [];
+         scope.returnFormShow = true;
+         user = JSON.parse(localStorage.getItem(('user')));
+         var res = loginService.getOpenReturnFormsDocs(user.Id);
+         res.then(function (val) {
+             angular.forEach(val, function (obj) {
+                 //console.log(obj);
+                 var docId = obj.DocId;
+                 var id = obj.UserId;
+                 var name;
+                 var thisUser = loginService.getUserById(obj.UserId);
+                 thisUser.then(function (val) {
+                     name = val.FirstName + ' ' + val.LastName;
+                     scope.returnFormsFromDbToShow.push({ "Id": id, "name": name, "DocId": docId });
+                 })
+             })
+             scope.returnFormsTables = true;
+         })
+     }
+
+     scope.addNewNight = function () {
+         if (scope.nights.length == 3) {
+             return;
+         }
+         var newItemNo = scope.nights.length + 1;
+         scope.nights.push({});
+     }
+
+
+
+     scope.addNew = function () {
+         console.log(scope.flights);
+         if (scope.flights.length == 2) {
+             return;
+         }
+         //console.log(scope.browse);
+         var countriesList = null;
+         countiesList = loginService.getCountries()
+         if (countiesList == null) {
+             $http.get('http://localhost:8080/api/Countries/')
+                      .success(function (response) {
+                          //console.log(response);
+                          loginService.setCountries(response);
+                          scope.countries = response;
+                          countiesList = loginService.getCountries();
+                      })
+         }
+         scope.countries = countiesList;
+         scope.selectedCountries = countiesList;
+         // form.contacts.push({});
+         var newItemNo = scope.flights.length + 1;
+         scope.flights.push({});
+         //var newItemNo = $scope.choices.length + 1;
+         //$scope.choices.push({ 'id': 'choice' + newItemNo });
+     }
+
+
+
+     $scope.removeNewFlight = function (flightIndex) {
+         console.log(flightIndex);
+         if (scope.flights.length == 1) {
+             return;
+         }
+         var newItemNo = scope.flights.length - 1;
+         var removeItem = scope.flights[flightIndex];
+         console.log(removeItem);
+         var allFlights = scope.flights;
+         if (newItemNo !== -1) {
+             $scope.flights.splice(flightIndex, 1);
+         }
+     };
+
+     scope.removeNewNight = function (nightIndex) {
+         console.log(nightIndex);
+         var newItemNo = scope.nights.length - 1;
+         var removeItem = scope.nights[nightIndex];
+         console.log(removeItem);
+         var allFlights = scope.nights;
+         if (newItemNo !== -1) {
+             $scope.nights.splice(nightIndex, 1);
+         }
+     };
+
+     scope.removeNewNExp = function (expIndex) {
+         console.log(expIndex);
+         var newItemNo = scope.exps.length - 1;
+         var removeItem = scope.exps[expIndex];
+         console.log(removeItem);
+         var allFlights = scope.exps;
+         if (newItemNo !== -1) {
+             $scope.exps.splice(expIndex, 1);
+         }
+     };
+
+     scope.addNewExp = function () {
+         debugger;
+         if (scope.exps.length == 2) {
+             return;
+         }
+         var newItemNo = scope.exps.length + 1;
+         scope.exps.push({});
+     }
+
+     scope.openReturnForm = function (docId) {
+         console.log(docId + ' hi');
+         currentDocId = docId;
+         scope.returnFormsTables = false;
+         scope.rf_formShow = true;
+     }
+
+     scope.setCountrieCode = function (countrieCode) {
+         console.log(countrieCode.CountryName);
+         console.log(countrieCode.CountryCode);
+     }
+
+     scope.setCarTotalDays = function () {
+         var startDate = scope.rf_FromDateCarRent;
+         var endDate = scope.rf_ToDateCarRent;
+         if (startDate > endDate) {
+             swal('!שגיאה', 'תאריך ההתחלה גדול מתאריך הסיום', 'error');
+             scope.rf_ToDateCarRent = startDate;
+             scope.rf_daysCarRentTextBox = '';
+             return;
+         }
+         var days = countDays(startDate, endDate)
+         scope.rf_daysCarRentTextBox = days + 1;
+     }
+
+     scope.setExpTotalDays = function () {
+         var startDate = scope.rf_FromDateStaingCost;
+         var endDate = scope.rf_ToDateStaingCost;
+         if (startDate > endDate) {
+             swal('!שגיאה', 'תאריך ההתחלה גדול מתאריך הסיום', 'error');
+             scope.rf_ToDateStaingCost = startDate;
+             scope.rf_daysTextBox = '';
+             return;
+         }
+         var days = countDays(startDate, endDate)
+         scope.rf_daysTextBox = days + 1;
+     }
+     
+     scope.setNightsNumber = function () {
+         debugger;
+         var startDate = scope.nights[scope.nights.length - 1].rf_FromDate;
+         var endDate = scope.nights[scope.nights.length - 1].rf_ToDate;
+         if (startDate > endDate) {
+             swal('!שגיאה', 'תאריך ההתחלה גדול מתאריך הסיום', 'error');
+             scope.nights[scope.nights.length - 1].rf_ToDate = startDate;
+             scope.nights[scope.nights.length - 1].rf_nightsTextBox = '';
+             return;
+         }
+         var nights = countDays(startDate, endDate)
+         scope.nights[scope.nights.length - 1].rf_nightsTextBox = nights;
+     }
+
+     function countDays(startDate,endDate) {
+         var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+         var firstDate = startDate;
+         var secondDate = endDate;
+         var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+         console.log(diffDays);
+         //scope.conferenceDays = diffDays;
+         return diffDays;
+     }
+
+     scope.checkAllFields = function () {
+         debugger
+         //console.log(scope.flights[0].rf_costTextBox != '' || scope.flights[0].rf_costTextBox != undefined);
+         if((scope.flights[0].rf_costTextBox != '' && scope.flights[0].rf_costTextBox != undefined) &&
+            (scope.flights[0].rf_date != '' && scope.flights[0].rf_date != undefined) &&
+            (scope.flights[0].rf_destinationTextBox != '' && scope.flights[0].rf_destinationTextBox != undefined && scope.flights[0].rf_destinationTextBox != 'מדינת יעד') &&
+            (scope.flights[0].rf_departmentTextBox != '' && scope.flights[0].rf_departmentTextBox != undefined)) {
+             scope.rf_sendFormDisabled = false;
+         }
+         else {
+             scope.rf_sendFormDisabled = true;
+         }
+         //if(scope.flights[0] !='')
+     }
+
+     scope.loadReturnForm = function () {
+         debugger;
+         var form = createMainReturnForn();
+         console.log(form.StayExpense);
+         var config = {
+             headers: {
+                 'Content-Type': 'application/json'
+             }
+         }
+         $http.put('http://localhost:8080/api/ReckoningDocuments/' + currentDocId, form, config)
+         .success(function (response) {
+             //console.log(response);
+             if (form.CarRent == 'Y') {
+                 var carRentDoc = getCarRent();
+                 $http.post('http://localhost:8080/api/CarRents', carRentDoc, config)
+                 .success(function (response) {
+                     if (form.AccommodationAbroad == 'Y') {
+                         debugger;
+                         var acmAbDoc = getAccommodationAbroadsDoc();
+                         $http.post('http://localhost:8080/api/AccommodationAbroads/' + currentDocId, acmAbDoc, config)
+                         .success(function (response) {
+                             //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                             if (form.StayExpense == 'Y') {
+                                 var stayExDoc = getStayExDoc();
+                                 $http.post('http://localhost:8080/api/StayExpenses', stayExDoc, config)
+                                    .success(function (response) {
+                                        //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                        debugger;
+                                        if (form.OtherOxpense == 'Y') {
+                                            var othersDoc = getOthersDoc();
+                                            $http.post('http://localhost:8080/api/OtherOxpenses', othersDoc, config)
+                                             .success(function (response) {
+                                                 var flightsDoc = getFlightsDoc();
+                                                 $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                                    .success(function (response) {
+                                                        swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                                        $window.location.reload();
+                                                    });
+                                                 //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                             });
+                                        }
+                                        else {
+                                            var flightsDoc = getFlightsDoc();
+                                            $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                               .success(function (response) {
+                                                   swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                                   $window.location.reload();
+                                               });
+                                        }
+                                    });
+                             }
+                             else {
+                                 if (form.OtherOxpense == 'Y') {
+                                     var othersDoc = getOthersDoc();
+                                     $http.post('http://localhost:8080/api/OtherOxpenses', othersDoc, config)
+                                      .success(function (response) {
+                                          var flightsDoc = getFlightsDoc();
+                                          $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                             .success(function (response) {
+                                                 swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                                 $window.location.reload();
+                                             });
+                                          //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                      });
+                                 }
+                                 else {
+                                     var flightsDoc = getFlightsDoc();
+                                     $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                        .success(function (response) {
+                                            swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                            $window.location.reload();
+                                        });
+                                 }
+                             }
+                         });
+                     }
+                     else {
+                         if (form.StayExpense == 'Y') {
+                             var stayExDoc = getStayExDoc();
+                             $http.post('http://localhost:8080/api/StayExpenses', stayExDoc, config)
+                                .success(function (response) {
+                                    //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                    debugger;
+                                    if (form.OtherOxpense == 'Y') {
+                                        var othersDoc = getOthersDoc();
+                                        $http.post('http://localhost:8080/api/OtherOxpenses', othersDoc, config)
+                                         .success(function (response) {
+                                             var flightsDoc = getFlightsDoc();
+                                             $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                                .success(function (response) {
+                                                    swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                                    $window.location.reload();
+                                                });
+                                             //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                         });
+                                    }
+                                    else {
+                                        var flightsDoc = getFlightsDoc();
+                                        $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                           .success(function (response) {
+                                               swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                               $window.location.reload();
+                                           });
+                                    }
+                                });
+                         }
+                         else {
+                             if (form.OtherOxpense == 'Y') {
+                                 var othersDoc = getOthersDoc();
+                                 $http.post('http://localhost:8080/api/OtherOxpenses', othersDoc, config)
+                                  .success(function (response) {
+                                      var flightsDoc = getFlightsDoc();
+                                      $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                         .success(function (response) {
+                                             swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                             $window.location.reload();
+                                         });
+                                      //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                  });
+                             }
+                             else {
+                                 var flightsDoc = getFlightsDoc();
+                                 $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                    .success(function (response) {
+                                        swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                        $window.location.reload();
+                                    });
+                             }
+                         }
+                     }
+                     //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                 });
+             }
+             else {
+                 if (form.AccommodationAbroad == 'Y') {
+                     debugger;
+                     var acmAbDoc = getAccommodationAbroadsDoc();
+                     $http.post('http://localhost:8080/api/AccommodationAbroads/' + currentDocId, acmAbDoc, config)
+                     .success(function (response) {
+                         //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                         if (form.StayExpense == 'Y') {
+                             var stayExDoc = getStayExDoc();
+                             $http.post('http://localhost:8080/api/StayExpenses', stayExDoc, config)
+                                .success(function (response) {
+                                    //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                    debugger;
+                                    if (form.OtherOxpense == 'Y') {
+                                        var othersDoc = getOthersDoc();
+                                        $http.post('http://localhost:8080/api/OtherOxpenses', othersDoc, config)
+                                         .success(function (response) {
+                                             var flightsDoc = getFlightsDoc();
+                                             $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                                .success(function (response) {
+                                                    swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                                    $window.location.reload();
+                                                });
+                                             //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                         });
+                                    }
+                                    else {
+                                        var flightsDoc = getFlightsDoc();
+                                        $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                           .success(function (response) {
+                                               swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                               $window.location.reload();
+                                           });
+                                    }
+                                });
+                         }
+                         else {
+                             if (form.OtherOxpense == 'Y') {
+                                 var othersDoc = getOthersDoc();
+                                 $http.post('http://localhost:8080/api/OtherOxpenses', othersDoc, config)
+                                  .success(function (response) {
+                                      var flightsDoc = getFlightsDoc();
+                                      $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                         .success(function (response) {
+                                             swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                             $window.location.reload();
+                                         });
+                                      //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                  });
+                             }
+                             else {
+                                 var flightsDoc = getFlightsDoc();
+                                 $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                    .success(function (response) {
+                                        swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                        $window.location.reload();
+                                    });
+                             }
+                         }
+                     });
+                 }
+                 else {
+                     if (form.StayExpense == 'Y') {
+                         var stayExDoc = getStayExDoc();
+                         $http.post('http://localhost:8080/api/StayExpenses', stayExDoc, config)
+                            .success(function (response) {
+                                //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                debugger;
+                                if (form.OtherOxpense == 'Y') {
+                                    var othersDoc = getOthersDoc();
+                                    $http.post('http://localhost:8080/api/OtherOxpenses', othersDoc, config)
+                                     .success(function (response) {
+                                         var flightsDoc = getFlightsDoc();
+                                         $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                            .success(function (response) {
+                                                swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                                $window.location.reload();
+                                            });
+                                         //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                     });
+                                }
+                                else {
+                                    var flightsDoc = getFlightsDoc();
+                                    $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                       .success(function (response) {
+                                           swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                           $window.location.reload();
+                                       });
+                                }
+                            });
+                     }
+                     else {
+                         if (form.OtherOxpense == 'Y') {
+                             var othersDoc = getOthersDoc();
+                             $http.post('http://localhost:8080/api/OtherOxpenses', othersDoc, config)
+                              .success(function (response) {
+                                  var flightsDoc = getFlightsDoc();
+                                  $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                     .success(function (response) {
+                                         swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                         $window.location.reload();
+                                     });
+                                  //swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                              });
+                         }
+                         else {
+                             var flightsDoc = getFlightsDoc();
+                             $http.post('http://localhost:8080/api/Flights', flightsDoc, config)
+                                .success(function (response) {
+                                    swal('תודה', 'הטופס נשמר בהצלחה', 'success');
+                                    $window.location.reload();
+                                });
+                         }
+                     }
+                 }
+             }
+         });
+
+         
+     }
+
+     function getOthersDoc() {
+         var doc = [];
+         angular.forEach(scope.exps, function (item) {
+             var tempDoc =
+                 {
+                     "DocId": currentDocId,
+                     "ExpenseEssence": item.rf_others,
+                     "Cost": parseInt(item.rf_othersCost)
+                 }
+             this.push(tempDoc);
+         }, doc);
+         return doc;
+     }
+
+     function getStayExDoc() {
+         var doc =
+             [{
+                 "DocId": currentDocId,
+                 "FromDate": convertDate(scope.rf_FromDateStaingCost),
+                 "ToDate": convertDate(scope.rf_ToDateStaingCost),
+                 "TotalDays": parseInt(scope.rf_daysTextBox),
+                 "FeePerDay": parseInt(scope.rf_costPerDayTextBox)
+             }]
+
+         return doc;
+     }
+
+
+     function getAccommodationAbroadsDoc() {
+         var doc = [];
+         angular.forEach(scope.nights, function (item) {
+             var tempDoc =
+                 {
+                     "DocId": currentDocId,
+                     "FromDate": convertDate(item.rf_FromDate),
+                     "ToDate": convertDate(item.rf_ToDate),
+                     "TotalNights": parseInt(item.rf_nightsTextBox),
+                     "Cost": parseInt(item.rf_costNightsTextBox),
+                 }
+             this.push(tempDoc);
+             //console.log(item);
+         }, doc);
+         // console.log(doc);
+         return doc;
+     }
+
+     function getCarRent() {
+         var doc =
+         {
+             'DocId': currentDocId,
+             'FromDate': convertDate(scope.rf_FromDateCarRent),
+             'ToDate': convertDate(scope.rf_ToDateCarRent),
+             'TotalDays': scope.rf_daysCarRentTextBox,
+             'Cost': scope.rf_costPerDayCarRent
+         }
+
+         return doc;
+     }
+
+     function getFlightsDoc() {
+         var doc = [];
+         debugger;
+         angular.forEach(scope.flights, function (item) {
+             var tempDoc =
+                 {
+                     "DocId": currentDocId,
+                     "FlightDate": convertDate(item.rf_date),
+                     "Class": item.rf_departmentTextBox,
+                     "Cost": parseInt(item.rf_costTextBox),
+                     "CountryCodeDest": item.rf_destinationTextBox.CountryCode
+                 }
+             this.push(tempDoc);
+         }, doc);
+         return doc;
+     }
+
+     //function replaceTeachDocToJson(DocId) {
+     //    //  console.log(DocId);
+     //    //console.log(scope.courses);
+     //    var doc = [];
+     //    angular.forEach(scope.courses, function (item) {
+     //        var tempDoc =
+     //            {
+     //                "DocId": DocId,
+     //                "CourseName": item.courseNameTextBox,
+     //                "Date": convertDate(item.courseDay),
+     //                "FromHour": convertTime(item.courseReplaceFromTime),
+     //                "ToHour": convertTime(item.courseReplaceToTime),
+     //                "CompleteBy": item.courseReplaseComplete
+     //            }
+     //        this.push(tempDoc);
+     //        //console.log(item);
+     //    }, doc);
+     //    // console.log(doc);
+     //    return doc;
+     //}
+
+     function convertDate(dateToConvert) {
+         var date = $filter('date')(dateToConvert, 'yyyy-MM-dd');
+         return date;
+     }
+
+     function createMainReturnForn() {
+         console.log(currentDocId);
+         debugger;
+         var flights = checkIfFill(scope.flights);
+         var acoAb = checkIfFill(scope.nights);
+         var sE = checkIfFill(scope.rf_FromDateStaingCost);
+         var returnJson = {
+             'DocId': currentDocId,
+             'UserId': user.Id,
+             'ConcentrationExpenses': flights,
+             'AccommodationAbroad': acoAb,
+             'StayExpense': sE,
+             'CarRent': checkIfFill(scope.rf_FromDateCarRent),
+             'OtherOxpense': checkIfFill(scope.exps)
+         }
+         return returnJson;
+     }
+
+     function checkIfFill(textkBox) {
+         if (textkBox == '' || textkBox == undefined) {
+             return 'N';
+         }
+         else {
+             return 'Y';
+         }
+     }
+ })
     .controller("getHistoryController", function ($scope, loginService, $http, $window) {
         var scope = $scope;
         scope.init = function () {
             console.log("get history");
             scope.getHistoryShow = true;
             var user = JSON.parse(localStorage.getItem(('user')));
-            getCloseDocs(user,1);
+            getCloseDocs(user, 1);
         }
 
-        function getCloseDocs(user,isMyDoc) {
+        function getCloseDocs(user, isMyDoc) {
             var url;
             if (isMyDoc == 1) {
-                url = 'http://localhost:8080/api/applydocuments/docs/' + user.Id;
+                url = 'http://localhost:8080/api/applydocuments/docs/' + user.Id + '/close';
             }
             else {
                 if (user.ApplicationRoleId == 1 || user.ApplicationRoleId == 4 || user.ApplicationRoleId == 5) {
                     url = 'http://localhost:8080/api/applydocuments/docs/close';
                 }
                 else if (data.ApplicationRoleId == 2) {
-                    url = 'http://localhost:8080/api/applydocuments/docs/' + user.Id;
+                    url = 'http://localhost:8080/api/applydocuments/docs/' + user.Id + '/close';
                 }
-            }          
+            }
             var index = 0;
             var res = loginService.getDocs(url);
             scope.formsFromDbToShow = [];
@@ -147,7 +739,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             })
         }
     })
-    .controller("deleteUser", function ($scope, loginService, $http , $window) {
+    .controller("deleteUser", function ($scope, loginService, $http, $window) {
         var scope = $scope;
         var temp = null;
         scope.usersFromDbToShow = [];
@@ -162,19 +754,19 @@ var app = angular.module("fastFly", ['ngRoute'])
                   });
             scope.deleteUser = true;
             scope.deleteUsersTablesShow = true;
-           
+
 
 
         }
 
-        scope.changeUserStatus = function(user) {
+        scope.changeUserStatus = function (user) {
             //console.log(user.UserEnable);
             if (user.UserEnable == 'פעיל') {
                 lockUser(user);
             }
             else if (user.UserEnable == 'חסום') {
                 unlockUser(user);
-            } 
+            }
         }
 
         function unlockUser(user) {
@@ -197,7 +789,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                   'Content-Type': 'application/json'
               }
           }
-          $http.put('http://localhost:8080/api/Users/' + user.Id,user,config)
+          $http.put('http://localhost:8080/api/Users/' + user.Id, user, config)
                  .success(function (response) {
                      console.log(response);
                      swal("המשתמש שוחרר", "שיחררת משתמש זה בהצלחה", "success");
@@ -228,10 +820,10 @@ var app = angular.module("fastFly", ['ngRoute'])
        });
         }
 
-        scope.updateUserStatusDynam = function(user){
+        scope.updateUserStatusDynam = function (user) {
             if (user.UserEnable == 'פעיל') {
                 //console.log('dd');
-                return { updateUserStatusDynamLock:user};
+                return { updateUserStatusDynamLock: user };
             }
             else {
                 return { updateUserStatusDynamUnlock: user };
@@ -278,11 +870,11 @@ var app = angular.module("fastFly", ['ngRoute'])
         var scope = $scope;
 
         $scope.init = function () {
-            console.log("new form init");   
+            console.log("new form init");
             scope.newFormShow = true;
             scope.destinationClass = 'otherPages';
             scope.privateDetailsClass = 'currentPage';
-           // console.log($location.path().split(/[\s/]+/).pop());
+            // console.log($location.path().split(/[\s/]+/).pop());
             var user = loginService.getData();
             scope.title = "Open New Form";
             scope.flightsTableShow = false;
@@ -298,7 +890,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     //console.log(loginService.getSignerFlag());
                     var userDoc = loginService.getResponse();
                     //console.log(userDoc);
-                   
+
                     console.log(" ....");
                     userDoc.then(function (x) {
                         console.log(x);
@@ -323,7 +915,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                         scope.conferenceDays = x.TotalDays;
                         scope.family = x.PlusOne;
                         scope.destinationTextBox = x.TravelPurpose;
-                        
+
                         var flights = loginService.getFlightByDocId(x.DocId);
                         flights.then(function (dest) {
                             //console.log(dest.data);
@@ -348,7 +940,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                         coursesFromDb.then(function (courseReplace) {
                             //console.log(courseReplace.data);
                             angular.forEach(courseReplace.data, function (value) {
-                                value.Date = convertDate(value.Date);                             
+                                value.Date = convertDate(value.Date);
                             })
                             scope.coursesTableShow = true;
                             scope.coursesFromDbToShow = courseReplace.data;
@@ -373,7 +965,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                         scope.travelDetailsConvention = x.ResearchTraining;
                         scope.travelDetailsExplainTextErea = x.ExceptionRequstExplain;
                         scope.userSignCheckBox = true;
-                       
+
 
                         //disabled all sign field exept the current signer
                         var signUsers = loginService.getAllSignUsers();
@@ -401,7 +993,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                             //angular.forEach(scope.signs, function (sign) {
                             //           console.log(sign);
                             //           if (sign.id == id) {
-                    
+
                             //               sign.dis = false;
                             //           }
                             //       })
@@ -409,12 +1001,12 @@ var app = angular.module("fastFly", ['ngRoute'])
                             //console.log(scope.signs.length);
 
                         })
-                       // console.log(scope.signs);
+                        // console.log(scope.signs);
                         //checkHwoIsTheSigner(signUser);
                         //disabled all fields in the main form
                         disableFields(user);
-                       
-                        
+
+
                     })
                     console.log(userDoc);
                 }
@@ -453,8 +1045,8 @@ var app = angular.module("fastFly", ['ngRoute'])
                 scope.allDocsShow = false;
                 scope.budgetTextBoxShow = false;
             }
-            
-            
+
+
         }
 
         function returnToOriginalDateFormat(date) {
@@ -468,7 +1060,7 @@ var app = angular.module("fastFly", ['ngRoute'])
         //    angular.forEach(scope.signs, function (sign) {
         //        console.log(sign);
         //        if (sign.id == id) {
-                    
+
         //            sign.dis = false;
         //        }
         //    })
@@ -537,7 +1129,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                 scope.budgetTextBoxShow = true;
                 scope.budgetTextBox = data.ColleagueType;
                 scope.selectedName = scope.type[3];
-            }            
+            }
         }
 
         //function getDataFromResponse(res) {
@@ -593,10 +1185,10 @@ var app = angular.module("fastFly", ['ngRoute'])
                                 if (scope.signs[0].id == null) {
                                     break;
                                 }
-                                if (scope.signs[0].id*1==0) {
+                                if (scope.signs[0].id * 1 == 0) {
                                     value.data.Sign1 = 0;
                                 }
-                                else if (scope.signs[0].id*1 == 1) {
+                                else if (scope.signs[0].id * 1 == 1) {
                                     value.data.Sign1 = 1;
                                 }
                                 else {
@@ -609,10 +1201,10 @@ var app = angular.module("fastFly", ['ngRoute'])
                                 if (scope.signs[1].id == null) {
                                     break;
                                 }
-                                if (scope.signs[1].id*1 == 0) {
+                                if (scope.signs[1].id * 1 == 0) {
                                     value.data.Sign2 = 0;
                                 }
-                                else if (scope.signs[1].id*1 == 1) {
+                                else if (scope.signs[1].id * 1 == 1) {
                                     value.data.Sign2 = 1;
                                 }
                                 else {
@@ -625,10 +1217,10 @@ var app = angular.module("fastFly", ['ngRoute'])
                                 if (scope.signs[2].id == null) {
                                     break;
                                 }
-                                if (scope.signs[2].id*1 == 0) {
+                                if (scope.signs[2].id * 1 == 0) {
                                     value.data.Sign3 = 0;
                                 }
-                                else if (scope.signs[2].id*1 == 1) {
+                                else if (scope.signs[2].id * 1 == 1) {
                                     value.data.Sign3 = 1;
                                 }
                                 else {
@@ -641,10 +1233,10 @@ var app = angular.module("fastFly", ['ngRoute'])
                                 if (scope.signs[3].id == null) {
                                     break;
                                 }
-                                if (scope.signs[3].id*1 == 0) {
+                                if (scope.signs[3].id * 1 == 0) {
                                     value.data.Sign4 = 0;
                                 }
-                                else if (scope.signs[3].id*1 == 1) {
+                                else if (scope.signs[3].id * 1 == 1) {
                                     value.data.Sign4 = 1;
                                 }
                                 else {
@@ -656,10 +1248,10 @@ var app = angular.module("fastFly", ['ngRoute'])
                                 if (scope.signs[4].id == null) {
                                     break;
                                 }
-                                if (scope.signs[4].id*1 == 0) {
+                                if (scope.signs[4].id * 1 == 0) {
                                     value.data.Sign5 = 0;
                                 }
-                                else if (scope.signs[4].id*1 == 1) {
+                                else if (scope.signs[4].id * 1 == 1) {
                                     value.data.Sign5 = 1;
                                 }
                                 else {
@@ -683,10 +1275,10 @@ var app = angular.module("fastFly", ['ngRoute'])
                         swal("שגיאה", "הטופס לא נקלט במערכת", "error");
                     }
                     //angular.forEach(signer, function (sign) {
-                        
+
                     //})
 
-                    
+
                 })
                 //value.data.Sign1 =parseInt(scope.signs[1].id);
                 //value.data.Reason1 = scope.signs[1].text;
@@ -703,8 +1295,9 @@ var app = angular.module("fastFly", ['ngRoute'])
                 //    swal("שגיאה", "הטופס לא נקלט במערכת", "error");
                 //}
             })
-           // console.log(scope.signs);
+            // console.log(scope.signs);
         }
+
         scope.checkDateRange = function () {
             var startDate = scope.startDate;
             var endDate = scope.endDate;
@@ -727,7 +1320,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             var secondDate = scope.endDate;
             var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
             console.log(diffDays);
-            scope.conferenceDays = diffDays;
+            scope.conferenceDays = diffDays +1;
         }
 
         scope.showDestinationForm = function () {
@@ -797,7 +1390,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.testReplaceClass = 'otherPages';
             scope.signsFormClass = 'otherPages';
             scope.travelDetailsClass = 'otherPages';
-            if (scope.isTeachingDisabled!=true) {
+            if (scope.isTeachingDisabled != true) {
                 if (!(checkIsTeaching(scope.isTeaching))) {
                     scope.addClassDisable = true;
                     scope.courses = [];
@@ -846,7 +1439,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     }
                 }
             }
-           
+
             else {
                 scope.addTestDisable = true;
             }
@@ -869,7 +1462,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.travelDetailsClass = 'currentPage';
         }
 
-        scope.showsignsForm = function(){
+        scope.showsignsForm = function () {
             scope.newFormShow = false;
             scope.destinationForm = false;
             scope.flightDetailsForm = false;
@@ -889,12 +1482,12 @@ var app = angular.module("fastFly", ['ngRoute'])
             //scope.signs.push({ "name": "ינון", "id": "1", "dis": false }, { "name": "נתי", "id": "2", "dis": false }, { "name": "יניב", "id": "3", "dis": false }, { "name": "גינדוס", "id": "4", "dis": false },{ "name": "ליאור", "id": "5", "dis": false });
             //console.log(scope.signs);
             var signUsers = loginService.getAllSignUsers();
-            
+
             //console.log(signUsers);
             signUsers.then(function (signRes) {
                 var user = JSON.parse(localStorage.getItem(('user')));
-                
-                
+
+
                 var DocId = loginService.getDocId();
                 if (DocId != null) {
                     var doc = loginService.getDocByDocId(DocId);
@@ -972,7 +1565,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                         var text = '';
                         scope.heads.push({ "name": name, "id": id, "dis": dis, "text": text, "DocId": DocId });
                     })
-                    
+
                     angular.forEach(signRes.data, function (value) {
                         var name = value.FirstName + ' ' + value.LastName;
                         var id = value.Id;
@@ -986,7 +1579,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                         scope.signs.push({ "name": name, "id": id, "dis": dis, "text": text, "DocId": DocId });
                     })
                 }
-                
+
 
             })
         }
@@ -1281,7 +1874,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     //"ApplyDate"://להכניס את התאריך של אישור הטופס עי הממלא
                     //ApplicantSign להוריד - לא רלוונטי
                     "ApplyDate": convertDate(scope.startDate),//לשנות לתאריך של היום
-                    "DocStatus":1
+                    "DocStatus": 1
                 }
             return doc;
         }
@@ -1417,19 +2010,19 @@ var app = angular.module("fastFly", ['ngRoute'])
             console.log(user);
             var response = loginService.createUser(user);
             if (response != null) {
-            //swal({
-            //    title: 'יצרת משתמש חדש בהצלחה',
-            //    text: 'המשתמש נוצר  ',
-            //    type: 'success',
-            //    timer: 2000
-            //    //}).then(function (dismiss) {
-            //    //          if (dismiss === 'timer') {
-            //    //              console.log('I was closed by the timer')
-            //    //          }
-            //    //      }
-            //}).then(function () {
-            //    console.log("hhhi");
-            //})
+                //swal({
+                //    title: 'יצרת משתמש חדש בהצלחה',
+                //    text: 'המשתמש נוצר  ',
+                //    type: 'success',
+                //    timer: 2000
+                //    //}).then(function (dismiss) {
+                //    //          if (dismiss === 'timer') {
+                //    //              console.log('I was closed by the timer')
+                //    //          }
+                //    //      }
+                //}).then(function () {
+                //    console.log("hhhi");
+                //})
 
 
                 swal("המשתמש נוצר", "יצרת משתמש חדש בהצלחה", "success");
@@ -1463,7 +2056,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             if (createUserCheckPhone()) {
                 return;
             }
-           if(createUserCheckPercentageJob()){
+            if (createUserCheckPercentageJob()) {
                 return;
             }
         }
@@ -1483,7 +2076,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             }
             swal("מספר טלפון לא חוקי", "יש להזין מספר טלפון חוקי ", "error");
             return 1
-            
+
         }
 
         function createUserCheckId() {
@@ -1521,10 +2114,10 @@ var app = angular.module("fastFly", ['ngRoute'])
             return user;
         }
     })
-    .controller("index", function ($scope, $http, $window, loginService, $location,$q) {
+    .controller("index", function ($scope, $http, $window, loginService, $location, $q) {
         var scope = $scope;
         scope.goHome = function () {
-            
+
             var user = JSON.parse(localStorage.getItem('user'));
             if (user != null) {
                 scope.title = "Home";
@@ -1569,6 +2162,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                            scope.adminDeleteUserButton = true;
                            scope.openNewFormButtonShow = true;
                            scope.getHistoryButtonShow = true;
+                           scope.adminReturnFormButton = false;
                        }
 
                        else if (loginService.checkRoll(response) == 4) {
@@ -1577,6 +2171,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                            scope.adminDeleteUserButton = false;
                            scope.openNewFormButtonShow = false;
                            scope.getHistoryButtonShow = false;
+                           scope.adminReturnFormButton = false;
                        }
                        else if (loginService.checkRoll(response) == 2) {
                            scope.adminGetHistoryButton = false;
@@ -1584,6 +2179,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                            scope.adminDeleteUserButton = false;
                            scope.openNewFormButtonShow = true;
                            scope.getHistoryButtonShow = true;
+                           scope.adminReturnFormButton = true;
                        }
                        else if (loginService.checkRoll(response) == 5) {
                            scope.adminGetHistoryButton = false;
@@ -1591,6 +2187,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                            scope.adminDeleteUserButton = false;
                            scope.openNewFormButtonShow = true;
                            scope.getHistoryButtonShow = true;
+                           scope.adminReturnFormButton = true;
 
                        }
                        //get all apply documents
@@ -1667,7 +2264,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             //})
         }
 
-        scope.getUserDetails = function(id) {
+        scope.getUserDetails = function (id) {
             console.log(id);
             var doc = loginService.getUserDetailsFromService(id);
             loginService.setResponse(doc);
@@ -1723,7 +2320,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.paging = false;
                 }
                 else if ($location.path().split(/[\s/]+/).pop() == 'index') {
-                   // getAllDocs(user);
+                    // getAllDocs(user);
                     scope.allDocsShow = true;
                     scope.paging = false;
                     scope.formsTablesShow = true;
@@ -1742,6 +2339,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.adminDeleteUserButton = true;
                     scope.openNewFormButtonShow = true;
                     scope.getHistoryButtonShow = true;
+                    scope.adminReturnFormButton = false;
                 }
                 else if (loginService.checkRoll(user) == 4) {
                     scope.adminGetHistoryButton = false;
@@ -1749,6 +2347,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.adminDeleteUserButton = false;
                     scope.openNewFormButtonShow = false;
                     scope.getHistoryButtonShow = false;
+                    scope.adminReturnFormButton = false;
 
                 }
                 else if (loginService.checkRoll(user) == 2) {
@@ -1757,6 +2356,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.adminDeleteUserButton = false;
                     scope.openNewFormButtonShow = true;
                     scope.getHistoryButtonShow = true;
+                    scope.adminReturnFormButton = true;
 
                 }
                 else if (loginService.checkRoll(user) == 5) {
@@ -1765,6 +2365,7 @@ var app = angular.module("fastFly", ['ngRoute'])
                     scope.adminDeleteUserButton = false;
                     scope.openNewFormButtonShow = true;
                     scope.getHistoryButtonShow = true;
+                    scope.adminReturnFormButton = true;
 
                 }
                 //scope.noDocsShow = false;
@@ -1784,7 +2385,7 @@ var app = angular.module("fastFly", ['ngRoute'])
             scope.newForm = false;
             scope.paging = false;
             scope.allDocsShow = false;
-           
+
         }
 
         scope.getUserHistory = function () {
@@ -1811,13 +2412,19 @@ var app = angular.module("fastFly", ['ngRoute'])
         scope.signOut = function () {
             //scope.createUserForm = false;
             localStorage.clear();
-            
-             $location.path("/#index");
+
+            $location.path("/#index");
             $window.location.reload();
         }
 
         scope.adminDeleteUser = function () {
             scope.title = "Delete User";
+            scope.allDocsShow = false;
+            scope.formsTablesShow = false;
+        }
+
+        scope.adminreturnForm = function () {
+            scope.title = "Return Form";
             scope.allDocsShow = false;
             scope.formsTablesShow = false;
         }

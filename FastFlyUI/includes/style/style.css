@@ -347,6 +347,7 @@ height:100px;
     position:relative;
     left:250px;
     float:right;
+    visibility: hidden;
 }
 .flightsTableWrapper{
      overflow-y:hidden;
@@ -552,6 +553,37 @@ tr:nth-child(even){background-color: #f2f2f2}
 }
 .updateUserStatusDynamUnlock{
     background-color:#7CFA8D;
+}
+.rf_formContainer{
+    position: relative;
+    left: 650px;
+}
+.rf_direction{
+    direction: rtl;
+    position: relative;
+    right:800px;
+    margin-bottom:10px;
+}
+.spacing{
+    margin-left: 10px;
+}
+.spacing2{
+    margin-left: 10px;
+    position: relative;
+    bottom: 98px;
+}
+.rf_button{
+    /*position: relative;
+    bottom: 5px;
+    right: 130px;*/
+}
+.returnButtonClass{
+    display: inline;
+    margin-left:20px;
+    margin-bottom: 10px;
+}
+.btn-info{
+    margin-bottom: 5px !important;
 }
 
 

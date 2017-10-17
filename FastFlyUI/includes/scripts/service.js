@@ -211,4 +211,24 @@
         return defer.promise;
     }
 
+    this.getreturnFormsDocs = function (id) {
+        var defer = $q.defer();
+        $http.get('http://localhost:8080/api/applydocuments/docs/' + id + '/close')
+        .success(function (response) {
+            defer.resolve(response);
+
+        })
+        return defer.promise;
+    }
+
+    this.getOpenReturnFormsDocs = function (id) {
+        var defer = $q.defer();
+        $http.get('http://localhost:8080/api/applydocuments/docs/' + id + '/closeWithoutReturn')
+        .success(function (response) {
+            defer.resolve(response);
+
+        })
+        return defer.promise;
+    }
+
 });

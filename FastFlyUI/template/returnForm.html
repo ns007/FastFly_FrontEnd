@@ -1,0 +1,166 @@
+﻿<section ng-show="returnFormShow" id="returnFormShow" ng-controller="returnFormController" data-ng-init="init()">
+    <!--return form table!-->
+    <table ng-model="returnFormsTables" ng-show="returnFormsTables" class="formsTableClass">
+        <tr>
+            <td class="tdHeaderClass">תעודת זהות</td>
+            <td class="tdHeaderClass">שם</td>
+            <td class="tdHeaderClass">מספר טופס</td>
+        </tr>
+        <tr ng-repeat="returmFormsTd in returnFormsFromDbToShow">
+            <td>{{ returmFormsTd.Id }}</td>
+            <td> <a href ng-click="openReturnForm(returmFormsTd.DocId)">{{ returmFormsTd.name}}</a> </td>
+            <td>{{ returmFormsTd.DocId }}</td>
+        </tr>
+    </table>
+    <!--return form-->
+    <div class="rf_formContainer" ng-show="rf_formShow">
+        <h2>דו"ח הוצאות</h2>
+        <button type="button" class="btn btn-info" id="" ng-click="addNew()" ng-disabled="">
+            <!--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>--> הוסף טיסה
+        </button>
+        <h4 class="returnButtonClass">טיסות</h4>
+        
+        <div data-ng-repeat="flight in flights" class="rf_direction">
+                <button type="button" class="btn btn-danger" aria-label="Left Align" ng-click="removeNewFlight($index)">
+                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                </button>
+            <label for="date" class="spacing">תאריך:</label>
+            <input type="date" id="date" name="date" ng-model="flight.rf_date" class="spacing" ng-change="checkAllFields()" />
+            <label for="destination" class="spacing">יעד:</label>
+            <select id="countriesId" class="" role="group" ng-options="item.CountryName for item in countries" ng-model="flight.rf_destinationTextBox" ng-change="checkAllFields()">
+                <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>
+            </select>
+            <label for="department" class="spacing">מחלקה:</label>
+            <input type="text" id="department" placeholder="מחלקה" ng-model="flight.rf_departmentTextBox" class="spacing" ng-change="checkAllFields()" />
+            <label for="cost" class="spacing">עלות:</label>
+            <input type="text" id="cost" placeholder="עלות" ng-model="flight.rf_costTextBox" ng-change="checkAllFields()" />  
+        </div>
+
+        <!--<section class="rf_direction">
+            <label for="date" class="spacing">תאריך:</label>
+            <input type="date" id="date" name="date" ng-model="rf_date1" class="spacing" />
+            <label for="destination" class="spacing">יעד:</label>
+            <select id="countriesId" class="" role="group" ng-options="item.CountryName for item in countries" ng-model="rf_destinationTextBox1" ng-change="setCountrieCode(rf_destinationTextBox1)">
+                <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>
+            </select>
+            <label for="department" class="spacing">מחלקה:</label>
+            <input type="text" id="department" placeholder="מחלקה" ng-model="rf_departmentTextBox1" class="spacing" />
+            <label for="cost" class="spacing">עלות:</label>
+            <input type="text" id="cost" placeholder="עלות" ng-model="rf_costTextBox1" />  
+        </section>
+        <section class="rf_direction">
+            <label for="date" class="spacing">תאריך:</label>
+            <input type="date" id="date" name="date" ng-model="rf_date2" class="spacing" />
+            <label for="destination" class="spacing">יעד:</label>
+            <select id="countriesId" class="" role="group" ng-options="item.CountryName for item in countries" ng-model="rf_destinationTextBox2" ng-change="setCountrieCode(rf_destinationTextBox2)" >
+                <option value="" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">מדינת יעד</option>
+            </select>
+            <label for="department" class="spacing">מחלקה:</label>
+            <input type="text" id="department" placeholder="מחלקה" ng-model="rf_departmentTextBox2" class="spacing" />
+            <label for="cost" class="spacing">עלות:</label>
+            <input type="text" id="cost" placeholder="עלות" ng-model="rf_costTextBox2" />
+        </section>-->
+        <button type="button" class="btn btn-info" id="" ng-click="addNewNight()" ng-disabled="">
+            <!--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>--> הוסף לינה
+        </button>
+        <h4 class="returnButtonClass">לינה בחו"ל</h4>
+
+        <div data-ng-repeat="night in nights" class="rf_direction">
+            <button type="button" class="btn btn-danger" aria-label="Left Align" ng-click="removeNewNight($index)">
+                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+            </button>
+            <label for="rf_FromDate" class="spacing">מתאריך:</label>
+            <input type="date" id="rf_FromDate" name="rf_FromDate" ng-model="night.rf_FromDate" class="spacing" />
+            <label for="rf_ToDate" class="spacing">עד תאריך:</label>
+            <input type="date" id="rf_ToDate" name="rf_ToDate" ng-model="night.rf_ToDate" class="spacing"  ng-change="setNightsNumber()"/>
+            <label for="rf_nightsTextBox" class="spacing">סה"כ לינות:</label>
+            <input type="text" id="rf_nightsTextBox" placeholder="מספר לילות" ng-model="night.rf_nightsTextBox" class="spacing" />
+            <label for="rf_costNights" class="spacing">עלות:</label>
+            <input type="text" id="rf_costNights" placeholder="עלות" ng-model="night.rf_costNightsTextBox" />
+        </div>
+
+        
+        <!--<section class="rf_direction">
+            <label for="rf_FromDate" class="spacing">מתאריך:</label>
+            <input type="date" id="rf_FromDate" name="rf_FromDate" ng-model="rf_FromDate1" class="spacing" />
+            <label for="rf_ToDate" class="spacing">עד תאריך:</label>
+            <input type="date" id="rf_ToDate" name="rf_ToDate" ng-model="rf_ToDate1" class="spacing" />
+            <label for="rf_nightsTextBox" class="spacing">סה"כ לינות:</label>
+            <input type="text" id="rf_nightsTextBox" placeholder="מספר לילות" ng-model="rf_nightsTextBox1" class="spacing" />
+            <label for="rf_costNights" class="spacing">עלות:</label>
+            <input type="text" id="rf_costNights" placeholder="עלות" ng-model="rf_costNightsTextBox1" />
+        </section>
+        <section class="rf_direction">
+            <label for="rf_FromDate" class="spacing">מתאריך:</label>
+            <input type="date" id="rf_FromDate" name="rf_FromDate" ng-model="rf_FromDate2" class="spacing" />
+            <label for="rf_ToDate" class="spacing">עד תאריך:</label>
+            <input type="date" id="rf_ToDate" name="rf_ToDate" ng-model="rf_ToDate2" class="spacing" />
+            <label for="rf_nightsTextBox" class="spacing">סה"כ לינות:</label>
+            <input type="text" id="rf_nightsTextBox" placeholder="מספר לילות" ng-model="rf_nightsTextBox2" class="spacing" />
+            <label for="rf_costNights" class="spacing">עלות:</label>
+            <input type="text" id="rf_costNights" placeholder="עלות" ng-model="rf_costNightsTextBox2" />
+        </section>-->
+        <h4>הוצאות שהייה</h4>
+        <section class="rf_direction">
+            <label for="rf_FromDateStaingCost" class="spacing">מתאריך:</label>
+            <input type="date" id="rf_FromDateStaingCost" name="rf_FromDateStaingCost" ng-model="rf_FromDateStaingCost" class="spacing" />
+            <label for="rf_ToDateStaingCost" class="spacing">עד תאריך:</label>
+            <input type="date" id="rf_ToDateStaingCost" name="rf_ToDateStaingCost" ng-model="rf_ToDateStaingCost" class="spacing" ng-change="setExpTotalDays()"/>
+            <label for="rf_daysTextBox" class="spacing">סה"כ ימים:</label>
+            <input type="text" id="rf_daysTextBox" placeholder="מספר ימים" ng-model="rf_daysTextBox" class="spacing" />
+            <label for="rf_costPerDay" class="spacing">מחיר ליום:</label>
+            <input type="text" id="rf_costPerDay" placeholder="מחיר ליום" ng-model="rf_costPerDayTextBox" />
+        </section>
+       <h4>שכירות רכב</h4>
+        <section class="rf_direction">
+            <label for="rf_FromDateCarRent" class="spacing">מתאריך:</label>
+            <input type="date" id="rf_FromDateCarRent" name="rf_FromDateCarRent" ng-model="rf_FromDateCarRent" class="spacing" />
+            <label for="rf_ToDateCarRent" class="spacing">עד תאריך:</label>
+            <input type="date" id="rf_ToDateCarRent" name="rf_ToDateCarRent" ng-model="rf_ToDateCarRent" class="spacing" ng-change="setCarTotalDays()"/>
+            <label for="rf_daysCarRentTextBox" class="spacing">סה"כ ימים:</label>
+            <input type="text" id="rf_daysCarRentTextBox" placeholder="מספר ימים" ng-model="rf_daysCarRentTextBox" class="spacing" />
+            <label for="rf_costPerDayCarRent" class="spacing">עלות:</label>
+            <input type="text" id="rf_costPerDayCarRent" placeholder="מחיר ליום" ng-model="rf_costPerDayCarRent" />
+        </section>
+
+        <button type="button" class="btn btn-info" id="" ng-click="addNewExp()" ng-disabled="">
+            <!--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>--> הוסף הוצאה
+        </button>
+        <h4 class="returnButtonClass">הוצאות אחרות</h4>
+
+        <div data-ng-repeat="exp in exps" class="rf_direction">
+            <button type="button" class="btn btn-danger" aria-label="Left Align" ng-click="removeNewNExp($index)">
+                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+            </button>
+            <label for="rf_others1" class="spacing">מהות ההוצאה:</label>
+            <input type="text" id="rf_others1" placeholder="מהות ההוצאה" ng-model="exp.rf_others" />
+            <label for="rf_othersCost1" class="spacing">עלות:</label>
+            <input type="text" id="rf_othersCost1" placeholder="עלות" ng-model="exp.rf_othersCost" />
+        </div>
+        <div>
+            <button class="btn btn-warning rf_button" ng-model="rf_button" ng-click="loadReturnForm()" ng-disabled="rf_sendFormDisabled">שמור נתונים</button>
+        </div>
+        <!--<section class="rf_direction">
+            <label for="rf_others1" class="spacing">מהות ההוצאה:</label>
+            <input type="text" id="rf_others1" placeholder="מהות ההוצאה" ng-model="exp.rf_others" />
+            <label for="rf_othersCost1" class="spacing">עלות:</label>
+            <input type="text" id="rf_othersCost1" placeholder="עלות" ng-model="rf_othersCost1" />
+        </section>
+        <section class="rf_direction">
+            <label for="rf_others2" class="spacing">מהות ההוצאה:</label>
+            <input type="text" id="rf_others2" placeholder="מהות ההוצאה" ng-model="rf_others2" />
+            <label for="rf_othersCost2" class="spacing">עלות:</label>
+            <input type="text" id="rf_othersCost2" placeholder="עלות" ng-model="rf_othersCost2" />
+            <button class="btn btn-default rf_button" ng-model="rf_button" ng-click="loadReturnForm()">שמור נתונים</button>
+        </section>-->
+
+            <!--<div class="row">
+            <div class="col-md-2">
+                <input type="date" name="date" ng-model="rf_date" ng-disabled="rf_DateDisabled" />
+            </div>
+            <div class="col-md-1">
+                <label for="date">תאריך</label>
+            </div>
+        </div>-->
+</div>
+</section>
